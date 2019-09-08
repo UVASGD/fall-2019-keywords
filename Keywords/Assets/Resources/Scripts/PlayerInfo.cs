@@ -7,7 +7,12 @@ public class PlayerInfo : MonoBehaviour {
 
     public int playerNum;
     public int keys;//how many keys does the player have?
-    public Text keyUI;//UI which displays how many keys the player has
+    public GameObject UI;//this UI;
+    private Text keyUI;//UI which displays how many keys the player has
+
+    private void Start() {
+        keyUI = UI.transform.Find("Keys").gameObject.GetComponent<Text>();
+    }
 
     public void IncKeys() {
         keys++;

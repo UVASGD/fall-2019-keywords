@@ -18,6 +18,10 @@ public class DoorCollisionCheck : MonoBehaviour {
         }
     }
     public void GiveKey(int playerNum) {
+        if (playerNum < 1 || playerNum > playerInfo.Count) {
+            print("tried to give key to weird value of playerNum");
+            return;
+        }
         playerInfo[playerNum - 1].IncKeys();
         SetDoorCollisions(playerNum);
     }
