@@ -18,6 +18,6 @@ public class Duplicator : Machine {
 		Vector3 pos = transform.position + placePosition;
 		GameObject newTile = GameObject.Instantiate (Tile, pos, Quaternion.identity, TileContainer);
 		newTile.GetComponent<LetterTile> ().SetLetter (tile.GetComponent<LetterTile> ().letter);
-		newTile.GetComponent<LetterTile> ().SetMatches (tile.GetComponent<LetterTile> ().matches);
+		newTile.GetComponent<LetterTile> ().SetLifespan (tile.GetComponent<LetterTile> ().lifespan);
 	}
 }

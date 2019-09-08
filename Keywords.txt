@@ -146,9 +146,9 @@ Behind the locked doors are
     +Deleter: has a slot where you can put a letter tile. Leaving it there for one minute will delete it.
     +Oracle: has a slot where you can put a letter tile. Leaving it there for one minute will delete it and it will spit out a piece of paper with a previously uncreated valid word on it.
         -change print to create piece of paper object
-    -Altar: has a slot where you can put a letter tile. Leaving it there for one minute will delete it and unlock a random currently locked door.
+    -Altar: has a slot where you can put a letter tile. Leaving it there for one minute will delete it and unlock a random currently locked door for all players.
     -Generator: Has a button which, when pushed, immediately completes all cooldowns of all other machines (including other Generators). Has a cooldown of one minute.
-        This creates a kind of exploit thing with 2 generators, a duplicator and an altar. 2 Generators can recharge each other and allow all devices to be used arbitrarily frequently.
+        This creates a kind of exploit thing with 2 generators, a duplicator and an altar. 2 Generators can recharge each other and allow all devices to be used arbitrarily frequently. If these devices include a duplicator and an altar relatively close to each other, players can repeatedly unlock random doors until all doors in the level have been unlocked.
     -Evil Red Button: A button which, when pressed, immediately freezes all tiles on all grids in place (just like the Tile Freeze device). Pressing it again immediately unfreezes all tiles. Has no cooldown, but each player can only press it twice.
     -Teleporter: Comes with the teleporter remote item. When the player with the teleporter remote activates it, they will get teleported to the Teleporter. Cooldown of one minute.
     -Dumbwaiter: Used to send letter tiles to lower levels and retrieve them from higher levels. There is at least one per floor (exactly one, plus maybe one in a secret room), and it can only be used once per floor. Placing a letter tile on its slot will send the tile down to the next floor. If the dumbwaiter on the next floor is reached, the slot will initially contain that tile.

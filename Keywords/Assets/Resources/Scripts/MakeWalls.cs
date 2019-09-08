@@ -491,7 +491,7 @@ public class MakeWalls : MonoBehaviour {
         for (int i = 0; i < (width * width) / 16; i++) {
             GameObject newTile = GameObject.Instantiate(Tile, Random.insideUnitCircle * cellSize * width / 2, Quaternion.Euler(0, 0, Random.Range(-30f, 30f)), TileContainer.transform);
             newTile.GetComponent<LetterTile>().SetLetter(w.GetRandomSourceChar());
-            newTile.GetComponent<LetterTile>().SetMatches(Random.Range(3, 9));
+            newTile.GetComponent<LetterTile>().SetLifespan(Random.Range(3, 9));
         }
         PlaceGoodTilesInRoom(-1);
         if (!coop) {
@@ -519,7 +519,7 @@ public class MakeWalls : MonoBehaviour {
         for (int i = 0; i < 8; i++) {
             GameObject newTile = r.SpawnItem(Tile, Quaternion.Euler(0, 0, Random.Range(-30f, 30f)), TileContainer.transform);
             newTile.GetComponent<LetterTile>().SetLetter(startingTiles[i]);
-            newTile.GetComponent<LetterTile>().SetMatches(Random.Range(3, 9));
+            newTile.GetComponent<LetterTile>().SetLifespan(Random.Range(3, 9));
         }
     }
 }

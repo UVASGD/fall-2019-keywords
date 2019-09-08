@@ -22,8 +22,8 @@ public class Move : MonoBehaviour {
     void Update() {
         rb.velocity = playerSpeed * new Vector2(me.GetAxis("Horizontal"), me.GetAxis("Vertical"));
         //make player 1 also controllable by keyboard
-        if (playerNum == 1) {
-            rb.velocity = playerSpeed * new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        }
+        //if (playerNum == 1) {
+        //    rb.velocity = playerSpeed * new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        //}
     }
 }
