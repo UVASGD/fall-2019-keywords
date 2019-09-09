@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour {
+    public GameObject[] items; //references to the gameobjects in inventory
     private int inventorySize = 7; //how big is the inventory?
-    public int inventorySlot;//which slot is currently active?
+    public int activeSlot;//which slot is currently active?
     const float pickupRadius = 0.2f; //how far away can the player pick up an object?
     public GameObject activeSquare;//the grid square the player's currently on
-    GameObject[] items; //references to the gameobjects in inventory
     private GameObject TileContainer; //the parent object for the letter tiles
     public Vector3 holdOffset; //what's the hold position of the inventory item?
 
@@ -23,7 +23,7 @@ public class Inventory : MonoBehaviour {
         me = GetComponent<PlayerInfo>();
         items = new GameObject[inventorySize];
         TileContainer = GameObject.Find("Tiles");
-        inventorySlot = 0;
+        activeSlot = 0;
         SetControls();
     }
 
@@ -38,9 +38,9 @@ public class Inventory : MonoBehaviour {
 
         //Change which item is active
         if (Input.GetKeyDown(LeftBumper) || (me.playerNum == 1 && Input.GetKeyDown(KeyCode.LeftArrow))) {
-            SwitchSlot(correctmod(inventorySlot - 1, inventorySize));
+            SwitchSlot(correctmod(activeSlot - 1, inventorySize));
         } else if (Input.GetKeyDown(RightBumper) || (me.playerNum == 1 && Input.GetKeyDown(KeyCode.RightArrow))) {
-            SwitchSlot(correctmod(inventorySlot + 1, inventorySize));
+            SwitchSlot(correctmod(activeSlot + 1, inventorySize));
         }
         //make player 1 controllable by keyboard
         if (me.playerNum == 1) {
@@ -86,22 +86,22 @@ public class Inventory : MonoBehaviour {
             print("tried to change inventory slot to a weird number");
             return;
         }
-        if (items[inventorySlot] != null) {
-            items[inventorySlot].SetActive(false);
+        if (items[activeSlot] != null) {
+            items[activeSlot].SetActive(false);
         }
-        inventorySlot = n;
-        if (items[inventorySlot] != null) {
-            items[inventorySlot].SetActive(true);
+        activeSlot = n;
+        if (items[activeSlot] != null) {
+            items[activeSlot].SetActive(true);
         }
 
     }
 
     public void IncSlot() {
-        SwitchSlot(correctmod(inventorySlot + 1, inventorySize));
+        SwitchSlot(correctmod(activeSlot + 1, inventorySize));
     }
 
     public void DecSlot() {
-        SwitchSlot(correctmod(inventorySlot - 1, inventorySize));
+        SwitchSlot(correctmod(activeSlot - 1, inventorySize));
     }
 
     //pseudocode of this:
@@ -125,8 +125,8 @@ public class Inventory : MonoBehaviour {
     private void Interact() {
         //		print ("interacting");
         bool x = (activeSquare != null);
-        bool y = (items[inventorySlot] != null);
-        bool z = y ? items[inventorySlot].CompareTag("LetterTile") : false;
+        bool y = (items[activeSlot] != null);
+        bool z = y ? items[activeSlot].CompareTag("LetterTile") : false;
         bool w = x ? activeSquare.GetComponent<GridSquare>().tile != null : false;
         //		print (x + " " + y + " " + z + " " + w);
 
@@ -154,35 +154,29 @@ public class Inventory : MonoBehaviour {
     private void Drop() {
         //		print ("dropping");
         if (activeSquare == null) {
-            if (items[inventorySlot] != null) {
-                items[inventorySlot].transform.SetParent(TileContainer.transform);
-                items[inventorySlot].GetComponent<SpriteRenderer>().sortingOrder -= 2;
-                foreach (Transform child in items[inventorySlot].transform) {
-                    child.gameObject.GetComponent<SpriteRenderer>().sortingOrder -= 2;
+            if (items[activeSlot] != null) {
+                items[activeSlot].transform.SetParent(TileContainer.transform);
+                Game.RepositionHeight(items[activeSlot], Height.OnFloor);
+                if (items[activeSlot].GetComponent<BoxCollider2D>() != null) {
+                    items[activeSlot].GetComponent<BoxCollider2D>().enabled = true;
                 }
-                if (items[inventorySlot].GetComponent<BoxCollider2D>() != null) {
-                    items[inventorySlot].GetComponent<BoxCollider2D>().enabled = true;
+                if (items[activeSlot].GetComponent<Rigidbody2D>() != null) {
+                    items[activeSlot].GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                    items[activeSlot].GetComponent<Rigidbody2D>().isKinematic = false;
+                    items[activeSlot].GetComponent<Rigidbody2D>().freezeRotation = false;
                 }
-                if (items[inventorySlot].GetComponent<Rigidbody2D>() != null) {
-                    items[inventorySlot].GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-                    items[inventorySlot].GetComponent<Rigidbody2D>().isKinematic = false;
-                    items[inventorySlot].GetComponent<Rigidbody2D>().freezeRotation = false;
-                }
-                items[inventorySlot] = null;
+                items[activeSlot] = null;
             }
         }
     }
 
     private void PlaceOnSquare() {
         //		print ("placing tile on square");
-        items[inventorySlot].transform.SetParent(activeSquare.transform);
-        items[inventorySlot].transform.position = activeSquare.transform.position;
-        items[inventorySlot].GetComponent<SpriteRenderer>().sortingOrder -= 4;
-        foreach (Transform child in items[inventorySlot].transform) {
-            child.gameObject.GetComponent<SpriteRenderer>().sortingOrder -= 4;
-        }
-        activeSquare.GetComponent<GridSquare>().SetTile(items[inventorySlot]);
-        items[inventorySlot] = null;
+        items[activeSlot].transform.SetParent(activeSquare.transform);
+        items[activeSlot].transform.position = activeSquare.transform.position;
+        Game.RepositionHeight(items[activeSlot], Height.OnGridSquare);
+        activeSquare.GetComponent<GridSquare>().SetTile(items[activeSlot]);
+        items[activeSlot] = null;
         int x = activeSquare.GetComponent<GridSquare>().x;
         int y = activeSquare.GetComponent<GridSquare>().y;
         if (activeSquare.transform.parent.gameObject.GetComponent<GridControl>() != null) {
@@ -193,14 +187,11 @@ public class Inventory : MonoBehaviour {
 
     private void TakeFromSquare() {
         //		print ("taking from square");
-        items[inventorySlot] = activeSquare.GetComponent<GridSquare>().tile;
-        items[inventorySlot].transform.SetParent(transform);
-        items[inventorySlot].transform.localPosition = holdOffset;
-        items[inventorySlot].transform.rotation = Quaternion.identity;
-        items[inventorySlot].GetComponent<SpriteRenderer>().sortingOrder += 4;
-        foreach (Transform child in items[inventorySlot].transform) {
-            child.gameObject.GetComponent<SpriteRenderer>().sortingOrder += 4;
-        }
+        items[activeSlot] = activeSquare.GetComponent<GridSquare>().tile;
+        items[activeSlot].transform.SetParent(transform);
+        items[activeSlot].transform.localPosition = holdOffset;
+        items[activeSlot].transform.rotation = Quaternion.identity;
+        Game.RepositionHeight(items[activeSlot], Height.Held);
         activeSquare.GetComponent<GridSquare>().SetTile(null);
         int x = activeSquare.GetComponent<GridSquare>().x;
         int y = activeSquare.GetComponent<GridSquare>().y;
@@ -214,12 +205,9 @@ public class Inventory : MonoBehaviour {
         temp.transform.SetParent(transform);
         temp.transform.localPosition = holdOffset;
         temp.transform.rotation = Quaternion.identity;
-        temp.GetComponent<SpriteRenderer>().sortingOrder += 4;
-        foreach (Transform child in temp.transform) {
-            child.gameObject.GetComponent<SpriteRenderer>().sortingOrder += 4;
-        }
+        Game.RepositionHeight(temp, Height.Held);
         PlaceOnSquare();
-        items[inventorySlot] = temp;
+        items[activeSlot] = temp;
     }
 
 
@@ -237,7 +225,7 @@ public class Inventory : MonoBehaviour {
                 }
             }
             //put item in inventory
-            items[inventorySlot] = closestObject;
+            items[activeSlot] = closestObject;
             closestObject.transform.SetParent(transform);
             closestObject.transform.localPosition = holdOffset;
             closestObject.transform.rotation = Quaternion.identity;
@@ -249,7 +237,7 @@ public class Inventory : MonoBehaviour {
                 closestObject.GetComponent<BoxCollider2D>().enabled = false;
             }
             if (closestObject.GetComponent<Rigidbody2D>() != null) {
-                items[inventorySlot].GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                items[activeSlot].GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                 closestObject.GetComponent<Rigidbody2D>().isKinematic = true;
                 closestObject.GetComponent<Rigidbody2D>().freezeRotation = true;
             }

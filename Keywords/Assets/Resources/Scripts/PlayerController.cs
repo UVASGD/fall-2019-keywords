@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
     private Inventory inventory;
 
+    public GameObject activeSquare;//the grid square the player's currently on
+
     //controls
     private PlayerInfo me;
     private KeyCode LeftBumper;
@@ -14,8 +16,10 @@ public class PlayerController : MonoBehaviour {
     private KeyCode BButton;
 
     private float playerSpeed = 2.2f;
+    const float pickupRadius = 0.2f; //how far away can the player pick up an object?
+
     private int playerNum;
-    private int keyboardControlledPlayer = 1; //for debug / testing without controllers - one player can be controlled by the keyboard at a time
+    private int keyboardControlledPlayer = 1; //for debug / testing without controllers - one player can be controlled by the keyboard at a time;
 
     // Use this for initialization
     void Start() {
@@ -36,19 +40,19 @@ public class PlayerController : MonoBehaviour {
         }
 
         ////Interact with world
-        //if (Input.GetKeyDown(AButton) || (me.playerNum == 1 && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
+        //if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
         //    Interact();
-        //} else if (Input.GetKeyDown(BButton) || (me.playerNum == 1 && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.R)))) {
+        //} else if (Input.GetKeyDown(BButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.R)))) {
         //    Drop();
         //}
 
         ////Change which item is active
-        //if (Input.GetKeyDown(LeftBumper) || (me.playerNum == 1 && Input.GetKeyDown(KeyCode.LeftArrow))) {
-        //    SwitchSlot(correctmod(inventorySlot - 1, inventorySize));
-        //} else if (Input.GetKeyDown(RightBumper) || (me.playerNum == 1 && Input.GetKeyDown(KeyCode.RightArrow))) {
-        //    SwitchSlot(correctmod(inventorySlot + 1, inventorySize));
+        //if (Input.GetKeyDown(LeftBumper) || (me.playerNum == keyboardControlledPlayer && Input.GetKeyDown(KeyCode.LeftArrow))) {
+        //    Inventory.DecSlot();
+        //} else if (Input.GetKeyDown(RightBumper) || (me.playerNum == keyboardControlledPlayer && Input.GetKeyDown(KeyCode.RightArrow))) {
+        //    Inventory.IncSlot();
         //}
-        //make player 1 controllable by keyboard
+        //make keyboardControlledPlayer adjustable by keyboard
         if (me.playerNum == keyboardControlledPlayer) {
             if (Input.GetKeyDown(KeyCode.Alpha1)) {
                 keyboardControlledPlayer = 1;
@@ -67,6 +71,10 @@ public class PlayerController : MonoBehaviour {
         BButton = me.GetKeyCode("B");
         LeftBumper = me.GetKeyCode("LeftBumper");
         RightBumper = me.GetKeyCode("RightBumper");
+    }
+
+    public void SetActiveSquare(GameObject newSquare) {
+        activeSquare = newSquare;
     }
 
     //pseudocode of this:
