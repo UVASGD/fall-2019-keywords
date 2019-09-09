@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour {
         rb.velocity = playerSpeed * new Vector2(me.GetAxis("Horizontal"), me.GetAxis("Vertical"));
         //make keyboardControlledPlayer also controllable by keyboard
         if (playerNum == keyboardControlledPlayer) {
-            rb.velocity = playerSpeed * new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            rb.velocity += playerSpeed * new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         }
 
         ////Interact with world

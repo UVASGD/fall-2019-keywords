@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
-using System.Linq;
 
 //all enums go here
 
@@ -91,6 +90,7 @@ public static class Game {
         }
     }
 
+    //set layer recursively
     public static void SetLayer(GameObject obj, LayerMask layer) {
         obj.layer = layer;
         foreach (Transform child in obj.transform) {

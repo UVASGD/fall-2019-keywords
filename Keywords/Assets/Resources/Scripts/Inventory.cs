@@ -8,7 +8,7 @@ public class Inventory : MonoBehaviour {
     private int inventorySize = 7; //how big is the inventory?
     public int activeSlot;//which slot is currently active?
     private GameObject UI;//the inventory
-    private const float UIScaleFactor = 110;//items in UI appear much smaller for some reason, so I just blow them up
+    private const float UIScaleFactor = 110 * 0.25f;//items in UI appear much smaller for some reason, so I just blow them up
 
     public Color unselectedSlotColor;
     public Color selectedSlotColor;
@@ -58,7 +58,7 @@ public class Inventory : MonoBehaviour {
         Transform SlotUI = UI.transform.Find("Slot" + activeSlot);
         GameObject ItemInUI = Instantiate(obj, SlotUI.position, Quaternion.identity, SlotUI);
         Game.RepositionHeight(ItemInUI, Height.UI);
-        ItemInUI.transform.localScale = new Vector3(UIScaleFactor * ItemInUI.transform.localScale.x, UIScaleFactor * ItemInUI.transform.localScale.y, ItemInUI.transform.localScale.z);
+        ItemInUI.transform.localScale = new Vector3(UIScaleFactor, UIScaleFactor, ItemInUI.transform.localScale.z);
         Game.SetLayer(ItemInUI, LayerMask.NameToLayer("P" + GetComponent<PlayerInfo>().playerNum));
         Game.DisablePhysics(ItemInUI);
     }
