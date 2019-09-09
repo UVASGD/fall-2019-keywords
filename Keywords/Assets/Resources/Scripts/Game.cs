@@ -12,7 +12,7 @@ public enum Height {
     Player = 1,
     Held = 2,
     Wall = 10,
-    UI = 100,
+    UI = 101,
 }
 
 //globals and game specific global functions
@@ -72,10 +72,16 @@ public static class Game {
         if (obj.GetComponent<BoxCollider2D>() != null) {
             obj.GetComponent<BoxCollider2D>().enabled = false;
         }
+        if (obj.GetComponent<Collider2D>() != null) {
+            obj.GetComponent<Collider2D>().enabled = false;
+        }
         if (obj.GetComponent<Rigidbody2D>() != null) {
             obj.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             obj.GetComponent<Rigidbody2D>().isKinematic = true;
             obj.GetComponent<Rigidbody2D>().freezeRotation = true;
+        }
+        foreach (Transform child in obj.transform) {
+            DisablePhysics(child.gameObject);
         }
     }
 
@@ -83,10 +89,16 @@ public static class Game {
         if (obj.GetComponent<BoxCollider2D>() != null) {
             obj.GetComponent<BoxCollider2D>().enabled = true;
         }
+        if (obj.GetComponent<Collider2D>() != null) {
+            obj.GetComponent<Collider2D>().enabled = true;
+        }
         if (obj.GetComponent<Rigidbody2D>() != null) {
             obj.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             obj.GetComponent<Rigidbody2D>().isKinematic = false;
             obj.GetComponent<Rigidbody2D>().freezeRotation = false;
+        }
+        foreach (Transform child in obj.transform) {
+            EnablePhysics(child.gameObject);
         }
     }
 

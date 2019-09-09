@@ -8,7 +8,7 @@ public class Inventory : MonoBehaviour {
     private int inventorySize = 7; //how big is the inventory?
     public int activeSlot;//which slot is currently active?
     private GameObject UI;//the inventory
-    private const float UIScaleFactor = 110 * 0.25f;//items in UI appear much smaller for some reason, so I just blow them up
+    private const float UIScaleFactor = 28;//items in UI appear much smaller for some reason, so I just blow them up
 
     public Color unselectedSlotColor;
     public Color selectedSlotColor;
@@ -55,6 +55,8 @@ public class Inventory : MonoBehaviour {
 
     public void Add(GameObject obj) {
         items[activeSlot] = obj;
+
+        //create item preview in inventory UI
         Transform SlotUI = UI.transform.Find("Slot" + activeSlot);
         GameObject ItemInUI = Instantiate(obj, SlotUI.position, Quaternion.identity, SlotUI);
         Game.RepositionHeight(ItemInUI, Height.UI);
@@ -69,6 +71,8 @@ public class Inventory : MonoBehaviour {
     }
     public void Remove() {
         items[activeSlot] = null;
+
+        //remove item preview in UI
         Transform SlotUI = UI.transform.Find("Slot" + activeSlot);
         Destroy(SlotUI.GetChild(0).gameObject);
     }
