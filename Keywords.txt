@@ -8,6 +8,7 @@ TODO:
         -debug border placement
             -during room creation, if a room is cut in half by another room, separate the halves into two rooms
             -SpawnItemAtCenter works weird sometimes, spawning stuff at an edge or outside the room entirely (for concave rooms or rooms that are split)
+            -I have occasionally seen a door and wall being spawned in the same place, but this is rare.
         -place doors intelligently
             -For each door,
             -Roll dice to figure out whether to give the door a special weighting or not
@@ -52,7 +53,6 @@ TODO:
         -Make player slower when on grid
             -If too fast it's hard to place tiles precisely
     -In-game UI:
-        -Visible inventory at bottom of each player's screen
         -List of recently made words
             -Versus: on side of each player's screen.
             -Coop: one list in center of screen, color coded by player

@@ -158,11 +158,11 @@ public class PlayerController : MonoBehaviour {
         //		print ("taking from square");
         GameObject itemToTake = activeSquare.GetComponent<GridSquare>().tile;
         itemToTake.transform.SetParent(transform);
+        inventory.Add(itemToTake);
         itemToTake.transform.localPosition = holdOffset;
         itemToTake.transform.rotation = Quaternion.identity;
         Game.RepositionHeight(itemToTake, Height.Held);
         activeSquare.GetComponent<GridSquare>().SetTile(null);
-        inventory.Add(itemToTake);
         int x = activeSquare.GetComponent<GridSquare>().x;
         int y = activeSquare.GetComponent<GridSquare>().y;
         if (activeSquare.transform.parent.gameObject.GetComponent<GridControl>()) {
@@ -189,8 +189,9 @@ public class PlayerController : MonoBehaviour {
             return;
         }
         //put item in inventory
-        inventory.Add(closestObject);
+        //inventory.Add(closestObject);
         closestObject.transform.SetParent(transform);
+        inventory.Add(closestObject);
         closestObject.transform.localPosition = holdOffset;
         closestObject.transform.rotation = Quaternion.identity;
         Game.RepositionHeight(closestObject, Height.Held);

@@ -7,8 +7,8 @@ public class Inventory : MonoBehaviour {
     public GameObject[] items; //references to the gameobjects in inventory
     private int inventorySize = 7; //how big is the inventory?
     public int activeSlot;//which slot is currently active?
-    public GameObject UI;//the inventory
-    private const float UIScaleFactor = 90;//items in UI appear much smaller for some reason, so I just blow them up
+    private GameObject UI;//the inventory
+    private const float UIScaleFactor = 110;//items in UI appear much smaller for some reason, so I just blow them up
 
     public Color unselectedSlotColor;
     public Color selectedSlotColor;
