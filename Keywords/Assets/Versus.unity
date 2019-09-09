@@ -451,6 +451,46 @@ PrefabInstance:
       propertyPath: UI
       value: 
       objectReference: {fileID: 965264306}
+    - target: {fileID: 6672107738324264241, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: selectedSlotColor.r
+      value: 0.85882354
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672107738324264241, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: selectedSlotColor.g
+      value: 0.85882354
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672107738324264241, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: selectedSlotColor.b
+      value: 0.85882354
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672107738324264241, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: selectedSlotColor.a
+      value: 0.78431374
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672107738324264241, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: unselectedSlotColor.r
+      value: 0.7372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672107738324264241, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: unselectedSlotColor.g
+      value: 0.7372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672107738324264241, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: unselectedSlotColor.b
+      value: 0.7372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672107738324264241, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: unselectedSlotColor.a
+      value: 0.47058824
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 25d26f1ffb97540048bf7196146c6dfa, type: 3}

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Linq;
 
 //all enums go here
 
@@ -12,6 +13,7 @@ public enum Height {
     Player = 1,
     Held = 2,
     Wall = 10,
+    UI = 100,
 }
 
 //globals and game specific global functions
@@ -42,9 +44,51 @@ public static class Game {
         }
     }
 
-    //C# mod is not too useful
+    //C# mod is not too useful. This one acts identically to the python one (and the math one)
     public static int correctmod(int a, int n) {
         return ((a % n) + n) % n;
+    }
+
+    public static Collider2D[] ItemsInRadius(Vector3 pos, float radius) {
+        return Physics2D.OverlapCircleAll(pos, radius, 1 << LayerMask.NameToLayer("Pickup"));
+    }
+
+    public static GameObject ClosestItemInRadius(Vector3 pos, float radius) {
+        Collider2D[] itemsWithinRadius = ItemsInRadius(pos, radius);
+        if (itemsWithinRadius.Length == 0) {
+            return null;
+        }
+        float minDistance = (itemsWithinRadius[0].gameObject.transform.position - pos).magnitude;
+        GameObject closestObject = itemsWithinRadius[0].gameObject;
+        foreach (Collider2D item in itemsWithinRadius) {
+            if ((item.gameObject.transform.position - pos).magnitude < minDistance) {
+                minDistance = (item.gameObject.transform.position - pos).magnitude;
+                closestObject = item.gameObject;
+            }
+        }
+        return closestObject;
+    }
+
+    public static void DisablePhysics(GameObject obj) {
+        if (obj.GetComponent<BoxCollider2D>() != null) {
+            obj.GetComponent<BoxCollider2D>().enabled = false;
+        }
+        if (obj.GetComponent<Rigidbody2D>() != null) {
+            obj.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            obj.GetComponent<Rigidbody2D>().isKinematic = true;
+            obj.GetComponent<Rigidbody2D>().freezeRotation = true;
+        }
+    }
+
+    public static void EnablePhysics(GameObject obj) {
+        if (obj.GetComponent<BoxCollider2D>() != null) {
+            obj.GetComponent<BoxCollider2D>().enabled = true;
+        }
+        if (obj.GetComponent<Rigidbody2D>() != null) {
+            obj.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            obj.GetComponent<Rigidbody2D>().isKinematic = false;
+            obj.GetComponent<Rigidbody2D>().freezeRotation = false;
+        }
     }
 }
 

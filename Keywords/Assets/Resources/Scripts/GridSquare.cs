@@ -20,13 +20,13 @@ public class GridSquare : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.name.Contains("Player") && other.isTrigger) {
             sr.color = highlightedColor;
-            other.transform.gameObject.GetComponent<Inventory>().SetActiveSquare(gameObject);
+            other.transform.gameObject.GetComponent<PlayerController>().SetActiveSquare(gameObject);
         }
     }
     void OnTriggerExit2D(Collider2D other) {
         if (other.gameObject.name.Contains("Player") && other.isTrigger) {
             sr.color = normalColor;
-            other.transform.gameObject.GetComponent<Inventory>().SetActiveSquare(null);
+            other.transform.gameObject.GetComponent<PlayerController>().SetActiveSquare(null);
         }
     }
 

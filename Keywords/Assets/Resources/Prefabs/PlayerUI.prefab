@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 222607640712154150}
   - component: {fileID: 114169285343902600}
   m_Layer: 5
-  m_Name: Inventory3
+  m_Name: Slot3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 0.57254905}
+  m_Color: {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 0.47058824}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 3285794741272705484}
   - component: {fileID: 3333820614515750861}
   m_Layer: 5
-  m_Name: Inventory4
+  m_Name: Slot4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -285,7 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 0.57254905}
+  m_Color: {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 0.47058824}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -313,7 +313,7 @@ GameObject:
   - component: {fileID: 2011725342866589350}
   - component: {fileID: 5737226993019650580}
   m_Layer: 5
-  m_Name: Inventory6
+  m_Name: Slot6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -359,7 +359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 0.57254905}
+  m_Color: {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 0.47058824}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -387,7 +387,7 @@ GameObject:
   - component: {fileID: 1849270980222481752}
   - component: {fileID: 6004474948300675418}
   m_Layer: 5
-  m_Name: Inventory0
+  m_Name: Slot0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -433,7 +433,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 0.57254905}
+  m_Color: {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 0.47058824}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -461,7 +461,7 @@ GameObject:
   - component: {fileID: 1782129784660476382}
   - component: {fileID: 3555109496648418342}
   m_Layer: 5
-  m_Name: Inventory2
+  m_Name: Slot2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -507,7 +507,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 0.57254905}
+  m_Color: {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 0.47058824}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -535,7 +535,7 @@ GameObject:
   - component: {fileID: 6047489593746545760}
   - component: {fileID: 7198457933271645022}
   m_Layer: 5
-  m_Name: Inventory1
+  m_Name: Slot1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -581,7 +581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 0.57254905}
+  m_Color: {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 0.47058824}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -609,7 +609,7 @@ GameObject:
   - component: {fileID: 450263966232174553}
   - component: {fileID: 5647007679937148935}
   m_Layer: 5
-  m_Name: Inventory5
+  m_Name: Slot5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -655,7 +655,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 0.57254905}
+  m_Color: {r: 0.7352941, g: 0.7352941, b: 0.7352941, a: 0.47058824}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
