@@ -59,6 +59,7 @@ public class Inventory : MonoBehaviour {
         GameObject ItemInUI = Instantiate(obj, SlotUI.position, Quaternion.identity, SlotUI);
         Game.RepositionHeight(ItemInUI, Height.UI);
         ItemInUI.transform.localScale = new Vector3(UIScaleFactor * ItemInUI.transform.localScale.x, UIScaleFactor * ItemInUI.transform.localScale.y, ItemInUI.transform.localScale.z);
+        Game.SetLayer(ItemInUI, LayerMask.NameToLayer("P" + GetComponent<PlayerInfo>().playerNum));
         Game.DisablePhysics(ItemInUI);
     }
     public void Remove() {

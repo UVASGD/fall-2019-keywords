@@ -90,5 +90,12 @@ public static class Game {
             obj.GetComponent<Rigidbody2D>().freezeRotation = false;
         }
     }
+
+    public static void SetLayer(GameObject obj, LayerMask layer) {
+        obj.layer = layer;
+        foreach (Transform child in obj.transform) {
+            SetLayer(child.gameObject, layer);
+        }
+    }
 }
 

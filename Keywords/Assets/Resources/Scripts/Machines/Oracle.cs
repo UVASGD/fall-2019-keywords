@@ -10,6 +10,7 @@ public class Oracle : Machine {
         GameObject tile = slot.GetComponent<GridSquare>().tile;
         Destroy(tile);
         slot.GetComponent<GridSquare>().tile = null;
+        //TODO: make piece of paper object with this word instead of printing
         print(words.GetRandomUnmadeWord());
     }
 }

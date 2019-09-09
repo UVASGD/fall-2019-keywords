@@ -71,8 +71,8 @@ public class MakeWalls : MonoBehaviour {
     public GameObject DoorContainer;
     public GameObject WallContainer;
     public GameObject TileContainer;
-    public GameObject VoidContainer;//container for fog of war objects
-    public GameObject[,] VoidArray;//grid of fog of war objects
+    public GameObject FogOfWarContainer;//container for fog of war objects
+    public GameObject[,] FogOfWarArray;//grid of fog of war objects
     public GameObject Wall;
     public GameObject Corner;
     public GameObject Door;
@@ -87,7 +87,7 @@ public class MakeWalls : MonoBehaviour {
         print("cellSize: " + cellSize);
         basePosition = new Vector3(-(width / 2) * cellSize, (width / 2) * cellSize, 0f);
         vertical = Quaternion.Euler(0, 0, 90);
-        VoidArray = new GameObject[width, width];
+        FogOfWarArray = new GameObject[width, width];
 
         FillRooms();
         FillRoomGraph();
@@ -470,18 +470,18 @@ public class MakeWalls : MonoBehaviour {
 
     void PlaceFogOfWarAt(int x, int y) {
         if (!InBounds(x, y)) {
-            GameObject.Instantiate(Void, GetCellPositionFor(x, y), Quaternion.identity, VoidContainer.transform);
+            GameObject.Instantiate(Void, GetCellPositionFor(x, y), Quaternion.identity, FogOfWarContainer.transform);
             return;
         }
-        GameObject newFog = GameObject.Instantiate(Void, GetCellPositionFor(x, y), Quaternion.identity, VoidContainer.transform);
-        VoidArray[x, y] = newFog;
+        GameObject newFog = GameObject.Instantiate(Void, GetCellPositionFor(x, y), Quaternion.identity, FogOfWarContainer.transform);
+        FogOfWarArray[x, y] = newFog;
         if (!ThereShouldBeARightWallAt(x - 1, y)) {
-            newFog.GetComponent<FogOfWar>().neighbors.Add(VoidArray[x - 1, y]);
-            VoidArray[x - 1, y].GetComponent<FogOfWar>().neighbors.Add(newFog);
+            newFog.GetComponent<FogOfWar>().neighbors.Add(FogOfWarArray[x - 1, y]);
+            FogOfWarArray[x - 1, y].GetComponent<FogOfWar>().neighbors.Add(newFog);
         }
         if (!ThereShouldBeABottomWallAt(x, y - 1)) {
-            newFog.GetComponent<FogOfWar>().neighbors.Add(VoidArray[x, y - 1]);
-            VoidArray[x, y - 1].GetComponent<FogOfWar>().neighbors.Add(newFog);
+            newFog.GetComponent<FogOfWar>().neighbors.Add(FogOfWarArray[x, y - 1]);
+            FogOfWarArray[x, y - 1].GetComponent<FogOfWar>().neighbors.Add(newFog);
         }
     }
 
