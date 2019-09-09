@@ -11,6 +11,7 @@ public class GridSquare : MonoBehaviour {
     private SpriteRenderer sr;
     public int x;
     public int y;
+    private int playersOnMe;
     void Awake() {
         tile = null;
         sr = GetComponent<SpriteRenderer>();
@@ -19,14 +20,19 @@ public class GridSquare : MonoBehaviour {
     //TODO: make it rigorously impossible for there to be no active grid square if the player is within the confines of a grid
     void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.name.Contains("Player") && other.isTrigger) {
+            playersOnMe++;
             sr.color = highlightedColor;
             other.transform.gameObject.GetComponent<PlayerController>().SetActiveSquare(gameObject);
         }
     }
     void OnTriggerExit2D(Collider2D other) {
         if (other.gameObject.name.Contains("Player") && other.isTrigger) {
-            sr.color = normalColor;
-            other.transform.gameObject.GetComponent<PlayerController>().SetActiveSquare(null);
+            playersOnMe--;
+            if (playersOnMe <= 0) {
+                playersOnMe = 0;
+                sr.color = normalColor;
+                other.transform.gameObject.GetComponent<PlayerController>().SetActiveSquare(null);
+            }
         }
     }
 
