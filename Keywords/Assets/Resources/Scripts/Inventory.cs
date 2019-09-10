@@ -54,6 +54,11 @@ public class Inventory : MonoBehaviour {
     }
 
     public void Add(GameObject obj) {
+        //TODO: if inventory is not full, cycle through spots until an empty slot is found, then add the objcet to that slot
+        //Currently, Add is simply not called when activeSlot has something in it
+        //while (Get()) {
+        //    IncSlot();
+        //}
         items[activeSlot] = obj;
 
         //create item preview in inventory UI

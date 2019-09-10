@@ -105,8 +105,8 @@ public class PlayerController : MonoBehaviour {
     private void Interact() {
         //		print ("interacting");
         bool x = (activeSquare != null);
-        bool y = (inventory.items[inventory.activeSlot] != null);
-        bool z = y ? inventory.items[inventory.activeSlot].CompareTag("LetterTile") : false;
+        bool y = (inventory.Get() != null);
+        bool z = y ? inventory.Get().CompareTag("LetterTile") : false;
         bool w = x ? activeSquare.GetComponent<GridSquare>().tile != null : false;
         //		print (x + " " + y + " " + z + " " + w);
 

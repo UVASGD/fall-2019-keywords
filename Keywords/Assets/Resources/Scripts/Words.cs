@@ -2,8 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Linq;
 
 public class Words : MonoBehaviour {
+
+    public string wordsFilePath; // where is the words file that I read from?
+
+    public int minWordLength; //minimum word length allowed
+    public int maxWordLength; //maximum word length allowed
+    public int maxWordLengthForScoring; //maximum word length taken into consideration when determining how many words can be made from a set of letters
+
     private Dictionary<char, int> characterFrequencies = new Dictionary<char, int> {
         {'e',37902},
         {'s',30209},
@@ -43,6 +51,7 @@ public class Words : MonoBehaviour {
     List<string> madeLevelWords;//all words from currentLevelWords that have been made (by somebody).
     List<string>[] madeLevelWordsForEachPlayer;
     List<char> currentSourceChars;//all chars in the current source word.
+    [HideInInspector]
     public int levelScore;//how fertile are the characters in the level?
     public float humanKnowledgeFactor = 0.7f; //approximately what percentage of words less than 8 letters long does the average player actually know?
 
@@ -50,7 +59,8 @@ public class Words : MonoBehaviour {
     private AudioSource AlreadyMadeWordSFX;
 
     void Awake() {
-        words = File.ReadAllLines("Assets/Words.txt");
+        words = File.ReadAllLines(wordsFilePath);
+        words = words.Where(w => w.Length >= minWordLength && w.Length <= maxWordLength).ToArray();
         numletterwords = GetNumLetterWords();
         currentSourceWords = GetSomeSourceWords(numLevels, 75, 250);
         currentSourceChars = new List<char>();
@@ -95,23 +105,26 @@ public class Words : MonoBehaviour {
     public List<string> GetWords(string letters) {
         List<string> result = new List<string>();
         foreach (string word in words) {
-            int c = 0;
-            bool done = false;
-            while (c < word.Length && !done) {
-                if (!letters.Contains(word.Substring(c, 1))) {
-                    done = true;
+            int wordlength = word.Length;
+            if (wordlength >= minWordLength && wordlength <= maxWordLength) {
+                int c = 0;
+                bool done = false;
+                while (c < word.Length && !done) {
+                    if (!letters.Contains(word.Substring(c, 1))) {
+                        done = true;
+                    }
+                    c++;
                 }
-                c++;
-            }
-            if (!done) {
-                result.Add(word);
+                if (!done) {
+                    result.Add(word);
+                }
             }
         }
         return result;
     }
 
     public int GetScore(string letters) {
-        return GetWords(letters).Count;
+        return GetWords(letters).Where(w => w.Length <= maxWordLengthForScoring).ToList().Count;
     }
 
     public List<string> GetWordsExact(string letters) {

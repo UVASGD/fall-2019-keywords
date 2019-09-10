@@ -2949,7 +2949,7 @@ PrefabInstance:
     - target: {fileID: 114829071905299904, guid: 1e7e92cfb695e4d179e54862a2a0515e,
         type: 3}
       propertyPath: width
-      value: 9
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e7e92cfb695e4d179e54862a2a0515e, type: 3}
@@ -3009,7 +3009,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bf64fa501ac94800b98efe69c221461, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numLevels: 12
+  wordsFilePath: Assets/AllWords.txt
+  minWordLength: 4
+  maxWordLength: 100
+  maxWordLengthForScoring: 7
+  numLevels: 5
   levelScore: 0
   humanKnowledgeFactor: 0.7
 --- !u!4 &1569157446

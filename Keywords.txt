@@ -203,4 +203,4 @@ Solution D:
 
 
 words:
-https://boardgames.stackexchange.com/questions/38366/latest-collins-scrabble-words-list-in-text-file
+https://www.wordgamedictionary.com/twl06/download/twl06.txt
