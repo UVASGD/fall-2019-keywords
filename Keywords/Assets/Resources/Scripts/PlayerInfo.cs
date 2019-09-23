@@ -94,7 +94,7 @@ public class PlayerInfo : MonoBehaviour {
         return controlSet[playerNum - 1];
     }
 
-    public float GetAxis(string axisName) {
+    public float GetAxisWindows(string axisName) {
         if (playerNum < 1 || playerNum > 4) {
             print("playerNum not a valid number fix it");
             return 0f;
@@ -107,6 +107,50 @@ public class PlayerInfo : MonoBehaviour {
             return Input.GetAxis("P" + playerNum + "_Horizontal_R");
         } else if (axisName == "Vertical_R") {
             return Input.GetAxis("P" + playerNum + "_Vertical_R");
+        } else if (axisName == "RTrigger") {
+            return Input.GetAxis("P" + playerNum + "_RTrigger_Windows");
+        } else {
+            print("axis name not recognized");
+            return 0f;
+        }
+    }
+
+    public float GetAxisOSX(string axisName) {
+        if (playerNum < 1 || playerNum > 4) {
+            print("playerNum not a valid number fix it");
+            return 0f;
+        }
+        if (axisName == "Horizontal") {
+            return Input.GetAxis("P" + playerNum + "_Horizontal");
+        } else if (axisName == "Vertical") {
+            return Input.GetAxis("P" + playerNum + "_Vertical");
+        } else if (axisName == "Horizontal_R") {
+            return Input.GetAxis("P" + playerNum + "_Horizontal_R_OSX");
+        } else if (axisName == "Vertical_R") {
+            return Input.GetAxis("P" + playerNum + "_Vertical_R_OSX");
+        } else if (axisName == "RTrigger") {
+            return Input.GetAxis("P" + playerNum + "_RTrigger");
+        } else {
+            print("axis name not recognized");
+            return 0f;
+        }
+    }
+
+    public float GetAxisLinux(string axisName) {
+        if (playerNum < 1 || playerNum > 4) {
+            print("playerNum not a valid number fix it");
+            return 0f;
+        }
+        if (axisName == "Horizontal") {
+            return Input.GetAxis("P" + playerNum + "_Horizontal");
+        } else if (axisName == "Vertical") {
+            return Input.GetAxis("P" + playerNum + "_Vertical");
+        } else if (axisName == "Horizontal_R") {
+            return Input.GetAxis("P" + playerNum + "_Horizontal_R");
+        } else if (axisName == "Vertical_R") {
+            return Input.GetAxis("P" + playerNum + "_Vertical_R");
+        } else if (axisName == "RTrigger") {
+            return Input.GetAxis("P" + playerNum + "_RTrigger");
         } else {
             print("axis name not recognized");
             return 0f;

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
@@ -23,6 +24,12 @@ public class PlayerController : MonoBehaviour {
     private int playerNum;
     private int keyboardControlledPlayer = 1; //for debug / testing without controllers - one player can be controlled by the keyboard at a time;
 
+    private Func<string, float> GetAxis;
+
+    private GameObject aimIndicator;
+
+    private bool fired;
+
     // Use this for initialization
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -31,14 +38,32 @@ public class PlayerController : MonoBehaviour {
         playerNum = me.playerNum;
         inventory = GetComponent<Inventory>();
         TileContainer = GameObject.Find("Tiles");
+        aimIndicator = transform.Find("AimIndicator").gameObject;
         SetControls();
     }
 
     // Update is called once per frame
     void Update() {
-        print(me.playerNum+":"+me.GetAxis("Horizontal_R"));
         //movement
-        rb.velocity = playerSpeed * new Vector2(me.GetAxis("Horizontal"), me.GetAxis("Vertical"));
+        rb.velocity = playerSpeed * new Vector2(GetAxis("Horizontal"), GetAxis("Vertical"));
+
+        //aiming and firing
+        Vector2 aim = new Vector2(GetAxis("Horizontal_R"), GetAxis("Vertical_R")).normalized;
+        float trigger = GetAxis("RTrigger");
+        if (!fired && trigger >= 0.9f && !aim.Equals(Vector2.zero)) {
+            //fire weapon/tool
+            fired = true;
+            print("activating held item");
+        }
+        if (fired && trigger < 0.1f) {
+            fired = false;
+        }
+
+        //debug
+        aimIndicator.transform.position = (Vector2)transform.position + aim;
+        aimIndicator.GetComponent<SpriteRenderer>().color = new Color(trigger, trigger, trigger);
+        //print(me.playerNum + ":" + trigger);
+
         //make keyboardControlledPlayer also controllable by keyboard
         if (playerNum == keyboardControlledPlayer) {
             Vector2 rawVelocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -79,6 +104,12 @@ public class PlayerController : MonoBehaviour {
         BButton = me.GetKeyCode("B");
         LeftBumper = me.GetKeyCode("LeftBumper");
         RightBumper = me.GetKeyCode("RightBumper");
+        GetAxis = me.GetAxisWindows;
+        if (Game.IsOnOSX) {
+            GetAxis = me.GetAxisOSX;
+        } else if (Game.IsOnLinux) {
+            GetAxis = me.GetAxisLinux;
+        }
     }
 
     public void SetActiveSquare(GameObject newSquare) {
