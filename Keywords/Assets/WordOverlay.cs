@@ -22,7 +22,6 @@ public class WordOverlay : MonoBehaviour
 	public void InitializeWord(string word) {
 		if (coroutineInitialized) return;
 		coroutineInitialized = true;
-		print("Initializing");
 		text.SetText(word);
 		StartCoroutine(WaitCR());
 	}
@@ -55,7 +54,6 @@ public class WordOverlay : MonoBehaviour
 		while (t < timeUntilDecay) {
 			if (!coroutinePaused) {
 				t += Time.deltaTime;
-				print(t);
 				yield return new WaitForEndOfFrame();
 			}
 		}
