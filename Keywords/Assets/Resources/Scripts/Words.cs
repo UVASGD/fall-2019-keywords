@@ -193,6 +193,7 @@ public class Words : MonoBehaviour {
             madeWords.Add(word);
             madeLevelWords.Add(word);
             GetKeySFX.Play();
+			FindObjectOfType<WordOverlayHandler>().CreateWord(word);
             return true;
         }
         return false;
