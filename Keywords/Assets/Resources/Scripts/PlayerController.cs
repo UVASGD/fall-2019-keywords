@@ -24,6 +24,12 @@ public class PlayerController : MonoBehaviour {
     private int playerNum;
     private int keyboardControlledPlayer = 1; //for debug / testing without controllers - one player can be controlled by the keyboard at a time;
 
+	//Idle variables
+	public float timeUntilIdle = 3f;
+	public bool idle;
+	private bool idleLF;
+	private float timeSinceLastMoved;
+
     private Func<string, float> GetAxis;
 
     private GameObject aimIndicator;
@@ -41,7 +47,12 @@ public class PlayerController : MonoBehaviour {
         TileContainer = GameObject.Find("Tiles");
         aimIndicator = transform.Find("AimIndicator").gameObject;
         SetControls();
-    }
+
+		//Idle
+		timeSinceLastMoved = 0f;
+		idle = false;
+		idleLF = false;
+	}
 
     // Update is called once per frame
     void Update() {
@@ -86,6 +97,24 @@ public class PlayerController : MonoBehaviour {
             }
             rb.velocity += playerSpeed * rawVelocity;
         }
+
+		if (rb.velocity.sqrMagnitude > float.Epsilon * float.Epsilon) {
+			timeSinceLastMoved = 0f;
+			idle = false;
+		} else {
+			if (timeSinceLastMoved > timeUntilIdle) {
+				idle = true;
+			}
+			timeSinceLastMoved += Time.deltaTime;
+		}
+
+		if (idle && !idleLF) {
+			GameManager.GetWordOverlayHandler(playerNum).AppearWords();
+		} else if (!idle && idleLF) {
+			GameManager.GetWordOverlayHandler(playerNum).DisappearWords();
+		}
+
+		idleLF = idle;
 
         ////Interact with world
         if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {

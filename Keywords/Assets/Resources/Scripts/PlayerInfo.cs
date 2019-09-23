@@ -8,10 +8,10 @@ public class PlayerInfo : MonoBehaviour {
     public int playerNum;
     public int keys;//how many keys does the player have?
     public GameObject UI;//this player's UI;
-    private Text keyUI;//UI which displays how many keys the player has
+    private TMPro.TextMeshProUGUI keyUI;//UI which displays how many keys the player has
 
     private void Start() {
-        keyUI = UI.transform.Find("Keys").gameObject.GetComponent<Text>();
+        keyUI = UI.transform.Find("Keys").gameObject.GetComponent<TMPro.TextMeshProUGUI>();
     }
 
     public void IncKeys() {

@@ -11,7 +11,7 @@ public class LetterTile : MonoBehaviour {
     private Words words;
 
     void Awake() {
-        words = GameObject.Find("GM").GetComponent<Words>();
+        words = GameManager.words;
         letterSprite = transform.GetChild(0).gameObject;
         numberSprite = transform.GetChild(1).gameObject;
         //		SetLetter (words.GetRandomSourceChar ());
