@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerInfo : MonoBehaviour {
+public class PlayerInfo : MonoBehaviour
+{
 
     public int playerNum;
     public int keys;//how many keys does the player have?
@@ -109,7 +110,32 @@ public class PlayerInfo : MonoBehaviour {
                 print("playerNum not a valid number fix it");
                 return 0f;
             }
-        } else {
+        }
+        else if (axisName == "Horizontal_R")
+        {
+            if (playerNum > 0 && playerNum < 5)
+            {
+                return Input.GetAxis("P" + playerNum + "_Horizontal_R");
+            }
+            else
+            {
+                print("playerNum not a valid number fix it");
+                return 0f;
+            }
+        }
+        else if (axisName == "Vertical_R")
+        {
+            if (playerNum > 0 && playerNum < 5)
+            {
+                return Input.GetAxis("P" + playerNum + "_Vertical_R");
+            }
+            else
+            {
+                print("playerNum not a valid number fix it");
+                return 0f;
+            }
+        }
+        else {
             print("axis name not recognized");
             return 0f;
         }

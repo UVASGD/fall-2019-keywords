@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        print(me.playerNum+":"+me.GetAxis("Horizontal_R"));
         //movement
         rb.velocity = playerSpeed * new Vector2(me.GetAxis("Horizontal"), me.GetAxis("Vertical"));
         //make keyboardControlledPlayer also controllable by keyboard
