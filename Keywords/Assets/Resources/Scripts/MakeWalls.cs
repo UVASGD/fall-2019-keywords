@@ -80,6 +80,8 @@ public class MakeWalls : MonoBehaviour {
     public GameObject Tile;
     public GameObject Void;//fog of war objects
 
+    public int seed;//seed for world gen
+
     // Use this for initialization
     void Awake() {
         Destroy(GetComponent<SpriteRenderer>());
