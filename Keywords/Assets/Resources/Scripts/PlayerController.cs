@@ -28,7 +28,8 @@ public class PlayerController : MonoBehaviour {
 
     private GameObject aimIndicator;
 
-    private bool fired;
+    private bool rt_pressed;
+    private bool lt_pressed;
 
     // Use this for initialization
     void Start() {
@@ -50,19 +51,32 @@ public class PlayerController : MonoBehaviour {
         //aiming and firing
         Vector2 aim = new Vector2(GetAxis("Horizontal_R"), GetAxis("Vertical_R")).normalized;
         float trigger = GetAxis("RTrigger");
-        if (!fired && trigger >= 0.9f && !aim.Equals(Vector2.zero)) {
-            //fire weapon/tool
-            fired = true;
-            print("activating held item");
+        if (!rt_pressed && trigger > 0.9f) {
+            //fire weapon/tool if aiming, else switch inventory slots
+            rt_pressed = true;
+            if (aim.Equals(Vector2.zero)) {
+                inventory.IncSlot();
+            } else {
+                print("activating held item");
+            }
         }
-        if (fired && trigger < 0.1f) {
-            fired = false;
+        if (rt_pressed && trigger < 0.1f) {
+            rt_pressed = false;
         }
 
         //debug
         aimIndicator.transform.position = (Vector2)transform.position + aim;
         aimIndicator.GetComponent<SpriteRenderer>().color = new Color(trigger, trigger, trigger);
-        //print(me.playerNum + ":" + trigger);
+
+        trigger = GetAxis("LTrigger");
+        if (!lt_pressed && trigger > 0.9f) {
+            //switch inventory slot
+            lt_pressed = true;
+            inventory.DecSlot();
+        }
+        if (lt_pressed && trigger < 0.1f) {
+            lt_pressed = false;
+        }
 
         //make keyboardControlledPlayer also controllable by keyboard
         if (playerNum == keyboardControlledPlayer) {

@@ -109,6 +109,8 @@ public class PlayerInfo : MonoBehaviour {
             return Input.GetAxis("P" + playerNum + "_Vertical_R");
         } else if (axisName == "RTrigger") {
             return Input.GetAxis("P" + playerNum + "_RTrigger_Windows");
+        } else if (axisName == "LTrigger") {
+            return Input.GetAxis("P" + playerNum + "_LTrigger_Windows");
         } else {
             print("axis name not recognized");
             return 0f;
@@ -130,6 +132,8 @@ public class PlayerInfo : MonoBehaviour {
             return Input.GetAxis("P" + playerNum + "_Vertical_R_OSX");
         } else if (axisName == "RTrigger") {
             return Input.GetAxis("P" + playerNum + "_RTrigger");
+        } else if (axisName == "LTrigger") {
+            return Input.GetAxis("P" + playerNum + "_LTrigger_OSX");
         } else {
             print("axis name not recognized");
             return 0f;
@@ -151,6 +155,8 @@ public class PlayerInfo : MonoBehaviour {
             return Input.GetAxis("P" + playerNum + "_Vertical_R");
         } else if (axisName == "RTrigger") {
             return Input.GetAxis("P" + playerNum + "_RTrigger");
+        } else if (axisName == "LTrigger") {
+            return Input.GetAxis("P" + playerNum + "_LTrigger_Linux");
         } else {
             print("axis name not recognized");
             return 0f;
