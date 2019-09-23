@@ -13,50 +13,44 @@ public class WordOverlay : MonoBehaviour
 
 	public TMP_Text text;
 
-	private Color tempColor;
-
     // Start is called before the first frame update
     void Start() {
-		//text = GetComponent<TMP_Text>();
-		tempColor = text.color;
 		coroutinePaused = false;
 		coroutineInitialized = false;
     }
-
-	private void Update () {
-		if (Input.GetKeyDown(KeyCode.J)) {
-			Disappear();
-		}
-		else if (Input.GetKeyDown(KeyCode.K)) {
-			Appear();
-		}
-	}
 
 	public void InitializeWord(string word) {
 		if (coroutineInitialized) return;
 		coroutineInitialized = true;
 		print("Initializing");
 		text.SetText(word);
-		StartCoroutine(DisappearCR());
+		StartCoroutine(WaitCR());
 	}
 
 	public void Appear () {
-		coroutinePaused = true;
-		print("Appear");
-		tempColor = text.color;
-		text.color = new Color(tempColor.r, tempColor.g, tempColor.b, 1f);
+		StopAllCoroutines();
+		StartCoroutine(FadeCR(1f));
 	}
 
 	public void Disappear () {
-		print("Disappear");
-		text.color = tempColor;
-		coroutinePaused = false;
+		StopAllCoroutines();
+		StartCoroutine(FadeCR(0f));
 	}
 
-	IEnumerator DisappearCR () {
-		print("DISSAPPEYAH");
-		//if (!coroutineInitialized) {
-		print("Waiting...");
+	//targetAlpha = 0f if disappearing, 1f if appearing.
+	IEnumerator FadeCR (float targetAlpha) {
+		Color startColor = text.color;
+		Color endColor = new Color(startColor.r, startColor.g, startColor.b, targetAlpha);
+		float t = 0f;
+
+		while (t < 1f) {
+			text.color = Color.Lerp(startColor, endColor, t);
+			t += Time.deltaTime / timeSpentDecaying;
+			yield return new WaitForEndOfFrame();
+		}
+	}
+
+	IEnumerator WaitCR () {
 		float t = 0f;
 		while (t < timeUntilDecay) {
 			if (!coroutinePaused) {
@@ -65,16 +59,6 @@ public class WordOverlay : MonoBehaviour
 				yield return new WaitForEndOfFrame();
 			}
 		}
-		t = 0f;
-		while (t < timeSpentDecaying) {
-			print("Going down...");
-			if (!coroutinePaused) {
-				text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a - Time.deltaTime / timeSpentDecaying);
-				t += Time.deltaTime;
-				print(t);
-				yield return new WaitForEndOfFrame();
-			}
-			}
-		//}
+		Disappear();
 	}
 }
