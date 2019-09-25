@@ -186,7 +186,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &6672107738324264240
 MonoBehaviour:
@@ -275,3 +275,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activeSquare: {fileID: 0}
   holdOffset: {x: 0.1, y: 0.1, z: 0}
+  timeUntilIdle: 3
+  idle: 0
