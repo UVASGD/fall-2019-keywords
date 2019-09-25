@@ -23,8 +23,8 @@ class Room {
     public GameObject SpawnItem(GameObject item, Transform parent = null) {
         int randomSquareIndex = Random.Range(0, squares.Count);
         Vector2Int square = squares[randomSquareIndex];
-        Vector3 pos = GameObject.Find("GM").GetComponent<MakeWalls>().GetCellPositionFor(square.x, square.y);
-        float centerToWall = GameObject.Find("GM").GetComponent<MakeWalls>().Wall.transform.localScale.x / 2f;
+        Vector3 pos = GameManager.makeWalls.GetCellPositionFor(square.x, square.y);
+        float centerToWall = GameManager.makeWalls.Wall.transform.localScale.x / 2f;
         pos += new Vector3(Random.Range(-centerToWall, centerToWall), Random.Range(-centerToWall, centerToWall), 0f);
         return GameObject.Instantiate(item, pos, Quaternion.identity, parent);
     }
@@ -34,8 +34,8 @@ class Room {
     public GameObject SpawnItem(GameObject item, Quaternion rot, Transform parent = null) {
         int randomSquareIndex = Random.Range(0, squares.Count);
         Vector2Int square = squares[randomSquareIndex];
-        Vector3 pos = GameObject.Find("GM").GetComponent<MakeWalls>().GetCellPositionFor(square.x, square.y);
-        float centerToWall = GameObject.Find("GM").GetComponent<MakeWalls>().Wall.transform.localScale.x / 2f;
+        Vector3 pos = GameManager.makeWalls.GetCellPositionFor(square.x, square.y);
+        float centerToWall = GameManager.makeWalls.Wall.transform.localScale.x / 2f;
         pos += new Vector3(Random.Range(-centerToWall, centerToWall), Random.Range(-centerToWall, centerToWall), 0f);
         return GameObject.Instantiate(item, pos, rot, parent);
     }
@@ -45,7 +45,7 @@ class Room {
     public GameObject SpawnItemAtCenter(GameObject item, Transform parent = null) {
         Vector3 weightedAvg = new Vector3(0, 0, 0);
         foreach (Vector2Int square in squares) {
-            weightedAvg += GameObject.Find("GM").GetComponent<MakeWalls>().GetCellPositionFor(square.x, square.y);
+            weightedAvg += GameManager.makeWalls.GetCellPositionFor(square.x, square.y);
         }
         weightedAvg *= (1f / squares.Count);
         return GameObject.Instantiate(item, weightedAvg, Quaternion.identity, parent);

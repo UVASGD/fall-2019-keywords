@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Oracle : Machine {
-    public Words words = GameObject.Find("GM").GetComponent<Words>();
+    public Words words = GameManager.words;
 
     protected override void PerformMachineAction() {
         //delete tile

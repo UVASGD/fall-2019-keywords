@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
@@ -23,6 +24,19 @@ public class PlayerController : MonoBehaviour {
     private int playerNum;
     private int keyboardControlledPlayer = 1; //for debug / testing without controllers - one player can be controlled by the keyboard at a time;
 
+	//Idle variables
+	public float timeUntilIdle = 3f;
+	public bool idle;
+	private bool idleLF;
+	private float timeSinceLastMoved;
+
+    private Func<string, float> GetAxis;
+
+    private GameObject aimIndicator;
+
+    private bool rt_pressed;
+    private bool lt_pressed;
+
     // Use this for initialization
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -31,13 +45,50 @@ public class PlayerController : MonoBehaviour {
         playerNum = me.playerNum;
         inventory = GetComponent<Inventory>();
         TileContainer = GameObject.Find("Tiles");
+        aimIndicator = transform.Find("AimIndicator").gameObject;
         SetControls();
-    }
+
+		//Idle
+		timeSinceLastMoved = 0f;
+		idle = false;
+		idleLF = false;
+	}
 
     // Update is called once per frame
     void Update() {
         //movement
-        rb.velocity = playerSpeed * new Vector2(me.GetAxis("Horizontal"), me.GetAxis("Vertical"));
+        rb.velocity = playerSpeed * new Vector2(GetAxis("Horizontal"), GetAxis("Vertical"));
+
+        //aiming and firing
+        Vector2 aim = new Vector2(GetAxis("Horizontal_R"), GetAxis("Vertical_R")).normalized;
+        float trigger = GetAxis("RTrigger");
+        if (!rt_pressed && trigger > 0.9f) {
+            //fire weapon/tool if aiming, else switch inventory slots
+            rt_pressed = true;
+            if (aim.Equals(Vector2.zero)) {
+                inventory.IncSlot();
+            } else {
+                print("activating held item");
+            }
+        }
+        if (rt_pressed && trigger < 0.1f) {
+            rt_pressed = false;
+        }
+
+        //debug
+        aimIndicator.transform.position = (Vector2)transform.position + aim;
+        aimIndicator.GetComponent<SpriteRenderer>().color = new Color(trigger, trigger, trigger);
+
+        trigger = GetAxis("LTrigger");
+        if (!lt_pressed && trigger > 0.9f) {
+            //switch inventory slot
+            lt_pressed = true;
+            inventory.DecSlot();
+        }
+        if (lt_pressed && trigger < 0.1f) {
+            lt_pressed = false;
+        }
+
         //make keyboardControlledPlayer also controllable by keyboard
         if (playerNum == keyboardControlledPlayer) {
             Vector2 rawVelocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -46,6 +97,24 @@ public class PlayerController : MonoBehaviour {
             }
             rb.velocity += playerSpeed * rawVelocity;
         }
+
+		if (rb.velocity.sqrMagnitude > float.Epsilon * float.Epsilon) {
+			timeSinceLastMoved = 0f;
+			idle = false;
+		} else {
+			if (timeSinceLastMoved > timeUntilIdle) {
+				idle = true;
+			}
+			timeSinceLastMoved += Time.deltaTime;
+		}
+
+		if (idle && !idleLF) {
+			GameManager.GetWordOverlayHandler(playerNum).AppearWords();
+		} else if (!idle && idleLF) {
+			GameManager.GetWordOverlayHandler(playerNum).DisappearWords();
+		}
+
+		idleLF = idle;
 
         ////Interact with world
         if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
@@ -78,6 +147,12 @@ public class PlayerController : MonoBehaviour {
         BButton = me.GetKeyCode("B");
         LeftBumper = me.GetKeyCode("LeftBumper");
         RightBumper = me.GetKeyCode("RightBumper");
+        GetAxis = me.GetAxisWindows;
+        if (Game.IsOnOSX) {
+            GetAxis = me.GetAxisOSX;
+        } else if (Game.IsOnLinux) {
+            GetAxis = me.GetAxisLinux;
+        }
     }
 
     public void SetActiveSquare(GameObject newSquare) {
