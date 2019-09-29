@@ -25,7 +25,7 @@ public class GridControl : MonoBehaviour {
     }
 
     void Start() {
-        words = GameObject.Find("GM").GetComponent<Words>();
+        words = GameManager.words;
         getKeySource = GameObject.Find("GetKeySFX").GetComponent<AudioSource>();
         globalGrid = ownerNum == 0;
         if (!globalGrid) {
