@@ -84,6 +84,7 @@ public class MakeWalls : MonoBehaviour {
 
     // Use this for initialization
     void Awake() {
+        Random.InitState(3);
         Destroy(GetComponent<SpriteRenderer>());
         cellSize = Wall.transform.localScale.x + Corner.transform.localScale.x - epsilon;
         print("cellSize: " + cellSize);
