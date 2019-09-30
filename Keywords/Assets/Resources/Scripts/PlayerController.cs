@@ -16,7 +16,11 @@ public class PlayerController : MonoBehaviour {
     private KeyCode RightBumper;
     private KeyCode AButton;
     private KeyCode BButton;
-
+    private bool movementEnabled;
+    [SerializeField]
+    [Range(10f,100f)]
+    private float dashSpeed = 10f;
+    private float DASH_SPEED = 3000f;
     private float playerSpeed = 2.2f;
     const float pickupRadius = 0.2f; //how far away can the player pick up an object?
     public Vector3 holdOffset; //what's the hold position of the currently held inventory item?
@@ -47,7 +51,7 @@ public class PlayerController : MonoBehaviour {
         TileContainer = GameObject.Find("Tiles");
         aimIndicator = transform.Find("AimIndicator").gameObject;
         SetControls();
-
+        movementEnabled = true;
 		//Idle
 		timeSinceLastMoved = 0f;
 		idle = false;
@@ -65,6 +69,7 @@ public class PlayerController : MonoBehaviour {
         if (!rt_pressed && trigger > 0.9f) {
             //fire weapon/tool if aiming, else switch inventory slots
             rt_pressed = true;
+            Blink(aim);
             if (aim.Equals(Vector2.zero)) {
                 inventory.IncSlot();
             } else {
@@ -95,7 +100,10 @@ public class PlayerController : MonoBehaviour {
             if (rawVelocity.magnitude > 1f) {
                 rawVelocity = rawVelocity.normalized;
             }
-            rb.velocity += playerSpeed * rawVelocity;
+            if (movementEnabled)
+            {
+                rb.velocity += playerSpeed * rawVelocity;
+            }
         }
 
 		if (rb.velocity.sqrMagnitude > float.Epsilon * float.Epsilon) {
@@ -275,5 +283,23 @@ public class PlayerController : MonoBehaviour {
         closestObject.transform.rotation = Quaternion.identity;
         Game.RepositionHeight(closestObject, Height.Held);
         Game.DisablePhysics(closestObject);
+    }
+
+    public void Blink(Vector2 v) {
+        //rb.AddForce(v * DASH_SPEED);
+        StartCoroutine(DashCR(v));
+    }
+
+    private IEnumerator DashCR(Vector2 v)
+    {
+        float t = 0f;
+        movementEnabled = false;
+        while(t < .25f)
+        {
+            rb.velocity = v * dashSpeed;
+            t += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        movementEnabled = true;
     }
 }

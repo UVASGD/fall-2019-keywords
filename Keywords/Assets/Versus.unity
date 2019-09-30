@@ -1981,6 +1981,11 @@ PrefabInstance:
       propertyPath: UI
       value: 
       objectReference: {fileID: 193016911}
+    - target: {fileID: 6672107738324264255, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: dashSpeed
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 25d26f1ffb97540048bf7196146c6dfa, type: 3}
