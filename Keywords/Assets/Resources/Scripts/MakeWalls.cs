@@ -80,12 +80,9 @@ public class MakeWalls : MonoBehaviour {
     public GameObject Tile;
     public GameObject Void;//fog of war objects
 
-    public int seed;//seed for world gen
 
     // Use this for initialization
     void Awake() {
-        seed = 168;
-        Random.InitState(seed);
         Destroy(GetComponent<SpriteRenderer>());
         cellSize = Wall.transform.localScale.x + Corner.transform.localScale.x - epsilon;
         print("cellSize: " + cellSize);
