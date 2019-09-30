@@ -17,10 +17,7 @@ public class PlayerController : MonoBehaviour {
     private KeyCode AButton;
     private KeyCode BButton;
     private bool movementEnabled;
-    [SerializeField]
-    [Range(10f,100f)]
-    private float dashSpeed = 10f;
-    private float DASH_SPEED = 3000f;
+
     private float playerSpeed = 2.2f;
     const float pickupRadius = 0.2f; //how far away can the player pick up an object?
     public Vector3 holdOffset; //what's the hold position of the currently held inventory item?
@@ -285,21 +282,6 @@ public class PlayerController : MonoBehaviour {
         Game.DisablePhysics(closestObject);
     }
 
-    public void Blink(Vector2 v) {
-        //rb.AddForce(v * DASH_SPEED);
-        StartCoroutine(DashCR(v));
-    }
 
-    private IEnumerator DashCR(Vector2 v)
-    {
-        float t = 0f;
-        movementEnabled = false;
-        while(t < .25f)
-        {
-            rb.velocity = v * dashSpeed;
-            t += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-        movementEnabled = true;
-    }
+ 
 }
