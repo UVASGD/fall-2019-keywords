@@ -17,7 +17,11 @@ public class PlayerController : MonoBehaviour {
     private KeyCode AButton;
     private KeyCode BButton;
 
-    private float playerSpeed = 2.2f;
+    private float pMovSpeed = 2.2f;
+    private float pMovHandleBase = 1.0f; // Player movmement "handling" when player is "slow" (within max speed)
+    private float pMovDrag = 0.05f; // Player linear drag when player is "fast"
+    private bool pMovDisable = false; // Disables basic movement mechanics entirely; shouldn't be needed
+    private float pMovHandle; // Current value of movement handling: used to lerp velocity to input velocity (0 to 1)
     const float pickupRadius = 0.2f; //how far away can the player pick up an object?
     public Vector3 holdOffset; //what's the hold position of the currently held inventory item?
 
@@ -57,7 +61,7 @@ public class PlayerController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         //movement
-        rb.velocity = playerSpeed * new Vector2(GetAxis("Horizontal"), GetAxis("Vertical"));
+        HandleMovement(GetAxis("Horizontal"), GetAxis("Vertical"));
 
         //aiming and firing
         Vector2 aim = new Vector2(GetAxis("Horizontal_R"), GetAxis("Vertical_R")).normalized;
@@ -95,7 +99,7 @@ public class PlayerController : MonoBehaviour {
             if (rawVelocity.magnitude > 1f) {
                 rawVelocity = rawVelocity.normalized;
             }
-            rb.velocity += playerSpeed * rawVelocity;
+            rb.velocity += pMovSpeed * rawVelocity;
         }
 
 		if (rb.velocity.sqrMagnitude > float.Epsilon * float.Epsilon) {
@@ -139,6 +143,17 @@ public class PlayerController : MonoBehaviour {
             keyboardControlledPlayer = 3;
         } else if (Input.GetKeyDown(KeyCode.Alpha4)) {
             keyboardControlledPlayer = 4;
+        }
+    }
+
+    private void HandleMovement(float GetAxisX, float GetAxisY) {
+        Vector2 input = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1);
+        if (pMovDisable) return;
+        
+        // stuff here
+
+        if (rb.velocity.magnitude > pMovSpeed) {
+            rb.velocity = rb.velocity * pMovDrag;
         }
     }
 
