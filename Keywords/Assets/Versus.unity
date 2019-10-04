@@ -3530,7 +3530,7 @@ MonoBehaviour:
   - {fileID: 2105357010}
   - {fileID: 470660013}
   - {fileID: 502630041}
-  wordOverlayHandlers:
+  textOverlayHandlers:
   - {fileID: 193016912}
   - {fileID: 328264682}
   - {fileID: 23488819}

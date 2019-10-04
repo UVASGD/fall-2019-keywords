@@ -51,6 +51,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wordPrefab: {fileID: 28212343597881902, guid: c8a09b0b5010f4eed834e6fd631a82a4,
     type: 3}
+  wordFontSize: 16
+  definitionFontSize: 9
 --- !u!114 &654449439
 MonoBehaviour:
   m_ObjectHideFlags: 0

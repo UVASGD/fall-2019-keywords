@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class WordOverlay : MonoBehaviour
+public class TextOverlay : MonoBehaviour
 {
 	public float timeUntilDecay = 10f;
 	public float timeSpentDecaying = 2f;
@@ -13,22 +13,31 @@ public class WordOverlay : MonoBehaviour
 
 	public TMP_Text text;
 
+	float maxAlpha;
+
     // Start is called before the first frame update
     void Start() {
 		coroutinePaused = false;
 		coroutineInitialized = false;
+		maxAlpha = text.color.a;
     }
 
-	public void InitializeWord(string word) {
+	public void InitializeText(string content, float fontSize = 20f) {
+		if (!text) {
+			Debug.LogError("Text reference not defined in WordOverlay.cs!");
+			return;
+		}
+
 		if (coroutineInitialized) return;
 		coroutineInitialized = true;
-		text.SetText(word);
+		text.fontSize = fontSize;
+		text.SetText(content);
 		StartCoroutine(WaitCR());
 	}
 
 	public void Appear () {
 		StopAllCoroutines();
-		StartCoroutine(FadeCR(1f));
+		StartCoroutine(FadeCR(maxAlpha));
 	}
 
 	public void Disappear () {

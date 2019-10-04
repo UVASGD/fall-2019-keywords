@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour {
 
 	//public int playerCount = 4;
 	public GameObject[] players;
-	public WordOverlayHandler[] wordOverlayHandlers;
+	public TextOverlayHandler[] textOverlayHandlers;
 	public Camera[] cameras;
 
 	private void Awake () {
@@ -33,12 +33,12 @@ public class GameManager : MonoBehaviour {
 			players[3] = GameObject.Find("Player4");
 		}
 
-		if (wordOverlayHandlers.Length == 0) {
-			wordOverlayHandlers = new WordOverlayHandler[4];
-			wordOverlayHandlers[0] = GameObject.Find("PlayerUI1").transform.Find("WordList").GetComponent<WordOverlayHandler>();
-			wordOverlayHandlers[1] = GameObject.Find("PlayerUI2").transform.Find("WordList").GetComponent<WordOverlayHandler>();
-			wordOverlayHandlers[2] = GameObject.Find("PlayerUI3").transform.Find("WordList").GetComponent<WordOverlayHandler>();
-			wordOverlayHandlers[3] = GameObject.Find("PlayerUI4").transform.Find("WordList").GetComponent<WordOverlayHandler>();
+		if (textOverlayHandlers.Length == 0) {
+			textOverlayHandlers = new TextOverlayHandler[4];
+			textOverlayHandlers[0] = GameObject.Find("PlayerUI1").transform.Find("WordList").GetComponent<TextOverlayHandler>();
+			textOverlayHandlers[1] = GameObject.Find("PlayerUI2").transform.Find("WordList").GetComponent<TextOverlayHandler>();
+			textOverlayHandlers[2] = GameObject.Find("PlayerUI3").transform.Find("WordList").GetComponent<TextOverlayHandler>();
+			textOverlayHandlers[3] = GameObject.Find("PlayerUI4").transform.Find("WordList").GetComponent<TextOverlayHandler>();
 		}
 
 		if (cameras.Length == 0) {
@@ -54,8 +54,8 @@ public class GameManager : MonoBehaviour {
 		return instance.players;
 	}
 
-	public static WordOverlayHandler[] GetWordOverlayHandlers () {
-		return instance.wordOverlayHandlers;
+	public static TextOverlayHandler[] GetWordOverlayHandlers () {
+		return instance.textOverlayHandlers;
 	}
 
 	public static Camera[] GetCameras () {
@@ -66,8 +66,8 @@ public class GameManager : MonoBehaviour {
 		return instance.players[playerNum-1];
 	}
 
-	public static WordOverlayHandler GetWordOverlayHandler (int playerNum) {
-		return instance.wordOverlayHandlers[playerNum-1];
+	public static TextOverlayHandler GetTextOverlayHandler (int playerNum) {
+		return instance.textOverlayHandlers[playerNum-1];
 	}
 
 	public static Camera GetCamera (int playerNum) {

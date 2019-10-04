@@ -216,10 +216,8 @@ public class Words : MonoBehaviour {
             madeWords.Add(word);
             madeLevelWords.Add(word);
             GetKeySFX.Play();
-			if (dictionary.ContainsKey(word.ToUpper())) {
-				word += " " + dictionary[word.ToUpper()];
-			}
-			GameManager.GetWordOverlayHandler(playerNum).CreateWord(word);
+			
+			GameManager.GetTextOverlayHandler(playerNum).CreateWord(word);
             return true;
         }
         return false;
