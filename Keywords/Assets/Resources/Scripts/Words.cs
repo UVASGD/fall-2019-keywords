@@ -7,6 +7,8 @@ using System.Linq;
 public class Words : MonoBehaviour {
 
     public string wordsFilePath; // where is the words file that I read from?
+	public string definitionsFilePath;
+	public string outputFilePath;
 
     public int minWordLength; //minimum word length allowed
     public int maxWordLength; //maximum word length allowed
@@ -43,6 +45,7 @@ public class Words : MonoBehaviour {
     private const int sumOfCharacterFrequencies = 323730;
     private const int numLettersInSource = 7;
     string[] words;//all words in the dictionary file
+	public Dictionary<string, string> dictionary;
     string[] numletterwords;//all words of exactly numLettersInSource letters in length
     string[] currentSourceWords;//a selection of words which each floor in the dungeon will be based on
     public int numLevels;//how many levels in the dungeon
@@ -61,6 +64,61 @@ public class Words : MonoBehaviour {
     void Awake() {
         words = File.ReadAllLines(wordsFilePath);
         words = words.Where(w => w.Length >= minWordLength && w.Length <= maxWordLength).ToArray();
+
+		dictionary = new Dictionary<string, string>();
+		
+		foreach (string w in words) {
+			if (w != null) {
+				dictionary.Add(w, "");
+			}
+		}
+
+		StreamWriter outputStream = new StreamWriter(outputFilePath);
+		StreamReader defStream = new StreamReader(definitionsFilePath);
+		string currentLine;
+		string[] currentLineTokens;
+		string currentWord = "";
+		string currentDef = "";
+		string token = "";
+
+		int ayaaaa = 0;
+
+		while ((currentLine = defStream.ReadLine()) != null) {
+			ayaaaa++;
+			currentLineTokens = currentLine.Split();
+			currentWord = currentLineTokens[0];
+			currentDef = "";
+			if (dictionary.ContainsKey(currentWord.ToLower())) {
+				for (int i = 1; i < currentLineTokens.Length; i++) {
+					token = currentLineTokens[i];
+					currentDef += currentLineTokens[i] + " ";
+				}
+				int start = 0;
+				int end = currentDef.Length-1;
+				while (currentDef.ElementAt(end) == ' ') {
+					end--;
+				}
+
+				//print("Begin Current Def: " + currentDef);
+				//print("Start: " + currentDef.ElementAt(start));
+				//print("End: " + currentDef.ElementAt(end));
+				if (currentDef.ElementAt(start) == '"') {
+					start++;
+				}
+				if (currentDef.ElementAt(end) == '"') {
+					end--;
+				}
+				currentDef = currentDef.Substring(start, end - start + 1);
+				//print("End Current Def: " + currentDef);
+				//print("=================================================================");
+
+				outputStream.WriteLine(currentWord + "\t" + currentDef);
+				dictionary[currentWord] = currentDef;
+			}
+		}
+		defStream.Close();
+		outputStream.Close();
+
         numletterwords = GetNumLetterWords();
         currentSourceWords = GetSomeSourceWords(numLevels, 75, 250);
         currentSourceChars = new List<char>();
