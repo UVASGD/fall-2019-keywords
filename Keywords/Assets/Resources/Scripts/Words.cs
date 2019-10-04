@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 public class Words : MonoBehaviour {
-
-    public string wordsFilePath; // where is the words file that I read from?
-	public string definitionsFilePath;
-	public string outputFilePath;
+	public string dictionaryFilePath;
 
     public int minWordLength; //minimum word length allowed
     public int maxWordLength; //maximum word length allowed
@@ -62,62 +60,25 @@ public class Words : MonoBehaviour {
     private AudioSource AlreadyMadeWordSFX;
 
     void Awake() {
-        words = File.ReadAllLines(wordsFilePath);
-        words = words.Where(w => w.Length >= minWordLength && w.Length <= maxWordLength).ToArray();
-
+		//words = File.ReadAllLines(wordsFilePath);
+		//words = words.Where(w => w.Length >= minWordLength && w.Length <= maxWordLength).ToArray();
+		var regex = new Regex(Regex.Escape("o"));
+		var newText = regex.Replace("Hello World", "Foo", 1);
+		string[] wordDefPairs = File.ReadAllLines(dictionaryFilePath);
+		words = new string[wordDefPairs.Length];
 		dictionary = new Dictionary<string, string>();
-		
-		foreach (string w in words) {
-			if (w != null) {
-				dictionary.Add(w, "");
-			}
-		}
 
-		StreamWriter outputStream = new StreamWriter(outputFilePath);
-		StreamReader defStream = new StreamReader(definitionsFilePath);
-		string currentLine;
-		string[] currentLineTokens;
 		string currentWord = "";
 		string currentDef = "";
-		string token = "";
+		string[] tokens;
+		for (int i = 0; i < wordDefPairs.Length; i++) {
+			tokens = wordDefPairs[i].Split();
+			currentWord = tokens[0];
 
-		int ayaaaa = 0;
-
-		while ((currentLine = defStream.ReadLine()) != null) {
-			ayaaaa++;
-			currentLineTokens = currentLine.Split();
-			currentWord = currentLineTokens[0];
-			currentDef = "";
-			if (dictionary.ContainsKey(currentWord.ToLower())) {
-				for (int i = 1; i < currentLineTokens.Length; i++) {
-					token = currentLineTokens[i];
-					currentDef += currentLineTokens[i] + " ";
-				}
-				int start = 0;
-				int end = currentDef.Length-1;
-				while (currentDef.ElementAt(end) == ' ') {
-					end--;
-				}
-
-				//print("Begin Current Def: " + currentDef);
-				//print("Start: " + currentDef.ElementAt(start));
-				//print("End: " + currentDef.ElementAt(end));
-				if (currentDef.ElementAt(start) == '"') {
-					start++;
-				}
-				if (currentDef.ElementAt(end) == '"') {
-					end--;
-				}
-				currentDef = currentDef.Substring(start, end - start + 1);
-				//print("End Current Def: " + currentDef);
-				//print("=================================================================");
-
-				outputStream.WriteLine(currentWord + "\t" + currentDef);
-				dictionary[currentWord] = currentDef;
-			}
+			currentDef = string.Join(" ", tokens.Skip(1));
+			words[i] = currentWord.ToLower();
+			dictionary.Add(currentWord, currentDef);
 		}
-		defStream.Close();
-		outputStream.Close();
 
         numletterwords = GetNumLetterWords();
         currentSourceWords = GetSomeSourceWords(numLevels, 75, 250);
@@ -135,6 +96,10 @@ public class Words : MonoBehaviour {
         GetKeySFX = GameObject.Find("GetKeySFX").GetComponent<AudioSource>();
         AlreadyMadeWordSFX = GameObject.Find("AlreadyMadeWordSFX").GetComponent<AudioSource>();
     }
+
+	public string GetDefinition (string word) {
+		return dictionary[word.ToUpper()];
+	}
 
     public void UpdateLevelWords(int level) {
         madeLevelWords.Clear();
@@ -251,6 +216,9 @@ public class Words : MonoBehaviour {
             madeWords.Add(word);
             madeLevelWords.Add(word);
             GetKeySFX.Play();
+			if (dictionary.ContainsKey(word.ToUpper())) {
+				word += " " + dictionary[word.ToUpper()];
+			}
 			GameManager.GetWordOverlayHandler(playerNum).CreateWord(word);
             return true;
         }
