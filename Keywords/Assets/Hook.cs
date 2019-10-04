@@ -17,6 +17,17 @@ public class Hook : MonoBehaviour
 
     Grabbable target;
 
+    //Code Logic Map? (For New Eyes to Better Understand)
+    //PlayerController triggers GrapplingHook.Fire() -> GrapplingHook triggers Hook.launch()
+    //Launch resets variables, sets velocity and physics, sets hasFired so hook can't be launched again
+    //If rope extends beyond max length, triggers launchReturn
+        //Sets toReturn and enables spring to pull back with gun as anchor. Upon collision of hook with player, ungrabs and resets variables.
+    //If hook hits player or another grappling hook, ignore it? Mebbe do something with this later
+    //If hook hits something grabbable, grab() it (Nothing is classified as grabbable atm?)
+        //Grab() grabs the object and enables the spring to pull it back, then starts ReturnTime
+    //If hooks hits a wall, pullPlayer()
+        //Enable spring (with anchor (thing being pulled) being player), set physics to kinematic, and start ReturnTime
+    //ReturnTime() allows travel for an amount of time, then stops the movement, launchReturns, and ungrabs
 
      public void launch(Vector2 dir, float speed)
     {
