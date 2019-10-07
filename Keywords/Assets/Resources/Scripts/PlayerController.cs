@@ -26,10 +26,12 @@ public class PlayerController : MonoBehaviour {
 
 	//Idle variables
 	public float timeUntilIdle = 3f;
+    [HideInInspector]
 	public bool idle;
 	private bool idleLF;
-	public float timeUntilLongIdle = 6f;
-	public bool longIdle;
+	public float timeUntilLongIdle = 3f;
+    [HideInInspector]
+    public bool longIdle;
 	private bool longIdleLF;
 
 	private float timeSinceLastMoved;

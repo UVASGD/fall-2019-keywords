@@ -7,6 +7,7 @@ public class TextOverlayHandler : MonoBehaviour {
 
 	public float wordFontSize;
 	public float definitionFontSize;
+    public int maxWords;
 
 	private Queue<TextOverlay> wordOverlays;
 	private Queue<TextOverlay> defOverlays;
@@ -19,7 +20,7 @@ public class TextOverlayHandler : MonoBehaviour {
 	public void CreateWord (string word) {
 		GameObject instance = Instantiate(wordPrefab.gameObject, transform) as GameObject;
 		TextOverlay overlay = instance.GetComponent<TextOverlay>();
-		if (wordOverlays.Count >= 10) {
+		if (wordOverlays.Count >= maxWords) {
 			TextOverlay wordToRemove = wordOverlays.Dequeue();
 			Destroy(wordToRemove.gameObject);
 		}
@@ -35,9 +36,9 @@ public class TextOverlayHandler : MonoBehaviour {
 																	  overlay.GetComponent<RectTransform>().sizeDelta.x,
 																	  overlay.GetComponent<RectTransform>().sizeDelta.y * (definitionFontSize / wordFontSize)
 																	 );
-		if (wordOverlays.Count >= 10) {
-			TextOverlay wordToRemove = wordOverlays.Dequeue();
-			Destroy(wordToRemove.gameObject);
+		if (defOverlays.Count >= maxWords) {
+			TextOverlay defToRemove = defOverlays.Dequeue();
+			Destroy(defToRemove.gameObject);
 		}
 		defOverlays.Enqueue(overlay);
 		overlay.InitializeText(def, definitionFontSize);
