@@ -6,6 +6,7 @@ using System;
 
 //keeping layer orders consistent
 public enum Height {
+    Background = -20,
     Floor = -9,
     OnGridSquare = -8,
     OnFloor = -1,
@@ -108,6 +109,11 @@ public static class Game {
         foreach (Transform child in obj.transform) {
             SetLayer(child.gameObject, layer);
         }
+    }
+
+    public static Color RandomDarkColor()
+    {
+        return UnityEngine.Random.ColorHSV(0f,1f,0.5f,1f,0f,0.3f,1f,1f);
     }
 }
 

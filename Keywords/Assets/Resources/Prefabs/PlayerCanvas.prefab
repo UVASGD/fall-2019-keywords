@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 5, y: 2.5}
-  m_SizeDelta: {x: -10, y: -5}
+  m_AnchoredPosition: {x: 2.5, y: 20}
+  m_SizeDelta: {x: -5, y: -40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &654449440
 MonoBehaviour:
@@ -52,8 +52,8 @@ MonoBehaviour:
   wordPrefab: {fileID: 28212343597881902, guid: c8a09b0b5010f4eed834e6fd631a82a4,
     type: 3}
   wordFontSize: 12
-  definitionFontSize: 6
-  maxWords: 5
+  definitionFontSize: 7
+  maxWords: 4
 --- !u!114 &654449439
 MonoBehaviour:
   m_ObjectHideFlags: 0

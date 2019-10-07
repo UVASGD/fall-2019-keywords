@@ -6,8 +6,14 @@ public class FogOfWar : MonoBehaviour {
 
     public List<GameObject> neighbors;//Fog of War objects adjacent to this one and in the same room
 
+    [HideInInspector]
+    public Color floorColor;
+    public float floorTintAlpha;
+
     void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.CompareTag("Player")) {
+            floorColor = Game.RandomDarkColor();
+            floorColor.a = floorTintAlpha;
             HideMyself();
         }
     }
@@ -21,9 +27,12 @@ public class FogOfWar : MonoBehaviour {
             if (neighbor.GetComponent<FogOfWar>().neighbors.Contains(gameObject)) {
                 neighbor.GetComponent<FogOfWar>().neighbors.Remove(gameObject);
             }
+            neighbor.GetComponent<FogOfWar>().floorColor = floorColor;
             neighbor.GetComponent<FogOfWar>().HideMyselfAndMyNeighbors();
         }
-        gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        Game.RepositionHeight(gameObject, Height.Background);
+        //gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        gameObject.GetComponent<SpriteRenderer>().color = floorColor;
         gameObject.GetComponent<BoxCollider2D>().enabled = false;//prevent repeat triggering
     }
 }
