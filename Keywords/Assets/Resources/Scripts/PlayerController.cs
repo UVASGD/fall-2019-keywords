@@ -26,8 +26,14 @@ public class PlayerController : MonoBehaviour {
 
 	//Idle variables
 	public float timeUntilIdle = 3f;
+    [HideInInspector]
 	public bool idle;
 	private bool idleLF;
+	public float timeUntilLongIdle = 3f;
+    [HideInInspector]
+    public bool longIdle;
+	private bool longIdleLF;
+
 	private float timeSinceLastMoved;
 
     private Func<string, float> GetAxis;
@@ -101,20 +107,33 @@ public class PlayerController : MonoBehaviour {
 		if (rb.velocity.sqrMagnitude > float.Epsilon * float.Epsilon) {
 			timeSinceLastMoved = 0f;
 			idle = false;
+			longIdle = false;
 		} else {
 			if (timeSinceLastMoved > timeUntilIdle) {
 				idle = true;
 			}
+
+			if (timeSinceLastMoved > timeUntilLongIdle) {
+				longIdle = true;
+			}
+
 			timeSinceLastMoved += Time.deltaTime;
 		}
 
 		if (idle && !idleLF) {
-			GameManager.GetWordOverlayHandler(playerNum).AppearWords();
+			GameManager.GetTextOverlayHandler(playerNum).AppearWords();
 		} else if (!idle && idleLF) {
-			GameManager.GetWordOverlayHandler(playerNum).DisappearWords();
+			GameManager.GetTextOverlayHandler(playerNum).DisappearWords();
+		}
+
+		if (longIdle && !longIdleLF) {
+			GameManager.GetTextOverlayHandler(playerNum).AppearDefinitions();
+		} else if (!longIdle && longIdleLF) {
+			GameManager.GetTextOverlayHandler(playerNum).DisappearDefinitions();
 		}
 
 		idleLF = idle;
+		longIdleLF = longIdle;
 
         ////Interact with world
         if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
