@@ -16,6 +16,8 @@ public class Machine : MonoBehaviour {
         slot = transform.GetChild(0).gameObject;
         progressIndicator = transform.GetChild(1).gameObject;
         timer = chargeTime;
+
+		slot.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
     }
 
     protected virtual void Update() {
