@@ -14,6 +14,9 @@ public class FogOfWar : MonoBehaviour {
         if (other.gameObject.CompareTag("Player")) {
             floorColor = Game.RandomDarkColor();
             floorColor.a = floorTintAlpha;
+            if(Time.time <= 0.01f){ //starting room
+                floorColor.a = 0f;
+            }
             HideMyself();
         }
     }
