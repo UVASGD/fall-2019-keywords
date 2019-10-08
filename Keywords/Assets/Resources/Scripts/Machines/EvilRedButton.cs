@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EvilRedButton : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+public class EvilRedButton : Machine {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    bool toggled;
+
+    protected override void PerformMachineAction() {
+        //get tile
+        GameObject tile = slot.GetComponent<GridSquare>().tile;
+        //destroy tile
+        Destroy(tile);
+        slot.GetComponent<GridSquare>().tile = null;
+        //TODO: if not toggled already, freeze all tiles in place on all grids and toggled = true
+        //if toggled already, unfreeze all tiles on all grids and toggled = false
+        //TODO: keep track of which player has activated the machine. Each player can only activate it twice
     }
 }

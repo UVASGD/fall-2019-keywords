@@ -2,17 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Teleporter : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+public class Teleporter : Machine {
+    protected override void PerformMachineAction() {
+        //TODO: teleport player to teleporter's location upon activating the remote
     }
 }
