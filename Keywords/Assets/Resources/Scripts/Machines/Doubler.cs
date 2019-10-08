@@ -13,10 +13,8 @@ public class Doubler : Machine {
         TileContainer = GameObject.Find("Tiles").transform;
     }
     protected override void PerformMachineAction() {
-        //duplicate tile
         GameObject tile = slot.GetComponent<GridSquare>().tile;
-        tile.GetComponent<LetterTile>().SetLifespan(tile.GetComponent <LetterTile>().lifespan * 2);
-        Vector3 pos = transform.position + placePosition;
+        tile.GetComponent<LetterTile>().SetLifespan(tile.GetComponent<LetterTile>().lifespan * 2);
 
     }
 }

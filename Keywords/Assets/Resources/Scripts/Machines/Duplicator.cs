@@ -19,5 +19,8 @@ public class Duplicator : Machine {
         GameObject newTile = Instantiate(Tile, pos, Quaternion.identity, TileContainer);
         newTile.GetComponent<LetterTile>().SetLetter(tile.GetComponent<LetterTile>().letter);
         newTile.GetComponent<LetterTile>().SetLifespan(tile.GetComponent<LetterTile>().lifespan);
+
+        //cost: 1 tile lifespan
+        tile.GetComponent<LetterTile>().DecLifespan();
     }
 }

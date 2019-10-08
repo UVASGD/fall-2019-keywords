@@ -17,13 +17,13 @@ public class Machine : MonoBehaviour {
         progressIndicator = transform.GetChild(1).gameObject;
         timer = chargeTime;
 
-		slot.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
+        slot.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
     }
 
     protected virtual void Update() {
         if (slot.GetComponent<GridSquare>().tile != null) {
             ticking = true;
-            if (!performedFirstAction){
+            if (!performedFirstAction) {
                 PerformMachineAction();
                 performedFirstAction = true;
             }
@@ -36,7 +36,7 @@ public class Machine : MonoBehaviour {
             timer += Time.deltaTime;
             float frac = 0.7f * (timer / chargeTime) + 0.3f;
             progressIndicator.GetComponent<SpriteRenderer>().color = new Color(frac, frac, frac, 1f);
-            if (timer >= chargeTime){
+            if (timer >= chargeTime) {
                 timer = 0f;
                 PerformMachineAction();
             }

@@ -111,9 +111,8 @@ public static class Game {
         }
     }
 
-    public static Color RandomDarkColor()
-    {
-        return UnityEngine.Random.ColorHSV(0f,1f,0.5f,1f,0f,0.3f,1f,1f);
+    public static Color RandomDarkColor() {
+        return UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 1f, 0f, 0.3f, 1f, 1f);
     }
 }
 
