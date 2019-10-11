@@ -80,6 +80,7 @@ public class MakeWalls : MonoBehaviour {
     public GameObject Tile;
     public GameObject Void;//fog of war objects
 
+    public int seed;//seed for world gen
 
     // Use this for initialization
     void Awake() {
@@ -92,7 +93,7 @@ public class MakeWalls : MonoBehaviour {
 
         FillRooms();
         FillRoomGraph();
-        GenerateWalls();
+        GenerateWallsAndLoot();
         //PlaceDebugDoors();
         PlaceFogOfWar();
         MakeLoot();
@@ -210,7 +211,7 @@ public class MakeWalls : MonoBehaviour {
 
     //FRONT END
     //runs BFS starting from player starting rooms.
-    void GenerateWalls() {
+    void GenerateWallsAndLoot() {
         print("makin dungeon walls");
         Queue<Room> q1 = new Queue<Room>();//all rooms at the current layer of depth
         Queue<Room> q2 = new Queue<Room>();//all rooms at the next layer of depth
@@ -225,8 +226,10 @@ public class MakeWalls : MonoBehaviour {
 
         //Make the rest of the stuff
         for (int depth = 1; depth < 11; depth++) {
+
             while (q1.Count > 0) {
                 Room a = q1.Dequeue();
+                MakeLootInRoom(a, depth);
                 //				GameObject roomnumIndicator = a.SpawnItemAtCenter (Door, null);
                 //				roomnumIndicator.GetComponent<Door> ().keyNum = a.roomID;
                 a.reached = true;
@@ -483,6 +486,20 @@ public class MakeWalls : MonoBehaviour {
         if (!ThereShouldBeABottomWallAt(x, y - 1)) {
             newFog.GetComponent<FogOfWar>().neighbors.Add(FogOfWarArray[x, y - 1]);
             FogOfWarArray[x, y - 1].GetComponent<FogOfWar>().neighbors.Add(newFog);
+        }
+    }
+
+    //will be called on each room in the dungeon during GenerateWallsAndLoot
+    void MakeLootInRoom(Room r, int depth) {
+        // room is the place to spawn, depth is the difficulty
+
+        List<GameObject> thingsToSpawn = new List<GameObject>();
+        // figure out what to spawn in r
+        thingsToSpawn.Add(Tile);
+
+        // spawn stuff
+        foreach (GameObject g in thingsToSpawn) {
+            r.SpawnItem(g, TileContainer.transform);
         }
     }
 
