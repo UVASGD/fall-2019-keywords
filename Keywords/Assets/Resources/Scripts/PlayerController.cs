@@ -71,6 +71,11 @@ public class PlayerController : MonoBehaviour {
                 inventory.IncSlot();
             } else {
                 print("activating held item");
+                Fireable f=inventory.Get().GetComponent<Fireable>();
+                if (f)
+                {
+                    f.Fire(aim);
+                }
             }
         }
         if (rt_pressed && trigger < 0.1f) {

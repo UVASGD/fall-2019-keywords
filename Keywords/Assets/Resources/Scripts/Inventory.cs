@@ -61,6 +61,12 @@ public class Inventory : MonoBehaviour {
         //}
         items[activeSlot] = obj;
 
+        GrapplingHook gh = obj.GetComponent<GrapplingHook>();
+        if (gh)
+        {
+            gh.onPickup();
+        }
+        
         //create item preview in inventory UI
         Transform SlotUI = UI.transform.Find("Slot" + activeSlot);
         GameObject ItemInUI = Instantiate(obj, SlotUI.position, Quaternion.identity, SlotUI);

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GrapplingHook : MonoBehaviour
+public class GrapplingHook : Fireable
 {
     // Start is called before the first frame update
     Vector2 launchDirection = Vector2.right;
@@ -12,27 +12,41 @@ public class GrapplingHook : MonoBehaviour
     Hook hook;
     GameObject player;
 
-    void LaunchHook()
+    public override void Fire(Vector2 direction)
     {
-        hook.launch(launchDirection, launchSpeed);
+        print(hook == null);
+        hook.launch(direction, launchSpeed);
+    }   
+
+    public void onPickup()
+    {
+        player = transform.parent.gameObject;
+        Physics2D.IgnoreCollision(player.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+        hook = GetComponentInChildren<Hook>();
+        print("before setup, " + (hook == null));
+        hook.Setup(player, gameObject);
+        print("after setup, " + (hook == null));
+
     }
 
     void PullPlayer()
     {
 
     }
-    void Start()
+    protected override void Start()
     {
-        player = transform.parent.gameObject;
+        /*player = transform.parent.gameObject;
         Physics2D.IgnoreCollision(player.GetComponent<Collider2D>(), GetComponent<Collider2D>());
         hook = GetComponentInChildren<Hook>();
+        print("before setup, " + (hook == null));
         hook.Setup(player, gameObject);
-        LaunchHook();
+        print("after setup, " + (hook == null));*/
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //print("hook is " + (hook == null));
     }
 }
