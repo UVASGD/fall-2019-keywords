@@ -495,7 +495,7 @@ public class MakeWalls : MonoBehaviour {
 
         List<GameObject> thingsToSpawn = new List<GameObject>();
         // figure out what to spawn in r
-        thingsToSpawn.Add(Tile);
+        //thingsToSpawn.Add(Tile);
 
         // spawn stuff
         foreach (GameObject g in thingsToSpawn) {
