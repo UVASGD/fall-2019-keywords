@@ -41,6 +41,7 @@ class Room {
 
     //spawns item at the center of the room (average of square positions)
     //will be used for rare/unique items for dramatic effect
+    //TODO: find the center of the nearest square in the room from the actual average of square positions
     public GameObject SpawnItemAtCenter(GameObject item, Transform parent = null) {
         Vector3 weightedAvg = new Vector3(0, 0, 0);
         foreach (Vector2Int square in squares) {
@@ -72,6 +73,7 @@ public class MakeWalls : MonoBehaviour {
     public GameObject WallContainer;
     public GameObject TileContainer;
     public GameObject LootContainer;
+    public GameObject GridContainer;
     public GameObject FogOfWarContainer;//container for fog of war objects
     public GameObject[,] FogOfWarArray;//grid of fog of war objects
     public GameObject Wall;
@@ -79,6 +81,7 @@ public class MakeWalls : MonoBehaviour {
     public GameObject Door;
     public GameObject WallSmall;
     public GameObject Tile;
+    public GameObject Grid;//grid prefab
     public GameObject Void;//fog of war objects
     public GameObject[] loot;
 
@@ -120,7 +123,7 @@ public class MakeWalls : MonoBehaviour {
             return;
         }
         int num = 6;//how far are player starting rooms from the center?
-        //MakeRoom(halfX, halfX, 7, 7, -5);//Boss Chamber
+        MakeRoom(halfX, halfX, 7, 7, -5);//Boss Chamber
         MakeRoom(halfX - num, halfX - num, 3, 3, -1);//P1 start
         MakeRoom(halfX + num, halfX - num, 3, 3, -2);//P2 start
         MakeRoom(halfX - num, halfX + num, 3, 3, -3);//P3 start
@@ -494,6 +497,7 @@ public class MakeWalls : MonoBehaviour {
     }
 
     //will be called on each room in the dungeon during GenerateWallsAndLoot
+    //TODO: Make a design doc for loot generation, stop hardcoding numbers. Formalize this entire process
     void MakeLootInRoom(Room r, int depth) {
         // room is the place to spawn, depth is the difficulty
 
@@ -504,8 +508,15 @@ public class MakeWalls : MonoBehaviour {
             if (diceRoll < 0.4f) {//spawn loot 40% of the time (for now, this is too often for real gameplay)
                 thingsToSpawn.Add(loot[Random.Range(0, loot.Length)]);
             }
-            if (r.squares.Count > 30) {
+            if (r.squares.Count > 30) {//definitely spawn loot in big enough room
                 thingsToSpawn.Add(loot[Random.Range(0, loot.Length)]);
+            }
+        }
+        if (r.squares.Count > 30) {//spawn grid in center of big enough room
+            if (depth >= 3) { //do not spawn new grids too close to starting rooms
+                if (r.roomID != -5) {//do not spawn in boss chamber
+                    r.SpawnItemAtCenter(Grid, GridContainer.transform);
+                }
             }
         }
 

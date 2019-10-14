@@ -3471,19 +3471,20 @@ MonoBehaviour:
   WallContainer: {fileID: 95303994}
   TileContainer: {fileID: 1350805110}
   LootContainer: {fileID: 1174214141}
+  GridContainer: {fileID: 1684912547}
   FogOfWarContainer: {fileID: 841617520}
   Wall: {fileID: 1902885538303810, guid: 947cea93a1f5f4e46bd68f1911a272e1, type: 3}
   Corner: {fileID: 1385444544092320, guid: 3001233bf52604d7dafab8eca4f32900, type: 3}
   Door: {fileID: 1224114833238022, guid: 4e0646f5e112f43669cf661613e4cb1e, type: 3}
   WallSmall: {fileID: 1205634193462772, guid: 974c4157089604355b88a0b286bb4f89, type: 3}
   Tile: {fileID: 1328259343011714, guid: f2c8f2487583c4c89bc6dd4a23624369, type: 3}
+  Grid: {fileID: 1844410269780700, guid: 1e7e92cfb695e4d179e54862a2a0515e, type: 3}
   Void: {fileID: 1852101372530700, guid: f7a6dac26038745c6ad0321728b11b9b, type: 3}
   loot:
   - {fileID: 1832904815124234, guid: 9ff508d6e02504db8a6c76f22b364b39, type: 3}
   - {fileID: 1832904815124234, guid: c2234a0f1cc7342f393c7171ad72e3ec, type: 3}
   - {fileID: 1328259343011714, guid: bd6b5850f0c43485d822cc49b4daf17e, type: 3}
   - {fileID: 1832904815124234, guid: 6d254133908ab4496a29796669f241ea, type: 3}
-  - {fileID: 1844410269780700, guid: 1e7e92cfb695e4d179e54862a2a0515e, type: 3}
 --- !u!114 &1569157445
 MonoBehaviour:
   m_ObjectHideFlags: 0
