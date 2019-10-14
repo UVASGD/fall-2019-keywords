@@ -66,7 +66,6 @@ public class PlayerController : MonoBehaviour {
         if (!rt_pressed && trigger > 0.9f) {
             //fire weapon/tool if aiming, else switch inventory slots
             rt_pressed = true;
-            Blink(aim);
             if (aim.Equals(Vector2.zero)) {
                 inventory.IncSlot();
             } else {
@@ -74,7 +73,7 @@ public class PlayerController : MonoBehaviour {
                 Fireable f=inventory.Get().GetComponent<Fireable>();
                 if (f)
                 {
-                    f.Fire(aim);
+                    f.Fire(aim,gameObject);
                 }
             }
         }
