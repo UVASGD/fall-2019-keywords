@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 //A representation of a room in a dungeon
 class Room {
     public List<Vector2Int> squares;
@@ -62,6 +61,7 @@ public class MakeWalls : MonoBehaviour {
     public int[,] rooms;
     Dictionary<int, Room> roomGraph;
 
+
     //front end - generated game objects
     private const float epsilon = 0.005f; //makes borders between walls/corners look better
     private const float smallWallOffset = 0.32f;
@@ -71,6 +71,7 @@ public class MakeWalls : MonoBehaviour {
     public GameObject DoorContainer;
     public GameObject WallContainer;
     public GameObject TileContainer;
+    public GameObject LootContainer;
     public GameObject FogOfWarContainer;//container for fog of war objects
     public GameObject[,] FogOfWarArray;//grid of fog of war objects
     public GameObject Wall;
@@ -79,8 +80,7 @@ public class MakeWalls : MonoBehaviour {
     public GameObject WallSmall;
     public GameObject Tile;
     public GameObject Void;//fog of war objects
-
-    public int seed;//seed for world gen
+    public GameObject[] loot;
 
     // Use this for initialization
     void Awake() {
@@ -109,6 +109,10 @@ public class MakeWalls : MonoBehaviour {
         while (numCheckedOff < numSquares) {
             MakeRoom(Random.Range(0, width), Random.Range(0, width), Random.Range(4, 7), Random.Range(4, 7));
         }
+        MakePresetRooms();
+    }
+
+    void MakePresetRooms() {
         //Starting Room
         int halfX = width / 2;
         if (coop) {
@@ -116,7 +120,7 @@ public class MakeWalls : MonoBehaviour {
             return;
         }
         int num = 6;//how far are player starting rooms from the center?
-        MakeRoom(halfX, halfX, 7, 7, -5);//Boss Chamber
+        //MakeRoom(halfX, halfX, 7, 7, -5);//Boss Chamber
         MakeRoom(halfX - num, halfX - num, 3, 3, -1);//P1 start
         MakeRoom(halfX + num, halfX - num, 3, 3, -2);//P2 start
         MakeRoom(halfX - num, halfX + num, 3, 3, -3);//P3 start
@@ -495,11 +499,20 @@ public class MakeWalls : MonoBehaviour {
 
         List<GameObject> thingsToSpawn = new List<GameObject>();
         // figure out what to spawn in r
-        //thingsToSpawn.Add(Tile);
+        if (depth > 1 && r.squares.Count > 3) {//do not make loot in starting rooms or really small rooms
+            float diceRoll = Random.value;
+            if (diceRoll < 0.4f) {//spawn loot 40% of the time (for now, this is too often for real gameplay)
+                thingsToSpawn.Add(loot[Random.Range(0, loot.Length)]);
+            }
+            if (r.squares.Count > 30) {
+                thingsToSpawn.Add(loot[Random.Range(0, loot.Length)]);
+            }
+        }
 
         // spawn stuff
         foreach (GameObject g in thingsToSpawn) {
-            r.SpawnItem(g, TileContainer.transform);
+            GameObject objSpawned = r.SpawnItem(g, LootContainer.transform);
+            Game.RepositionHeight(objSpawned, Height.OnFloor);
         }
     }
 

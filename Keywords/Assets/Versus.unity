@@ -2087,6 +2087,11 @@ PrefabInstance:
       propertyPath: UI
       value: 
       objectReference: {fileID: 23488818}
+    - target: {fileID: 6672107738324264255, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: timeUntilLongIdle
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6672107738324264232, guid: 25d26f1ffb97540048bf7196146c6dfa,
         type: 3}
       propertyPath: m_Color.r
@@ -2106,11 +2111,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_CollisionDetection
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6672107738324264255, guid: 25d26f1ffb97540048bf7196146c6dfa,
-        type: 3}
-      propertyPath: timeUntilLongIdle
-      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa, type: 3}
@@ -2263,6 +2263,11 @@ PrefabInstance:
       propertyPath: UI
       value: 
       objectReference: {fileID: 333296482}
+    - target: {fileID: 6672107738324264255, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: timeUntilLongIdle
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6672107738324264232, guid: 25d26f1ffb97540048bf7196146c6dfa,
         type: 3}
       propertyPath: m_Color.r
@@ -2282,11 +2287,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_CollisionDetection
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6672107738324264255, guid: 25d26f1ffb97540048bf7196146c6dfa,
-        type: 3}
-      propertyPath: timeUntilLongIdle
-      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa, type: 3}
@@ -2852,6 +2852,7 @@ Transform:
   - {fileID: 541289254}
   - {fileID: 95303995}
   - {fileID: 1350805111}
+  - {fileID: 1174214142}
   - {fileID: 841617521}
   - {fileID: 1684912548}
   m_Father: {fileID: 0}
@@ -2885,7 +2886,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 804940279}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &987614323
 GameObject:
@@ -3132,6 +3133,36 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1547147176}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1174214141
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1174214142}
+  m_Layer: 0
+  m_Name: Loot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1174214142
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174214141}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 10.469593, y: 15.180922, z: -3053.606}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 804940279}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1209074788
 GameObject:
   m_ObjectHideFlags: 0
@@ -3439,6 +3470,7 @@ MonoBehaviour:
   DoorContainer: {fileID: 541289253}
   WallContainer: {fileID: 95303994}
   TileContainer: {fileID: 1350805110}
+  LootContainer: {fileID: 1174214141}
   FogOfWarContainer: {fileID: 841617520}
   Wall: {fileID: 1902885538303810, guid: 947cea93a1f5f4e46bd68f1911a272e1, type: 3}
   Corner: {fileID: 1385444544092320, guid: 3001233bf52604d7dafab8eca4f32900, type: 3}
@@ -3446,6 +3478,12 @@ MonoBehaviour:
   WallSmall: {fileID: 1205634193462772, guid: 974c4157089604355b88a0b286bb4f89, type: 3}
   Tile: {fileID: 1328259343011714, guid: f2c8f2487583c4c89bc6dd4a23624369, type: 3}
   Void: {fileID: 1852101372530700, guid: f7a6dac26038745c6ad0321728b11b9b, type: 3}
+  loot:
+  - {fileID: 1832904815124234, guid: 9ff508d6e02504db8a6c76f22b364b39, type: 3}
+  - {fileID: 1832904815124234, guid: c2234a0f1cc7342f393c7171ad72e3ec, type: 3}
+  - {fileID: 1328259343011714, guid: bd6b5850f0c43485d822cc49b4daf17e, type: 3}
+  - {fileID: 1832904815124234, guid: 6d254133908ab4496a29796669f241ea, type: 3}
+  - {fileID: 1844410269780700, guid: 1e7e92cfb695e4d179e54862a2a0515e, type: 3}
 --- !u!114 &1569157445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3620,7 +3658,7 @@ Transform:
   - {fileID: 727914568}
   - {fileID: 1221484315}
   m_Father: {fileID: 804940279}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1692939275 stripped
 Transform:
@@ -3977,6 +4015,11 @@ PrefabInstance:
       propertyPath: UI
       value: 
       objectReference: {fileID: 328264681}
+    - target: {fileID: 6672107738324264255, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: timeUntilLongIdle
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6672107738324264232, guid: 25d26f1ffb97540048bf7196146c6dfa,
         type: 3}
       propertyPath: m_Color.r
@@ -3996,11 +4039,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_CollisionDetection
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6672107738324264255, guid: 25d26f1ffb97540048bf7196146c6dfa,
-        type: 3}
-      propertyPath: timeUntilLongIdle
-      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa, type: 3}

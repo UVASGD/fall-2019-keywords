@@ -70,6 +70,9 @@ public class PlayerController : MonoBehaviour {
         Vector2 aim_raw = new Vector2(GetAxis("Horizontal_R"), GetAxis("Vertical_R"));
         if (aim_raw.sqrMagnitude < epsilon) {
             aim_raw = Vector2.zero;
+            aimIndicator.GetComponent<SpriteRenderer>().enabled = false;
+        } else {
+            aimIndicator.GetComponent<SpriteRenderer>().enabled = true;
         }
         Vector2 aim = aim_raw.normalized;
         float trigger = GetAxis("RTrigger");
