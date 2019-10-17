@@ -41,14 +41,23 @@ class Room {
 
     //spawns item at the center of the room (average of square positions)
     //will be used for rare/unique items for dramatic effect
-    //TODO: find the center of the nearest square in the room from the actual average of square positions
     public GameObject SpawnItemAtCenter(GameObject item, Transform parent = null) {
         Vector3 weightedAvg = new Vector3(0, 0, 0);
         foreach (Vector2Int square in squares) {
             weightedAvg += GameManager.makeWalls.GetCellPositionFor(square.x, square.y);
         }
         weightedAvg *= (1f / squares.Count);
-        return GameObject.Instantiate(item, weightedAvg, Quaternion.identity, parent);
+        Vector2Int closestSquare = squares[0];
+        float minDist = Vector3.Distance(weightedAvg, GameManager.makeWalls.GetCellPositionFor(closestSquare.x, closestSquare.y));
+        foreach (Vector2Int square in squares) {
+            float dist = Vector3.Distance(weightedAvg, GameManager.makeWalls.GetCellPositionFor(square.x, square.y));
+            if (dist < minDist) {
+                closestSquare = square;
+                minDist = dist;
+            }
+        }
+        Vector3 finalPos = GameManager.makeWalls.GetCellPositionFor(closestSquare.x, closestSquare.y);
+        return GameObject.Instantiate(item, finalPos, Quaternion.identity, parent);
     }
 }
 public class MakeWalls : MonoBehaviour {
@@ -57,7 +66,7 @@ public class MakeWalls : MonoBehaviour {
     public int width;
     private int numSquares;
     private int numCheckedOff;
-    private int roomNum;
+    private int numRooms;
     [HideInInspector]
     public int[,] rooms;
     Dictionary<int, Room> roomGraph;
@@ -97,7 +106,7 @@ public class MakeWalls : MonoBehaviour {
         FillRooms();
         FillRoomGraph();
         GenerateWallsAndLoot();
-        //PlaceDebugDoors();
+        PlaceDebugDoors();
         PlaceFogOfWar();
         MakeLoot();
         print("level Score: " + GetComponent<Words>().levelScore);
@@ -106,7 +115,7 @@ public class MakeWalls : MonoBehaviour {
     //BACK END
     void FillRooms() {
         rooms = new int[width, width];
-        roomNum = 1;
+        numRooms = 1;
         numCheckedOff = 0;
         numSquares = width * width;
         while (numCheckedOff < numSquares) {
@@ -145,11 +154,11 @@ public class MakeWalls : MonoBehaviour {
                     if (rooms[a, b] == 0) {
                         numCheckedOff++;
                     }
-                    rooms[a, b] = roomNum;
+                    rooms[a, b] = numRooms;
                 }
             }
         }
-        roomNum++;
+        numRooms++;
     }
 
     //makes a room of width w and height h centered at [x,y] with room designation num
@@ -187,22 +196,93 @@ public class MakeWalls : MonoBehaviour {
         print(result);
     }
 
+    List<Vector2Int> GetNeighbors(Vector2Int xy) {
+        int x = xy.x;
+        int y = xy.y;
+        List<Vector2Int> result = new List<Vector2Int>();
+        if (InBounds(x + 1, y)) {
+            result.Add(new Vector2Int(x + 1, y));
+        }
+        if (InBounds(x, y + 1)) {
+            result.Add(new Vector2Int(x, y + 1));
+        }
+        if (InBounds(x - 1, y)) {
+            result.Add(new Vector2Int(x - 1, y));
+        }
+        if (InBounds(x, y - 1)) {
+            result.Add(new Vector2Int(x, y - 1));
+        }
+        return result;
+    }
+
+    List<Vector2Int> GetNeighborsRightAndBottom(Vector2Int xy) {
+        int x = xy.x;
+        int y = xy.y;
+        List<Vector2Int> result = new List<Vector2Int>();
+        if (InBounds(x + 1, y)) {
+            result.Add(new Vector2Int(x + 1, y));
+        }
+        if (InBounds(x, y + 1)) {
+            result.Add(new Vector2Int(x, y + 1));
+        }
+        return result;
+    }
+
+    //helper for FillRoomGraph
+    //starting at (x,y), find all neighboring squares
+    void FloodFillRoomIntoGraph(int x, int y, int newroomnum, Dictionary<Vector2Int, int> reachedSquares) {
+        int orig_roomnum = rooms[x, y];
+        Queue<Vector2Int> q = new Queue<Vector2Int>();
+        Vector2Int xy = new Vector2Int(x, y);
+        q.Enqueue(xy);
+        reachedSquares[xy] = 0;
+        while (q.Count > 0) {
+            Vector2Int square = q.Dequeue();
+            roomGraph[newroomnum].squares.Add(square);
+            rooms[square.x, square.y] = newroomnum;
+            foreach (Vector2Int neighbor in GetNeighbors(square)) {
+                if (rooms[neighbor.x, neighbor.y] == orig_roomnum && !reachedSquares.ContainsKey(neighbor)) {
+                    q.Enqueue(neighbor);
+                    reachedSquares[neighbor] = 0;
+                }
+            }
+        }
+    }
+
     //analyze room grid and convert it into an adjacency list of room objects
     void FillRoomGraph() {
         roomGraph = new Dictionary<int, Room>();
+        Dictionary<Vector2Int, int> reachedSquares = new Dictionary<Vector2Int, int>();
+        //put correct squares in each room
+        //also, scan for bisected rooms and rename each chunk
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < width; y++) {
                 int roomnum = rooms[x, y];
-                if (!roomGraph.ContainsKey(roomnum)) {
+                //print(roomnum);
+                if (roomGraph.ContainsKey(roomnum)) {
+                    if (roomGraph[roomnum].reached && !reachedSquares.ContainsKey(new Vector2Int(x, y))) {
+                        //get new room num
+                        roomnum = numRooms;
+                        numRooms++;
+                        //add new room, floodfill
+                        roomGraph.Add(roomnum, new Room(roomnum));
+                        FloodFillRoomIntoGraph(x, y, roomnum, reachedSquares);
+                        roomGraph[roomnum].reached = true;
+                    }
+                } else {
+                    //add new room, floodfill
                     roomGraph.Add(roomnum, new Room(roomnum));
+                    FloodFillRoomIntoGraph(x, y, roomnum, reachedSquares);
+                    roomGraph[roomnum].reached = true;
                 }
-                roomGraph[roomnum].squares.Add(new Vector2Int(x, y));
             }
         }
+
+        //find correct neighbors for each room
         foreach (Room room in roomGraph.Values) {
             foreach (Vector2Int square in room.squares) {
                 int numDissimilar = 0;
-                foreach (Vector2Int neighbor in GetNeighbors(square)) {
+                foreach (Vector2Int neighbor in GetNeighborsRightAndBottom(square)) {
                     if (rooms[neighbor.x, neighbor.y] != rooms[square.x, square.y]) {
                         numDissimilar++;
                         Room otherGuy = roomGraph[rooms[neighbor.x, neighbor.y]];
@@ -213,6 +293,10 @@ public class MakeWalls : MonoBehaviour {
                     }
                 }
             }
+        }
+        //I probably reuse room.reached in a later floodfill pass so I will set that to false
+        foreach (Room room in roomGraph.Values) {
+            room.reached = false;
         }
     }
 
@@ -370,20 +454,6 @@ public class MakeWalls : MonoBehaviour {
             GameObject debugDoor = r.SpawnItemAtCenter(Door);
             debugDoor.GetComponent<Door>().keyNum = r.roomID;
         }
-    }
-
-
-    List<Vector2Int> GetNeighbors(Vector2Int xy) {
-        int x = xy.x;
-        int y = xy.y;
-        List<Vector2Int> result = new List<Vector2Int>();
-        if (InBounds(x + 1, y)) {
-            result.Add(new Vector2Int(x + 1, y));
-        }
-        if (InBounds(x, y + 1)) {
-            result.Add(new Vector2Int(x, y + 1));
-        }
-        return result;
     }
 
     void PlaceFogOfWar() {
