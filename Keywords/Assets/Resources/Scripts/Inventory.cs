@@ -65,11 +65,12 @@ public class Inventory : MonoBehaviour {
         Transform SlotUI = UI.transform.Find("Slot" + activeSlot);
         GameObject ItemInUI = Instantiate(obj, SlotUI.position, Quaternion.identity, SlotUI);
         Game.RepositionHeight(ItemInUI, Height.UI);
-        bool scaleToWidth = (ItemInUI.transform.localScale.x >= ItemInUI.transform.localScale.y);
+        Bounds bounds = Game.GetBounds(ItemInUI);
+        bool scaleToWidth = (bounds.size.x >= bounds.size.y);
         if (scaleToWidth) {
-            ItemInUI.transform.localScale = new Vector3(UIScaleFactor, UIScaleFactor * (ItemInUI.transform.localScale.y / ItemInUI.transform.localScale.x), ItemInUI.transform.localScale.z);
+            ItemInUI.transform.localScale = new Vector3(UIScaleFactor, UIScaleFactor * (bounds.size.y / bounds.size.x), ItemInUI.transform.localScale.z);
         } else {
-            ItemInUI.transform.localScale = new Vector3(UIScaleFactor * (ItemInUI.transform.localScale.x / ItemInUI.transform.localScale.y), UIScaleFactor, ItemInUI.transform.localScale.z);
+            ItemInUI.transform.localScale = new Vector3(UIScaleFactor * (bounds.size.x / bounds.size.y), UIScaleFactor, ItemInUI.transform.localScale.z);
         }
         Game.SetLayer(ItemInUI, LayerMask.NameToLayer("P" + GetComponent<PlayerInfo>().playerNum));
         Game.DisablePhysics(ItemInUI);
