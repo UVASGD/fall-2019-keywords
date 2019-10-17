@@ -44,6 +44,26 @@ public static class Game {
         }
     }
 
+    public static Bounds GetBounds(GameObject obj)
+    {
+        // Generate parent bounds object
+        Bounds bounds;
+        SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
+        if (sr != null)
+            bounds = sr.bounds;
+        else
+            bounds = new Bounds(obj.transform.position, Vector3.zero);
+        // Recursively expand bounds to accomodate children
+        // If no children, won't have to worry about recursive case
+        for (int i=0; i<obj.transform.childCount; i++)
+        {
+            GameObject childObj = obj.transform.GetChild(i).gameObject;
+            Bounds childBounds = GetBounds(childObj);
+            bounds.Encapsulate(childBounds);
+        }
+        return bounds;
+    }
+
     //C# mod is not too useful. This one acts identically to the python one (and the math one)
     public static int correctmod(int a, int n) {
         return ((a % n) + n) % n;
