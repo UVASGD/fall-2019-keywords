@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour {
     private KeyCode RightBumper;
     private KeyCode AButton;
     private KeyCode BButton;
+    private bool movementEnabled;
 
     private float pMovSpeed = 2.2f;
     private float pMovHandleBase = 0.8f; // Player movmement "handling" when player is "slow" (within max speed)
@@ -88,6 +89,11 @@ public class PlayerController : MonoBehaviour {
                 inventory.IncSlot();
             } else {
                 print("activating held item");
+                Fireable f=inventory.Get().GetComponent<Fireable>();
+                if (f)
+                {
+                    f.Fire(aim,gameObject);
+                }
             }
         }
         if (rt_pressed && trigger < 0.1f) {
@@ -346,4 +352,7 @@ public class PlayerController : MonoBehaviour {
         Game.RepositionHeight(closestObject, Height.Held);
         Game.DisablePhysics(closestObject);
     }
+
+
+ 
 }

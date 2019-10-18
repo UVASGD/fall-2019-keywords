@@ -5,142 +5,67 @@ using UnityEngine;
 public class Hook : MonoBehaviour
 {
     // Start is called before the first frame update
-    public Rigidbody2D rb;
+    Vector3 initial, dir;
+    float launchSpeed, pullSpeed;
+    public float stopDistance;
+
+    float curLength = 0f;
     float maxLength = 3f;
-    public bool hasFired;
-    float curLength;
-    public SpringJoint2D spring;
-    public bool hasHit, hasReturned, toReturn;
-    float maxReturnTime = 5f;
+    bool hasFired, hasHit;
 
     public GameObject player, grapplingHook;
+    Rigidbody2D rbPlayer;
+    Transform tPlayer;
 
-    Grabbable target;
-
-
-     public void launch(Vector2 dir, float speed)
+     public void launch(Vector3 dir, float launchSpeed, float pullSpeed)
     {
-        if (hasFired)
-            return;
-
-        print("Launching");
-        transform.parent = null;
-        rb.bodyType = RigidbodyType2D.Dynamic;
-        hasFired = true;
-        hasReturned = false;
-        hasHit = false;
-        rb.velocity = dir * speed;
-        curLength = 0;
-        spring.enabled = false;
-    }
-
-    public void launchReturn()///for when we run out of rope/time and hook is sent back to player
-    {
-        if (hasReturned)
+        if (hasFired) //Cancel the Grappling Hook
         {
-            StopAllCoroutines();
+            Stop();
             return;
         }
-        toReturn = true;
-        print("Returning launch");
-        //change physics type to dynamic
-        rb.bodyType = RigidbodyType2D.Dynamic;
-        //change anchor to gun
-        spring.connectedBody = grapplingHook.GetComponent<Rigidbody2D>();
-        //enable spring
-        spring.enabled = true;
-    }
-    public void pullPlayer()
-    {
-        print("Pulling player");
-        //change physics to kinematic
-        rb.bodyType = RigidbodyType2D.Kinematic;
-        //change anchor to player
-        spring.connectedBody = player.GetComponent<Rigidbody2D>();
-        //enable spring
-        spring.enabled = true;
-        StartCoroutine(ReturnTime());
+
+        Game.EnablePhysics(gameObject);
+        transform.parent = null; //Separate Hook from GrapplingHook Body
+        hasFired = true;
+        hasHit = false;
+        this.dir = dir;
+        this.launchSpeed = launchSpeed;
+        this.pullSpeed = pullSpeed;
+        curLength = 0;
     }
 
-    public void grab(Grabbable target)
+    public void Stop()//for when we run out of rope/time
     {
-        print("Grabbing: " + target);
-        target.grab(rb);
-        spring.connectedBody = grapplingHook.GetComponent<Rigidbody2D>();
-        spring.enabled = true;
-        this.target = target;
-        launchReturn();
-        StartCoroutine(ReturnTime());
+        transform.parent = grapplingHook.transform;
+        transform.localPosition = initial;
+        transform.eulerAngles = Vector3.zero;
+        hasFired = false;
+        hasHit = false;
+        Game.DisablePhysics(gameObject);
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        print("Triggered: " + collision.gameObject.name + " ree");
-        if (hasFired)
+        if (hasFired && !hasHit)
         {
-            if(collision.gameObject == player || collision.gameObject == grapplingHook)
+            if (collision.CompareTag("Wall"))
             {
-                if (hasHit || toReturn)
-                {
-                    print("Collided with home: " + collision.gameObject);
-                    hasFired = false;
-                    hasReturned = true;
-                    rb.velocity = Vector2.zero;
-                    curLength = 0;
-                    spring.enabled = false;
-                    toReturn = false;
-                    if (target)
-                        this.target.ungrab();
-                    transform.position = grapplingHook.transform.position;
-                    transform.parent = grapplingHook.transform;
-                    rb.bodyType = RigidbodyType2D.Kinematic;
-                    // allow the gun to be fired again
-                }
-            }
-            else if (!hasHit)
-            {
-                if (collision.GetComponent<Grabbable>())
-                {
-                    hasHit = true;
-                    rb.velocity = Vector2.zero;
-                    curLength = 0;
-                    grab(collision.GetComponent<Grabbable>());
-                }
-                else if (collision.CompareTag("Wall"))
-                {
-                    hasHit = true;
-                    rb.velocity = Vector2.zero;
-                    curLength = 0;
-                    pullPlayer();
-                }
+                curLength = 0;
+                hasHit = true;
             }
         }
-    }
-    void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-        spring = GetComponent<SpringJoint2D>();
-        spring.enabled = false;
     }
 
     public void Setup(GameObject player, GameObject grapplingHook)
     {
-        print("Set up");
         this.player = player;
         this.grapplingHook = grapplingHook;
-        spring.connectedBody = grapplingHook.GetComponent<Rigidbody2D>();
-        rb.bodyType = RigidbodyType2D.Kinematic;
+        rbPlayer = player.GetComponent<Rigidbody2D>();
+        tPlayer = player.GetComponent<Transform>();
+        initial = transform.localPosition;
     }
-
-    IEnumerator ReturnTime()
-    {
-        yield return new WaitForSeconds(maxReturnTime);
-        print("We've reached return time");
-        launchReturn();
-        if (target)
-            this.target.ungrab();
-    }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -148,11 +73,30 @@ public class Hook : MonoBehaviour
         {
             if (curLength < maxLength)
             {
-                curLength += Time.deltaTime;          
+                transform.position = transform.position + (Time.deltaTime * dir * launchSpeed);
+                curLength += Time.deltaTime;
             }
             else
             {
-                launchReturn();
+                Stop();
+            }
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (hasHit)
+        {
+            Vector3 dif = transform.position - tPlayer.position;
+            if (curLength < maxLength && dif.magnitude > stopDistance)
+            {
+                dir = dif.normalized * pullSpeed;
+                rbPlayer.velocity += (Vector2)dir;
+                curLength += Time.deltaTime;
+            }
+            else
+            {
+                Stop();
             }
         }
     }
