@@ -17,12 +17,16 @@ public class PlayerController : MonoBehaviour {
     private KeyCode AButton;
     private KeyCode BButton;
 
-    private float playerSpeed = 2.2f;
+    private float pMovSpeed = 2.2f;
+    private float pMovHandleBase = 0.8f; // Player movmement "handling" when player is "slow" (within max speed)
+    private float pMovHandleFast = 0.05f; // When moving fast, drag/handling
+    private bool pMovDisable = false; // Disables basic movement mechanics entirely; shouldn't be needed
+    private float pMovHandle; // Current value of movement handling: used to lerp velocity to input velocity (0 to 1)
     const float pickupRadius = 0.2f; //how far away can the player pick up an object?
     public Vector3 holdOffset; //what's the hold position of the currently held inventory item?
 
     private int playerNum;
-    private int keyboardControlledPlayer = 1; //for debug / testing without controllers - one player can be controlled by the keyboard at a time;
+    private int keyboardControlledPlayer = 0; //for debug / testing without controllers - one player can be controlled by the keyboard at a time;
 
 	//Idle variables
 	public float timeUntilIdle = 3f;
@@ -36,6 +40,7 @@ public class PlayerController : MonoBehaviour {
 
 	private float timeSinceLastMoved;
 
+    public Vector2 lsInput;
     private Func<string, float> GetAxis;
 
     private GameObject aimIndicator;
@@ -58,12 +63,13 @@ public class PlayerController : MonoBehaviour {
 		timeSinceLastMoved = 0f;
 		idle = false;
 		idleLF = false;
+
+        // movement
+        pMovHandle = pMovHandleBase;
 	}
 
     // Update is called once per frame
     void Update() {
-        //movement
-        rb.velocity = playerSpeed * new Vector2(GetAxis("Horizontal"), GetAxis("Vertical"));
 
         //aiming and firing
         Vector2 aim = new Vector2(GetAxis("Horizontal_R"), GetAxis("Vertical_R")).normalized;
@@ -95,14 +101,6 @@ public class PlayerController : MonoBehaviour {
             lt_pressed = false;
         }
 
-        //make keyboardControlledPlayer also controllable by keyboard
-        if (playerNum == keyboardControlledPlayer) {
-            Vector2 rawVelocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            if (rawVelocity.magnitude > 1f) {
-                rawVelocity = rawVelocity.normalized;
-            }
-            rb.velocity += playerSpeed * rawVelocity;
-        }
 
 		if (rb.velocity.sqrMagnitude > float.Epsilon * float.Epsilon) {
 			timeSinceLastMoved = 0f;
@@ -158,8 +156,54 @@ public class PlayerController : MonoBehaviour {
             keyboardControlledPlayer = 3;
         } else if (Input.GetKeyDown(KeyCode.Alpha4)) {
             keyboardControlledPlayer = 4;
+        } else if (Input.GetKeyDown(KeyCode.Alpha0)) {
+            keyboardControlledPlayer = 0;
         }
     }
+
+    // runs every physics calculation frame, used for movement
+    void FixedUpdate() {
+        float axisX, axisY;
+        if (playerNum == keyboardControlledPlayer) {
+            axisX = Input.GetAxisRaw("Horizontal");
+            axisY = Input.GetAxisRaw("Vertical");
+        } else {
+            axisX = GetAxis("Horizontal");
+            axisY = GetAxis("Vertical");
+        }
+        lsInput = new Vector2(axisX, axisY);
+        HandleMovement(axisX, axisY);
+        // if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
+        //     DebugDash(axisX, axisY);
+        // }
+    }
+
+    private void HandleMovement(float GetAxisX, float GetAxisY) {
+        // Store movement vector.
+        
+        if (pMovDisable) return;
+        
+        Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1) * pMovSpeed;
+        float handling = pMovHandle;
+        // When above player max speed, we let reduce control so that momentum is preserved
+        if (rb.velocity.magnitude > pMovSpeed) {
+            handling = pMovHandleFast;
+        } else {
+            // can't reverse direction ezpz
+            if (Vector2.Dot(rb.velocity, move) < -0.1) {
+                handling *= 0.3f;
+            }
+        }
+
+        if (me.playerNum == keyboardControlledPlayer) {
+            Debug.Log("KeyboardPlayer handling: " + handling);
+        }
+        rb.velocity = Vector2.Lerp(rb.velocity, move, handling);
+    }
+    private void DebugDash(float GetAxisX, float GetAxisY) {
+        Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1);
+        rb.velocity = move*pMovSpeed*6;
+    } 
 
     private void SetControls() {
         AButton = me.GetKeyCode("A");
