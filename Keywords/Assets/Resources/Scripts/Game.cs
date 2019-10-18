@@ -37,23 +37,20 @@ public static class Game {
     }
     private static void RepositionInSortingOrder(GameObject obj, int height) {
         int originalSortingOrder = 0;
-        if (obj.GetComponent<SpriteRenderer>())
-        {
+        if (obj.GetComponent<SpriteRenderer>()) {
             originalSortingOrder = obj.GetComponent<SpriteRenderer>().sortingOrder;
             obj.GetComponent<SpriteRenderer>().sortingOrder = height;
         }
         foreach (Transform child in obj.transform) {
             int diff = 0;
-            if (child.GetComponent<SpriteRenderer>())
-            {
+            if (child.GetComponent<SpriteRenderer>()) {
                 diff = child.gameObject.GetComponent<SpriteRenderer>().sortingOrder - originalSortingOrder;
             }
             RepositionInSortingOrder(child.gameObject, height + diff);
         }
     }
 
-    public static Bounds GetBounds(GameObject obj)
-    {
+    public static Bounds GetBounds(GameObject obj) {
         // Generate parent bounds object
         Bounds bounds;
         SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
@@ -63,8 +60,7 @@ public static class Game {
             bounds = new Bounds(obj.transform.position, Vector3.zero);
         // Recursively expand bounds to accomodate children
         // If no children, won't have to worry about recursive case
-        for (int i=0; i<obj.transform.childCount; i++)
-        {
+        for (int i = 0; i < obj.transform.childCount; i++) {
             GameObject childObj = obj.transform.GetChild(i).gameObject;
             Bounds childBounds = GetBounds(childObj);
             bounds.Encapsulate(childBounds);

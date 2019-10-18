@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hook : MonoBehaviour
-{
+public class Hook : MonoBehaviour {
     // Start is called before the first frame update
     Vector3 initial, dir;
     float launchSpeed, pullSpeed;
@@ -17,8 +16,7 @@ public class Hook : MonoBehaviour
     Rigidbody2D rbPlayer;
     Transform tPlayer;
 
-     public void launch(Vector3 dir, float launchSpeed, float pullSpeed)
-    {
+    public void launch(Vector3 dir, float launchSpeed, float pullSpeed) {
         if (hasFired) //Cancel the Grappling Hook
         {
             Stop();
@@ -45,57 +43,43 @@ public class Hook : MonoBehaviour
         Game.DisablePhysics(gameObject);
     }
 
-    public void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (hasFired && !hasHit)
-        {
-            if (collision.CompareTag("Wall"))
-            {
+    public void OnTriggerEnter2D(Collider2D collision) {
+        if (hasFired && !hasHit) {
+            if (collision.CompareTag("Wall")) {
                 curLength = 0;
                 hasHit = true;
             }
         }
     }
 
-    public void Setup(GameObject player, GameObject grapplingHook)
-    {
+    public void Setup(GameObject player, GameObject grapplingHook) {
         this.player = player;
         this.grapplingHook = grapplingHook;
         rbPlayer = player.GetComponent<Rigidbody2D>();
         tPlayer = player.GetComponent<Transform>();
         initial = transform.localPosition;
     }
-    
+
     // Update is called once per frame
-    void Update()
-    {
-        if (hasFired && !hasHit)
-        {
-            if (curLength < maxLength)
-            {
+    void Update() {
+        if (hasFired && !hasHit) {
+            if (curLength < maxLength) {
                 transform.position = transform.position + (Time.deltaTime * dir * launchSpeed);
                 curLength += Time.deltaTime;
-            }
-            else
-            {
+            } else {
                 Stop();
             }
         }
     }
 
-    void LateUpdate()
-    {
-        if (hasHit)
-        {
+    void LateUpdate() {
+        if (hasHit) {
             Vector3 dif = transform.position - tPlayer.position;
-            if (curLength < maxLength && dif.magnitude > stopDistance)
-            {
+            if (curLength < maxLength && dif.magnitude > stopDistance) {
                 dir = dif.normalized * pullSpeed;
                 rbPlayer.velocity += (Vector2)dir;
                 curLength += Time.deltaTime;
-            }
-            else
-            {
+            } else {
                 Stop();
             }
         }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 
 public class Words : MonoBehaviour {
-	public string dictionaryFilePath;
+    public string dictionaryFilePath;
 
     public int minWordLength; //minimum word length allowed
     public int maxWordLength; //maximum word length allowed
@@ -43,7 +43,7 @@ public class Words : MonoBehaviour {
     private const int sumOfCharacterFrequencies = 323730;
     private const int numLettersInSource = 7;
     string[] words;//all words in the dictionary file
-	public Dictionary<string, string> dictionary;
+    public Dictionary<string, string> dictionary;
     string[] numletterwords;//all words of exactly numLettersInSource letters in length
     string[] currentSourceWords;//a selection of words which each floor in the dungeon will be based on
     public int numLevels;//how many levels in the dungeon
@@ -60,25 +60,25 @@ public class Words : MonoBehaviour {
     private AudioSource AlreadyMadeWordSFX;
 
     void Awake() {
-		//words = File.ReadAllLines(wordsFilePath);
-		//words = words.Where(w => w.Length >= minWordLength && w.Length <= maxWordLength).ToArray();
-		var regex = new Regex(Regex.Escape("o"));
-		var newText = regex.Replace("Hello World", "Foo", 1);
-		string[] wordDefPairs = File.ReadAllLines(dictionaryFilePath);
-		words = new string[wordDefPairs.Length];
-		dictionary = new Dictionary<string, string>();
+        //words = File.ReadAllLines(wordsFilePath);
+        //words = words.Where(w => w.Length >= minWordLength && w.Length <= maxWordLength).ToArray();
+        var regex = new Regex(Regex.Escape("o"));
+        var newText = regex.Replace("Hello World", "Foo", 1);
+        string[] wordDefPairs = File.ReadAllLines(dictionaryFilePath);
+        words = new string[wordDefPairs.Length];
+        dictionary = new Dictionary<string, string>();
 
-		string currentWord = "";
-		string currentDef = "";
-		string[] tokens;
-		for (int i = 0; i < wordDefPairs.Length; i++) {
-			tokens = wordDefPairs[i].Split();
-			currentWord = tokens[0];
+        string currentWord = "";
+        string currentDef = "";
+        string[] tokens;
+        for (int i = 0; i < wordDefPairs.Length; i++) {
+            tokens = wordDefPairs[i].Split();
+            currentWord = tokens[0];
 
-			currentDef = string.Join(" ", tokens.Skip(1));
-			words[i] = currentWord.ToLower();
-			dictionary.Add(currentWord, currentDef);
-		}
+            currentDef = string.Join(" ", tokens.Skip(1));
+            words[i] = currentWord.ToLower();
+            dictionary.Add(currentWord, currentDef);
+        }
 
         numletterwords = GetNumLetterWords();
         currentSourceWords = GetSomeSourceWords(numLevels, 75, 250);
@@ -97,9 +97,9 @@ public class Words : MonoBehaviour {
         AlreadyMadeWordSFX = GameObject.Find("AlreadyMadeWordSFX").GetComponent<AudioSource>();
     }
 
-	public string GetDefinition (string word) {
-		return dictionary[word.ToUpper()];
-	}
+    public string GetDefinition(string word) {
+        return dictionary[word.ToUpper()];
+    }
 
     public void UpdateLevelWords(int level) {
         madeLevelWords.Clear();
@@ -216,8 +216,8 @@ public class Words : MonoBehaviour {
             madeWords.Add(word);
             madeLevelWords.Add(word);
             GetKeySFX.Play();
-			
-			GameManager.GetTextOverlayHandler(playerNum).CreateWord(word);
+
+            GameManager.GetTextOverlayHandler(playerNum).CreateWord(word);
             return true;
         }
         return false;
