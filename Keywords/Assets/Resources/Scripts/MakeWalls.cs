@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //A representation of a room in a dungeon
+#region roomclass
 class Room {
     public List<Vector2Int> squares;
     public List<Room> neighbors;//list of all neighboring rooms
@@ -60,7 +61,10 @@ class Room {
         return GameObject.Instantiate(item, finalPos, Quaternion.identity, parent);
     }
 }
+#endregion
+
 public class MakeWalls : MonoBehaviour {
+    #region fields
     //back end - grid of rooms
     public bool coop;
     public int width;
@@ -93,7 +97,9 @@ public class MakeWalls : MonoBehaviour {
     public GameObject Grid;//grid prefab
     public GameObject Void;//fog of war objects
     public GameObject[] loot;
+    #endregion
 
+    #region main
     // Use this for initialization
     void Awake() {
         Destroy(GetComponent<SpriteRenderer>());
@@ -111,7 +117,9 @@ public class MakeWalls : MonoBehaviour {
         MakeLoot();
         print("level Score: " + GetComponent<Words>().levelScore);
     }
+    #endregion
 
+    #region backend
     //BACK END
     void FillRooms() {
         rooms = new int[width, width];
@@ -240,7 +248,7 @@ public class MakeWalls : MonoBehaviour {
             Vector2Int square = q.Dequeue();
             roomGraph[newroomnum].squares.Add(square);
             rooms[square.x, square.y] = newroomnum;
-            foreach (Vector2Int neighbor in GetNeighbors(square)) {
+            foreach (Vector2Int neighbor in GetNeighborsRightAndBottom(square)) {
                 if (rooms[neighbor.x, neighbor.y] == orig_roomnum && !reachedSquares.ContainsKey(neighbor)) {
                     q.Enqueue(neighbor);
                     reachedSquares[neighbor] = 0;
@@ -299,7 +307,9 @@ public class MakeWalls : MonoBehaviour {
             room.reached = false;
         }
     }
+    #endregion
 
+    #region frontend
     //FRONT END
     //runs BFS starting from player starting rooms.
     void GenerateWallsAndLoot() {
@@ -565,7 +575,9 @@ public class MakeWalls : MonoBehaviour {
             FogOfWarArray[x, y - 1].GetComponent<FogOfWar>().neighbors.Add(newFog);
         }
     }
+    #endregion
 
+    #region loot
     //will be called on each room in the dungeon during GenerateWallsAndLoot
     //TODO: Make a design doc for loot generation, stop hardcoding numbers. Formalize this entire process
     void MakeLootInRoom(Room r, int depth) {
@@ -634,4 +646,6 @@ public class MakeWalls : MonoBehaviour {
             newTile.GetComponent<LetterTile>().SetLifespan(Random.Range(3, 9));
         }
     }
+
+    #endregion
 }
