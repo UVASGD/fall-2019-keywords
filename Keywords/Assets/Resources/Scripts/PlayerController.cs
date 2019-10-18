@@ -24,21 +24,22 @@ public class PlayerController : MonoBehaviour {
     private float pMovHandle; // Current value of movement handling: used to lerp velocity to input velocity (0 to 1)
     const float pickupRadius = 0.2f; //how far away can the player pick up an object?
     public Vector3 holdOffset; //what's the hold position of the currently held inventory item?
+    private float epsilon = 0.001f;
 
     private int playerNum;
     private int keyboardControlledPlayer = 0; //for debug / testing without controllers - one player can be controlled by the keyboard at a time;
 
-	//Idle variables
-	public float timeUntilIdle = 3f;
+    //Idle variables
+    public float timeUntilIdle = 3f;
     [HideInInspector]
-	public bool idle;
-	private bool idleLF;
-	public float timeUntilLongIdle = 3f;
+    public bool idle;
+    private bool idleLF;
+    public float timeUntilLongIdle = 3f;
     [HideInInspector]
     public bool longIdle;
-	private bool longIdleLF;
+    private bool longIdleLF;
 
-	private float timeSinceLastMoved;
+    private float timeSinceLastMoved;
 
     public Vector2 lsInput;
     private Func<string, float> GetAxis;
@@ -58,21 +59,27 @@ public class PlayerController : MonoBehaviour {
         TileContainer = GameObject.Find("Tiles");
         aimIndicator = transform.Find("AimIndicator").gameObject;
         SetControls();
-
-		//Idle
-		timeSinceLastMoved = 0f;
-		idle = false;
-		idleLF = false;
+        //Idle
+        timeSinceLastMoved = 0f;
+        idle = false;
+        idleLF = false;
 
         // movement
         pMovHandle = pMovHandleBase;
-	}
+      }
 
     // Update is called once per frame
     void Update() {
 
         //aiming and firing
-        Vector2 aim = new Vector2(GetAxis("Horizontal_R"), GetAxis("Vertical_R")).normalized;
+        Vector2 aim_raw = new Vector2(GetAxis("Horizontal_R"), GetAxis("Vertical_R"));
+        if (aim_raw.sqrMagnitude < epsilon) {
+            aim_raw = Vector2.zero;
+            aimIndicator.GetComponent<SpriteRenderer>().enabled = false;
+        } else {
+            aimIndicator.GetComponent<SpriteRenderer>().enabled = true;
+        }
+        Vector2 aim = aim_raw.normalized;
         float trigger = GetAxis("RTrigger");
         if (!rt_pressed && trigger > 0.9f) {
             //fire weapon/tool if aiming, else switch inventory slots
@@ -102,36 +109,36 @@ public class PlayerController : MonoBehaviour {
         }
 
 
-		if (rb.velocity.sqrMagnitude > float.Epsilon * float.Epsilon) {
-			timeSinceLastMoved = 0f;
-			idle = false;
-			longIdle = false;
-		} else {
-			if (timeSinceLastMoved > timeUntilIdle) {
-				idle = true;
-			}
+        if (rb.velocity.sqrMagnitude > float.Epsilon * float.Epsilon) {
+            timeSinceLastMoved = 0f;
+            idle = false;
+            longIdle = false;
+        } else {
+            if (timeSinceLastMoved > timeUntilIdle) {
+                idle = true;
+            }
 
-			if (timeSinceLastMoved > timeUntilLongIdle) {
-				longIdle = true;
-			}
+            if (timeSinceLastMoved > timeUntilLongIdle) {
+                longIdle = true;
+            }
 
-			timeSinceLastMoved += Time.deltaTime;
-		}
+            timeSinceLastMoved += Time.deltaTime;
+        }
 
-		if (idle && !idleLF) {
-			GameManager.GetTextOverlayHandler(playerNum).AppearWords();
-		} else if (!idle && idleLF) {
-			GameManager.GetTextOverlayHandler(playerNum).DisappearWords();
-		}
+        if (idle && !idleLF) {
+            GameManager.GetTextOverlayHandler(playerNum).AppearWords();
+        } else if (!idle && idleLF) {
+            GameManager.GetTextOverlayHandler(playerNum).DisappearWords();
+        }
 
-		if (longIdle && !longIdleLF) {
-			GameManager.GetTextOverlayHandler(playerNum).AppearDefinitions();
-		} else if (!longIdle && longIdleLF) {
-			GameManager.GetTextOverlayHandler(playerNum).DisappearDefinitions();
-		}
+        if (longIdle && !longIdleLF) {
+            GameManager.GetTextOverlayHandler(playerNum).AppearDefinitions();
+        } else if (!longIdle && longIdleLF) {
+            GameManager.GetTextOverlayHandler(playerNum).DisappearDefinitions();
+        }
 
-		idleLF = idle;
-		longIdleLF = longIdle;
+        idleLF = idle;
+        longIdleLF = longIdle;
 
         ////Interact with world
         if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {

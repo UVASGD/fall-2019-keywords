@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 //A representation of a room in a dungeon
+#region roomclass
 class Room {
     public List<Vector2Int> squares;
     public List<Room> neighbors;//list of all neighboring rooms
@@ -48,19 +48,33 @@ class Room {
             weightedAvg += GameManager.makeWalls.GetCellPositionFor(square.x, square.y);
         }
         weightedAvg *= (1f / squares.Count);
-        return GameObject.Instantiate(item, weightedAvg, Quaternion.identity, parent);
+        Vector2Int closestSquare = squares[0];
+        float minDist = Vector3.Distance(weightedAvg, GameManager.makeWalls.GetCellPositionFor(closestSquare.x, closestSquare.y));
+        foreach (Vector2Int square in squares) {
+            float dist = Vector3.Distance(weightedAvg, GameManager.makeWalls.GetCellPositionFor(square.x, square.y));
+            if (dist < minDist) {
+                closestSquare = square;
+                minDist = dist;
+            }
+        }
+        Vector3 finalPos = GameManager.makeWalls.GetCellPositionFor(closestSquare.x, closestSquare.y);
+        return GameObject.Instantiate(item, finalPos, Quaternion.identity, parent);
     }
 }
+#endregion
+
 public class MakeWalls : MonoBehaviour {
+    #region fields
     //back end - grid of rooms
     public bool coop;
     public int width;
     private int numSquares;
     private int numCheckedOff;
-    private int roomNum;
+    private int numRooms;
     [HideInInspector]
     public int[,] rooms;
     Dictionary<int, Room> roomGraph;
+
 
     //front end - generated game objects
     private const float epsilon = 0.005f; //makes borders between walls/corners look better
@@ -71,6 +85,8 @@ public class MakeWalls : MonoBehaviour {
     public GameObject DoorContainer;
     public GameObject WallContainer;
     public GameObject TileContainer;
+    public GameObject LootContainer;
+    public GameObject GridContainer;
     public GameObject FogOfWarContainer;//container for fog of war objects
     public GameObject[,] FogOfWarArray;//grid of fog of war objects
     public GameObject Wall;
@@ -78,9 +94,12 @@ public class MakeWalls : MonoBehaviour {
     public GameObject Door;
     public GameObject WallSmall;
     public GameObject Tile;
+    public GameObject Grid;//grid prefab
     public GameObject Void;//fog of war objects
+    public GameObject[] loot;
+    #endregion
 
-
+    #region main
     // Use this for initialization
     void Awake() {
         Destroy(GetComponent<SpriteRenderer>());
@@ -92,22 +111,28 @@ public class MakeWalls : MonoBehaviour {
 
         FillRooms();
         FillRoomGraph();
-        GenerateWalls();
+        GenerateWallsAndLoot();
         //PlaceDebugDoors();
         PlaceFogOfWar();
         MakeLoot();
         print("level Score: " + GetComponent<Words>().levelScore);
     }
+    #endregion
 
+    #region backend
     //BACK END
     void FillRooms() {
         rooms = new int[width, width];
-        roomNum = 1;
+        numRooms = 1;
         numCheckedOff = 0;
         numSquares = width * width;
         while (numCheckedOff < numSquares) {
             MakeRoom(Random.Range(0, width), Random.Range(0, width), Random.Range(4, 7), Random.Range(4, 7));
         }
+        MakePresetRooms();
+    }
+
+    void MakePresetRooms() {
         //Starting Room
         int halfX = width / 2;
         if (coop) {
@@ -137,11 +162,11 @@ public class MakeWalls : MonoBehaviour {
                     if (rooms[a, b] == 0) {
                         numCheckedOff++;
                     }
-                    rooms[a, b] = roomNum;
+                    rooms[a, b] = numRooms;
                 }
             }
         }
-        roomNum++;
+        numRooms++;
     }
 
     //makes a room of width w and height h centered at [x,y] with room designation num
@@ -179,22 +204,93 @@ public class MakeWalls : MonoBehaviour {
         print(result);
     }
 
+    List<Vector2Int> GetNeighbors(Vector2Int xy) {
+        int x = xy.x;
+        int y = xy.y;
+        List<Vector2Int> result = new List<Vector2Int>();
+        if (InBounds(x + 1, y)) {
+            result.Add(new Vector2Int(x + 1, y));
+        }
+        if (InBounds(x, y + 1)) {
+            result.Add(new Vector2Int(x, y + 1));
+        }
+        if (InBounds(x - 1, y)) {
+            result.Add(new Vector2Int(x - 1, y));
+        }
+        if (InBounds(x, y - 1)) {
+            result.Add(new Vector2Int(x, y - 1));
+        }
+        return result;
+    }
+
+    List<Vector2Int> GetNeighborsRightAndBottom(Vector2Int xy) {
+        int x = xy.x;
+        int y = xy.y;
+        List<Vector2Int> result = new List<Vector2Int>();
+        if (InBounds(x + 1, y)) {
+            result.Add(new Vector2Int(x + 1, y));
+        }
+        if (InBounds(x, y + 1)) {
+            result.Add(new Vector2Int(x, y + 1));
+        }
+        return result;
+    }
+
+    //helper for FillRoomGraph
+    //starting at (x,y), find all neighboring squares
+    void FloodFillRoomIntoGraph(int x, int y, int newroomnum, Dictionary<Vector2Int, int> reachedSquares) {
+        int orig_roomnum = rooms[x, y];
+        Queue<Vector2Int> q = new Queue<Vector2Int>();
+        Vector2Int xy = new Vector2Int(x, y);
+        q.Enqueue(xy);
+        reachedSquares[xy] = 0;
+        while (q.Count > 0) {
+            Vector2Int square = q.Dequeue();
+            roomGraph[newroomnum].squares.Add(square);
+            rooms[square.x, square.y] = newroomnum;
+            foreach (Vector2Int neighbor in GetNeighborsRightAndBottom(square)) {
+                if (rooms[neighbor.x, neighbor.y] == orig_roomnum && !reachedSquares.ContainsKey(neighbor)) {
+                    q.Enqueue(neighbor);
+                    reachedSquares[neighbor] = 0;
+                }
+            }
+        }
+    }
+
     //analyze room grid and convert it into an adjacency list of room objects
     void FillRoomGraph() {
         roomGraph = new Dictionary<int, Room>();
+        Dictionary<Vector2Int, int> reachedSquares = new Dictionary<Vector2Int, int>();
+        //put correct squares in each room
+        //also, scan for bisected rooms and rename each chunk
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < width; y++) {
                 int roomnum = rooms[x, y];
-                if (!roomGraph.ContainsKey(roomnum)) {
+                //print(roomnum);
+                if (roomGraph.ContainsKey(roomnum)) {
+                    if (roomGraph[roomnum].reached && !reachedSquares.ContainsKey(new Vector2Int(x, y))) {
+                        //get new room num
+                        roomnum = numRooms;
+                        numRooms++;
+                        //add new room, floodfill
+                        roomGraph.Add(roomnum, new Room(roomnum));
+                        FloodFillRoomIntoGraph(x, y, roomnum, reachedSquares);
+                        roomGraph[roomnum].reached = true;
+                    }
+                } else {
+                    //add new room, floodfill
                     roomGraph.Add(roomnum, new Room(roomnum));
+                    FloodFillRoomIntoGraph(x, y, roomnum, reachedSquares);
+                    roomGraph[roomnum].reached = true;
                 }
-                roomGraph[roomnum].squares.Add(new Vector2Int(x, y));
             }
         }
+
+        //find correct neighbors for each room
         foreach (Room room in roomGraph.Values) {
             foreach (Vector2Int square in room.squares) {
                 int numDissimilar = 0;
-                foreach (Vector2Int neighbor in GetNeighbors(square)) {
+                foreach (Vector2Int neighbor in GetNeighborsRightAndBottom(square)) {
                     if (rooms[neighbor.x, neighbor.y] != rooms[square.x, square.y]) {
                         numDissimilar++;
                         Room otherGuy = roomGraph[rooms[neighbor.x, neighbor.y]];
@@ -206,11 +302,17 @@ public class MakeWalls : MonoBehaviour {
                 }
             }
         }
+        //I probably reuse room.reached in a later floodfill pass so I will set that to false
+        foreach (Room room in roomGraph.Values) {
+            room.reached = false;
+        }
     }
+    #endregion
 
+    #region frontend
     //FRONT END
     //runs BFS starting from player starting rooms.
-    void GenerateWalls() {
+    void GenerateWallsAndLoot() {
         print("makin dungeon walls");
         Queue<Room> q1 = new Queue<Room>();//all rooms at the current layer of depth
         Queue<Room> q2 = new Queue<Room>();//all rooms at the next layer of depth
@@ -225,8 +327,10 @@ public class MakeWalls : MonoBehaviour {
 
         //Make the rest of the stuff
         for (int depth = 1; depth < 11; depth++) {
+
             while (q1.Count > 0) {
                 Room a = q1.Dequeue();
+                MakeLootInRoom(a, depth);
                 //				GameObject roomnumIndicator = a.SpawnItemAtCenter (Door, null);
                 //				roomnumIndicator.GetComponent<Door> ().keyNum = a.roomID;
                 a.reached = true;
@@ -362,20 +466,6 @@ public class MakeWalls : MonoBehaviour {
         }
     }
 
-
-    List<Vector2Int> GetNeighbors(Vector2Int xy) {
-        int x = xy.x;
-        int y = xy.y;
-        List<Vector2Int> result = new List<Vector2Int>();
-        if (InBounds(x + 1, y)) {
-            result.Add(new Vector2Int(x + 1, y));
-        }
-        if (InBounds(x, y + 1)) {
-            result.Add(new Vector2Int(x, y + 1));
-        }
-        return result;
-    }
-
     void PlaceFogOfWar() {
         print("placing fog of war objects");
         for (int x = -3; x < width + 3; x++) {
@@ -485,6 +575,39 @@ public class MakeWalls : MonoBehaviour {
             FogOfWarArray[x, y - 1].GetComponent<FogOfWar>().neighbors.Add(newFog);
         }
     }
+    #endregion
+
+    #region loot
+    //will be called on each room in the dungeon during GenerateWallsAndLoot
+    //TODO: Make a design doc for loot generation, stop hardcoding numbers. Formalize this entire process
+    void MakeLootInRoom(Room r, int depth) {
+        // room is the place to spawn, depth is the difficulty
+
+        List<GameObject> thingsToSpawn = new List<GameObject>();
+        // figure out what to spawn in r
+        if (depth > 1 && r.squares.Count > 3) {//do not make loot in starting rooms or really small rooms
+            float diceRoll = Random.value;
+            if (diceRoll < 0.4f) {//spawn loot 40% of the time (for now, this is too often for real gameplay)
+                thingsToSpawn.Add(loot[Random.Range(0, loot.Length)]);
+            }
+            if (r.squares.Count > 30) {//definitely spawn loot in big enough room
+                thingsToSpawn.Add(loot[Random.Range(0, loot.Length)]);
+            }
+        }
+        if (r.squares.Count > 30) {//spawn grid in center of big enough room
+            if (depth >= 3) { //do not spawn new grids too close to starting rooms
+                if (r.roomID != -5) {//do not spawn in boss chamber
+                    r.SpawnItemAtCenter(Grid, GridContainer.transform);
+                }
+            }
+        }
+
+        // spawn stuff
+        foreach (GameObject g in thingsToSpawn) {
+            GameObject objSpawned = r.SpawnItem(g, LootContainer.transform);
+            Game.RepositionHeight(objSpawned, Height.OnFloor);
+        }
+    }
 
     void MakeLoot() {
         print("making some sweet loot");
@@ -523,4 +646,6 @@ public class MakeWalls : MonoBehaviour {
             newTile.GetComponent<LetterTile>().SetLifespan(Random.Range(3, 9));
         }
     }
+
+    #endregion
 }
