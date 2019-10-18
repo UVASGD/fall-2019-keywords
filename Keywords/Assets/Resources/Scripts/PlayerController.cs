@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour {
     private KeyCode RightBumper;
     private KeyCode AButton;
     private KeyCode BButton;
+    private bool movementEnabled;
 
     private float playerSpeed = 2.2f;
     const float pickupRadius = 0.2f; //how far away can the player pick up an object?
@@ -47,7 +48,7 @@ public class PlayerController : MonoBehaviour {
         TileContainer = GameObject.Find("Tiles");
         aimIndicator = transform.Find("AimIndicator").gameObject;
         SetControls();
-
+        movementEnabled = true;
 		//Idle
 		timeSinceLastMoved = 0f;
 		idle = false;
@@ -72,7 +73,7 @@ public class PlayerController : MonoBehaviour {
                 Fireable f=inventory.Get().GetComponent<Fireable>();
                 if (f)
                 {
-                    f.Fire(aim);
+                    f.Fire(aim,gameObject);
                 }
             }
         }
@@ -100,7 +101,10 @@ public class PlayerController : MonoBehaviour {
             if (rawVelocity.magnitude > 1f) {
                 rawVelocity = rawVelocity.normalized;
             }
-            rb.velocity += playerSpeed * rawVelocity;
+            if (movementEnabled)
+            {
+                rb.velocity += playerSpeed * rawVelocity;
+            }
         }
 
 		if (rb.velocity.sqrMagnitude > float.Epsilon * float.Epsilon) {
@@ -281,4 +285,7 @@ public class PlayerController : MonoBehaviour {
         Game.RepositionHeight(closestObject, Height.Held);
         Game.DisablePhysics(closestObject);
     }
+
+
+ 
 }

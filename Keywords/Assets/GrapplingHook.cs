@@ -11,7 +11,7 @@ public class GrapplingHook : Fireable
     Hook hook;
     GameObject player;
 
-    public override void Fire(Vector2 direction)
+    public void Fire(Vector2 direction)
     {
         hook.launch(direction, launchSpeed, pullSpeed);
     }   
