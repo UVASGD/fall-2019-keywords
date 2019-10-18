@@ -173,9 +173,9 @@ public class PlayerController : MonoBehaviour {
         }
         lsInput = new Vector2(axisX, axisY);
         HandleMovement(axisX, axisY);
-        if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
-            DebugDash(axisX, axisY);
-        }
+        // if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
+        //     DebugDash(axisX, axisY);
+        // }
     }
 
     private void HandleMovement(float GetAxisX, float GetAxisY) {
@@ -200,7 +200,7 @@ public class PlayerController : MonoBehaviour {
         }
         rb.velocity = Vector2.Lerp(rb.velocity, move, handling);
     }
-    void DebugDash(float GetAxisX, float GetAxisY) {
+    private void DebugDash(float GetAxisX, float GetAxisY) {
         Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1);
         rb.velocity = move*pMovSpeed*6;
     } 
