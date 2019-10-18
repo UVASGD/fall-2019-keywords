@@ -18,19 +18,31 @@ public class PlayerController : MonoBehaviour {
     private KeyCode BButton;
     private bool movementEnabled;
 
-    private float playerSpeed = 2.2f;
+    private float pMovSpeed = 2.2f;
+    private float pMovHandleBase = 0.8f; // Player movmement "handling" when player is "slow" (within max speed)
+    private float pMovHandleFast = 0.05f; // When moving fast, drag/handling
+    private bool pMovDisable = false; // Disables basic movement mechanics entirely; shouldn't be needed
+    private float pMovHandle; // Current value of movement handling: used to lerp velocity to input velocity (0 to 1)
     const float pickupRadius = 0.2f; //how far away can the player pick up an object?
     public Vector3 holdOffset; //what's the hold position of the currently held inventory item?
+    private float epsilon = 0.001f;
 
     private int playerNum;
-    private int keyboardControlledPlayer = 1; //for debug / testing without controllers - one player can be controlled by the keyboard at a time;
+    private int keyboardControlledPlayer = 0; //for debug / testing without controllers - one player can be controlled by the keyboard at a time;
 
-	//Idle variables
-	public float timeUntilIdle = 3f;
-	public bool idle;
-	private bool idleLF;
-	private float timeSinceLastMoved;
+    //Idle variables
+    public float timeUntilIdle = 3f;
+    [HideInInspector]
+    public bool idle;
+    private bool idleLF;
+    public float timeUntilLongIdle = 3f;
+    [HideInInspector]
+    public bool longIdle;
+    private bool longIdleLF;
 
+    private float timeSinceLastMoved;
+
+    public Vector2 lsInput;
     private Func<string, float> GetAxis;
 
     private GameObject aimIndicator;
@@ -48,20 +60,27 @@ public class PlayerController : MonoBehaviour {
         TileContainer = GameObject.Find("Tiles");
         aimIndicator = transform.Find("AimIndicator").gameObject;
         SetControls();
-        movementEnabled = true;
-		//Idle
-		timeSinceLastMoved = 0f;
-		idle = false;
-		idleLF = false;
-	}
+        //Idle
+        timeSinceLastMoved = 0f;
+        idle = false;
+        idleLF = false;
+
+        // movement
+        pMovHandle = pMovHandleBase;
+      }
 
     // Update is called once per frame
     void Update() {
-        //movement
-        rb.velocity = playerSpeed * new Vector2(GetAxis("Horizontal"), GetAxis("Vertical"));
 
         //aiming and firing
-        Vector2 aim = new Vector2(GetAxis("Horizontal_R"), GetAxis("Vertical_R")).normalized;
+        Vector2 aim_raw = new Vector2(GetAxis("Horizontal_R"), GetAxis("Vertical_R"));
+        if (aim_raw.sqrMagnitude < epsilon) {
+            aim_raw = Vector2.zero;
+            aimIndicator.GetComponent<SpriteRenderer>().enabled = false;
+        } else {
+            aimIndicator.GetComponent<SpriteRenderer>().enabled = true;
+        }
+        Vector2 aim = aim_raw.normalized;
         float trigger = GetAxis("RTrigger");
         if (!rt_pressed && trigger > 0.9f) {
             //fire weapon/tool if aiming, else switch inventory slots
@@ -95,35 +114,37 @@ public class PlayerController : MonoBehaviour {
             lt_pressed = false;
         }
 
-        //make keyboardControlledPlayer also controllable by keyboard
-        if (playerNum == keyboardControlledPlayer) {
-            Vector2 rawVelocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            if (rawVelocity.magnitude > 1f) {
-                rawVelocity = rawVelocity.normalized;
+
+        if (rb.velocity.sqrMagnitude > float.Epsilon * float.Epsilon) {
+            timeSinceLastMoved = 0f;
+            idle = false;
+            longIdle = false;
+        } else {
+            if (timeSinceLastMoved > timeUntilIdle) {
+                idle = true;
             }
-            if (movementEnabled)
-            {
-                rb.velocity += playerSpeed * rawVelocity;
+
+            if (timeSinceLastMoved > timeUntilLongIdle) {
+                longIdle = true;
             }
+
+            timeSinceLastMoved += Time.deltaTime;
         }
 
-		if (rb.velocity.sqrMagnitude > float.Epsilon * float.Epsilon) {
-			timeSinceLastMoved = 0f;
-			idle = false;
-		} else {
-			if (timeSinceLastMoved > timeUntilIdle) {
-				idle = true;
-			}
-			timeSinceLastMoved += Time.deltaTime;
-		}
+        if (idle && !idleLF) {
+            GameManager.GetTextOverlayHandler(playerNum).AppearWords();
+        } else if (!idle && idleLF) {
+            GameManager.GetTextOverlayHandler(playerNum).DisappearWords();
+        }
 
-		if (idle && !idleLF) {
-			GameManager.GetWordOverlayHandler(playerNum).AppearWords();
-		} else if (!idle && idleLF) {
-			GameManager.GetWordOverlayHandler(playerNum).DisappearWords();
-		}
+        if (longIdle && !longIdleLF) {
+            GameManager.GetTextOverlayHandler(playerNum).AppearDefinitions();
+        } else if (!longIdle && longIdleLF) {
+            GameManager.GetTextOverlayHandler(playerNum).DisappearDefinitions();
+        }
 
-		idleLF = idle;
+        idleLF = idle;
+        longIdleLF = longIdle;
 
         ////Interact with world
         if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
@@ -148,8 +169,54 @@ public class PlayerController : MonoBehaviour {
             keyboardControlledPlayer = 3;
         } else if (Input.GetKeyDown(KeyCode.Alpha4)) {
             keyboardControlledPlayer = 4;
+        } else if (Input.GetKeyDown(KeyCode.Alpha0)) {
+            keyboardControlledPlayer = 0;
         }
     }
+
+    // runs every physics calculation frame, used for movement
+    void FixedUpdate() {
+        float axisX, axisY;
+        if (playerNum == keyboardControlledPlayer) {
+            axisX = Input.GetAxisRaw("Horizontal");
+            axisY = Input.GetAxisRaw("Vertical");
+        } else {
+            axisX = GetAxis("Horizontal");
+            axisY = GetAxis("Vertical");
+        }
+        lsInput = new Vector2(axisX, axisY);
+        HandleMovement(axisX, axisY);
+        // if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
+        //     DebugDash(axisX, axisY);
+        // }
+    }
+
+    private void HandleMovement(float GetAxisX, float GetAxisY) {
+        // Store movement vector.
+        
+        if (pMovDisable) return;
+        
+        Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1) * pMovSpeed;
+        float handling = pMovHandle;
+        // When above player max speed, we let reduce control so that momentum is preserved
+        if (rb.velocity.magnitude > pMovSpeed) {
+            handling = pMovHandleFast;
+        } else {
+            // can't reverse direction ezpz
+            if (Vector2.Dot(rb.velocity, move) < -0.1) {
+                handling *= 0.3f;
+            }
+        }
+
+        if (me.playerNum == keyboardControlledPlayer) {
+            Debug.Log("KeyboardPlayer handling: " + handling);
+        }
+        rb.velocity = Vector2.Lerp(rb.velocity, move, handling);
+    }
+    private void DebugDash(float GetAxisX, float GetAxisY) {
+        Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1);
+        rb.velocity = move*pMovSpeed*6;
+    } 
 
     private void SetControls() {
         AButton = me.GetKeyCode("A");

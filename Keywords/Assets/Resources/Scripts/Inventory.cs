@@ -71,12 +71,19 @@ public class Inventory : MonoBehaviour {
         Transform SlotUI = UI.transform.Find("Slot" + activeSlot);
         GameObject ItemInUI = Instantiate(obj, SlotUI.position, Quaternion.identity, SlotUI);
         Game.RepositionHeight(ItemInUI, Height.UI);
-        bool scaleToWidth = (ItemInUI.transform.localScale.x >= ItemInUI.transform.localScale.y);
+        GameObject scaleReference = Instantiate(obj, Vector3.zero, Quaternion.identity, null);
+        Bounds bounds = Game.GetBounds(scaleReference);
+        bool scaleToWidth = (bounds.size.x >= bounds.size.y);
         if (scaleToWidth) {
-            ItemInUI.transform.localScale = new Vector3(UIScaleFactor, UIScaleFactor * (ItemInUI.transform.localScale.y / ItemInUI.transform.localScale.x), ItemInUI.transform.localScale.z);
+            float scaleFactor = UIScaleFactor * (scaleReference.transform.localScale.x / bounds.size.x);
+            float aspectRatio = scaleReference.transform.localScale.y / scaleReference.transform.localScale.x;
+            ItemInUI.transform.localScale = new Vector3(scaleFactor, scaleFactor * aspectRatio, ItemInUI.transform.localScale.z);
         } else {
-            ItemInUI.transform.localScale = new Vector3(UIScaleFactor * (ItemInUI.transform.localScale.x / ItemInUI.transform.localScale.y), UIScaleFactor, ItemInUI.transform.localScale.z);
+            float scaleFactor = UIScaleFactor * (scaleReference.transform.localScale.y / bounds.size.y);
+            float aspectRatio = scaleReference.transform.localScale.x / scaleReference.transform.localScale.y;
+            ItemInUI.transform.localScale = new Vector3(scaleFactor * aspectRatio, scaleFactor, ItemInUI.transform.localScale.z);
         }
+        Destroy(scaleReference);
         Game.SetLayer(ItemInUI, LayerMask.NameToLayer("P" + GetComponent<PlayerInfo>().playerNum));
         Game.DisablePhysics(ItemInUI);
     }

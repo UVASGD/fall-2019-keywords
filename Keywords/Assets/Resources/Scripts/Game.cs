@@ -6,6 +6,7 @@ using System;
 
 //keeping layer orders consistent
 public enum Height {
+    Background = -20,
     Floor = -9,
     OnGridSquare = -8,
     OnFloor = -1,
@@ -49,6 +50,26 @@ public static class Game {
             }
             RepositionInSortingOrder(child.gameObject, height + diff);
         }
+    }
+
+    public static Bounds GetBounds(GameObject obj)
+    {
+        // Generate parent bounds object
+        Bounds bounds;
+        SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
+        if (sr != null)
+            bounds = sr.bounds;
+        else
+            bounds = new Bounds(obj.transform.position, Vector3.zero);
+        // Recursively expand bounds to accomodate children
+        // If no children, won't have to worry about recursive case
+        for (int i=0; i<obj.transform.childCount; i++)
+        {
+            GameObject childObj = obj.transform.GetChild(i).gameObject;
+            Bounds childBounds = GetBounds(childObj);
+            bounds.Encapsulate(childBounds);
+        }
+        return bounds;
     }
 
     //C# mod is not too useful. This one acts identically to the python one (and the math one)
@@ -116,6 +137,10 @@ public static class Game {
         foreach (Transform child in obj.transform) {
             SetLayer(child.gameObject, layer);
         }
+    }
+
+    public static Color RandomDarkColor() {
+        return UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 1f, 0f, 0.3f, 1f, 1f);
     }
 }
 

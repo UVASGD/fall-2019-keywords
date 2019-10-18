@@ -31,7 +31,7 @@ public class LetterTile : MonoBehaviour {
     }
 
     public void SetLifespan(int newLifespan) {
-        if (newLifespan < 0 || newLifespan > 16) {//out of range
+        if (newLifespan < 0) {//out of range
             print("tried to set letter tile to weird number");
             return;
         }
@@ -46,7 +46,8 @@ public class LetterTile : MonoBehaviour {
         }
         lifespan = newLifespan;
         string spriteName = "NumberSprites/" + lifespan.ToString();
-        if (lifespan == 16) {
+        if (lifespan >= 16) {
+            lifespan = 16;
             spriteName = "NumberSprites/inf";
         }
         numberSprite.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(spriteName);
@@ -55,7 +56,7 @@ public class LetterTile : MonoBehaviour {
     //decrement
     public void DecLifespan() {
         //TODO: call animation to flash this letter tile
-        if (lifespan != 16) {
+        if (lifespan < 16) {
             SetLifespan(lifespan - 1);
         }
     }
