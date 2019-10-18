@@ -19,8 +19,7 @@ public class PlayerController : MonoBehaviour {
 
     private float pMovSpeed = 2.2f;
     private float pMovHandleBase = 0.8f; // Player movmement "handling" when player is "slow" (within max speed)
-    private float pMovHandleFast = 0.05f; // Minimum Player movement "handling" when player is "fast", also linear drag
-    private float pMovHandleStop = 0.1f; // Maximum Player movement "handling" when player is "fast", how fast they can manually stop
+    private float pMovHandleFast = 0.05f; // When moving fast, drag/handling
     private bool pMovDisable = false; // Disables basic movement mechanics entirely; shouldn't be needed
     private float pMovHandle; // Current value of movement handling: used to lerp velocity to input velocity (0 to 1)
     const float pickupRadius = 0.2f; //how far away can the player pick up an object?
@@ -35,6 +34,7 @@ public class PlayerController : MonoBehaviour {
 	private bool idleLF;
 	private float timeSinceLastMoved;
 
+    public Vector2 lsInput;
     private Func<string, float> GetAxis;
 
     private GameObject aimIndicator;
@@ -152,6 +152,7 @@ public class PlayerController : MonoBehaviour {
             axisX = GetAxis("Horizontal");
             axisY = GetAxis("Vertical");
         }
+        lsInput = new Vector2(axisX, axisY);
         HandleMovement(axisX, axisY);
         if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
             DebugDash(axisX, axisY);
@@ -159,16 +160,24 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void HandleMovement(float GetAxisX, float GetAxisY) {
-        Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1);
+        // Store movement vector.
+        
         if (pMovDisable) return;
         
-        move *= pMovSpeed;
+        Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1) * pMovSpeed;
         float handling = pMovHandle;
         // When above player max speed, we let reduce control so that momentum is preserved
         if (rb.velocity.magnitude > pMovSpeed) {
-            float x = (rb.velocity.magnitude - pMovSpeed) / pMovSpeed;
-            float val = Mathf.Exp(-x);
-            handling = Mathf.Lerp(pMovHandleStop, handling, val);
+            handling = pMovHandleFast;
+        } else {
+            // can't reverse direction ezpz
+            if (Vector2.Dot(rb.velocity, move) < -0.1) {
+                handling *= 0.3f;
+            }
+        }
+
+        if (me.playerNum == keyboardControlledPlayer) {
+            Debug.Log("KeyboardPlayer handling: " + handling);
         }
         rb.velocity = Vector2.Lerp(rb.velocity, move, handling);
     }
