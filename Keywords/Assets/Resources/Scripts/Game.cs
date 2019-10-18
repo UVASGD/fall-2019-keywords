@@ -35,10 +35,18 @@ public static class Game {
         RepositionInSortingOrder(obj, (int)height);
     }
     private static void RepositionInSortingOrder(GameObject obj, int height) {
-        int originalSortingOrder = obj.GetComponent<SpriteRenderer>().sortingOrder;
-        obj.GetComponent<SpriteRenderer>().sortingOrder = height;
+        int originalSortingOrder = 0;
+        if (obj.GetComponent<SpriteRenderer>())
+        {
+            originalSortingOrder = obj.GetComponent<SpriteRenderer>().sortingOrder;
+            obj.GetComponent<SpriteRenderer>().sortingOrder = height;
+        }
         foreach (Transform child in obj.transform) {
-            int diff = child.gameObject.GetComponent<SpriteRenderer>().sortingOrder - originalSortingOrder;
+            int diff = 0;
+            if (child.GetComponent<SpriteRenderer>())
+            {
+                diff = child.gameObject.GetComponent<SpriteRenderer>().sortingOrder - originalSortingOrder;
+            }
             RepositionInSortingOrder(child.gameObject, height + diff);
         }
     }
