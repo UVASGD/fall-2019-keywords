@@ -67,10 +67,12 @@ public class PlayerController : MonoBehaviour {
 
         // movement
         pMovHandle = pMovHandleBase;
-      }
+    }
 
     // Update is called once per frame
     void Update() {
+        //movement
+        //rb.velocity = pMovSpeed * lsInput;
 
         //aiming and firing
         Vector2 aim_raw = new Vector2(GetAxis("Horizontal_R"), GetAxis("Vertical_R"));
@@ -89,10 +91,9 @@ public class PlayerController : MonoBehaviour {
                 inventory.IncSlot();
             } else {
                 print("activating held item");
-                Fireable f=inventory.Get().GetComponent<Fireable>();
-                if (f)
-                {
-                    f.Fire(aim,gameObject);
+                Fireable f = inventory.Get().GetComponent<Fireable>();
+                if (f) {
+                    f.Fire(aim, gameObject);
                 }
             }
         }
@@ -185,6 +186,7 @@ public class PlayerController : MonoBehaviour {
             axisY = GetAxis("Vertical");
         }
         lsInput = new Vector2(axisX, axisY);
+        //rb.velocity = pMovSpeed * lsInput;
         HandleMovement(axisX, axisY);
         // if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
         //     DebugDash(axisX, axisY);
@@ -193,9 +195,9 @@ public class PlayerController : MonoBehaviour {
 
     private void HandleMovement(float GetAxisX, float GetAxisY) {
         // Store movement vector.
-        
+
         if (pMovDisable) return;
-        
+
         Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1) * pMovSpeed;
         float handling = pMovHandle;
         // When above player max speed, we let reduce control so that momentum is preserved
@@ -215,8 +217,8 @@ public class PlayerController : MonoBehaviour {
     }
     private void DebugDash(float GetAxisX, float GetAxisY) {
         Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1);
-        rb.velocity = move*pMovSpeed*6;
-    } 
+        rb.velocity = move * pMovSpeed * 6;
+    }
 
     private void SetControls() {
         AButton = me.GetKeyCode("A");
@@ -354,5 +356,5 @@ public class PlayerController : MonoBehaviour {
     }
 
 
- 
+
 }
