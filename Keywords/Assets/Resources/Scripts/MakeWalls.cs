@@ -106,7 +106,7 @@ public class MakeWalls : MonoBehaviour {
         FillRooms();
         FillRoomGraph();
         GenerateWallsAndLoot();
-        PlaceDebugDoors();
+        //PlaceDebugDoors();
         PlaceFogOfWar();
         MakeLoot();
         print("level Score: " + GetComponent<Words>().levelScore);
