@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DumbWaiter : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+public class DumbWaiter : Machine {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    protected override void PerformMachineAction() {
+        //get tile
+        GameObject tile = slot.GetComponent<GridSquare>().tile;
+        //TODO: pass this tile down to next level (or something similar)
     }
 }
