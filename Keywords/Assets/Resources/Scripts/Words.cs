@@ -76,8 +76,9 @@ public class Words : MonoBehaviour {
             currentWord = tokens[0];
 
             currentDef = string.Join(" ", tokens.Skip(1));
-            words[i] = currentWord.ToLower();
-            dictionary.Add(currentWord, currentDef);
+            string lowercaseWord = currentWord.ToLower();
+            words[i] = lowercaseWord;
+            dictionary.Add(lowercaseWord, currentDef);
         }
 
         numletterwords = GetNumLetterWords();
@@ -98,7 +99,7 @@ public class Words : MonoBehaviour {
     }
 
     public string GetDefinition(string word) {
-        return dictionary[word.ToUpper()];
+        return dictionary[word];
     }
 
     public void UpdateLevelWords(int level) {
@@ -211,7 +212,7 @@ public class Words : MonoBehaviour {
             //			AlreadyMadeWordSFX.Play ();
             return false;
         }
-        if (currentLevelWords.Contains(word)) {
+        if (dictionary.ContainsKey(word)) {
             unmadeLevelWords.Remove(word);
             madeWords.Add(word);
             madeLevelWords.Add(word);
