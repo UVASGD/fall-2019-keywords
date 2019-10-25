@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour {
     private KeyCode RightBumper;
     private KeyCode AButton;
     private KeyCode BButton;
-    private bool movementEnabled;
 
     private float pMovSpeed = 2.2f;
     private float pMovHandleBase = 0.8f; // Player movmement "handling" when player is "slow" (within max speed)
@@ -355,6 +354,14 @@ public class PlayerController : MonoBehaviour {
         Game.DisablePhysics(closestObject);
     }
 
-
+    // movement modifier access
+    public bool getMovDisabled() {
+        return pMovDisable;
+    }
+    
+    public bool setMovDisabled(bool disabled) {
+        pMovDisable = disabled;
+        return disabled;
+    }
 
 }
