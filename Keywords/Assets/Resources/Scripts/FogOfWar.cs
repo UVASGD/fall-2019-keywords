@@ -10,6 +10,10 @@ public class FogOfWar : MonoBehaviour {
     public Color floorColor;
     public float floorTintAlpha;
 
+    void Start() {
+        gameObject.layer = 8; // "wall" layer; used to generalize detecting if it is traversable by players
+    }
+
     void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.CompareTag("Player")) {
             floorColor = Game.RandomDarkColor();
