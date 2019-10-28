@@ -17,11 +17,14 @@ public class PlayerController : MonoBehaviour {
     private KeyCode AButton;
     private KeyCode BButton;
 
-    private float pMovSpeed = 2.2f;
+    private float pMovSpeedBase = 2.2f;
     private float pMovHandleBase = 0.8f; // Player movmement "handling" when player is "slow" (within max speed)
     private float pMovHandleFast = 0.05f; // When moving fast, drag/handling
     private bool pMovDisable = false; // Disables basic movement mechanics entirely; shouldn't be needed
+    private float pMovSpeed; 
+    private Coroutine pMovSpeedResetCoroutine;
     private float pMovHandle; // Current value of movement handling: used to lerp velocity to input velocity (0 to 1)
+    private Coroutine pMovHandleResetCoroutine;
     const float pickupRadius = 0.2f; //how far away can the player pick up an object?
     public Vector3 holdOffset; //what's the hold position of the currently held inventory item?
     private float epsilon = 0.001f;
@@ -65,6 +68,7 @@ public class PlayerController : MonoBehaviour {
         idleLF = false;
 
         // movement
+        pMovSpeed = pMovSpeedBase;
         pMovHandle = pMovHandleBase;
     }
 
@@ -187,9 +191,9 @@ public class PlayerController : MonoBehaviour {
         lsInput = new Vector2(axisX, axisY);
         //rb.velocity = pMovSpeed * lsInput; 
         HandleMovement(axisX, axisY);
-        // if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
-        //     DebugDash(axisX, axisY);
-        // }
+        if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
+            DebugDash(axisX, axisY);
+        }
     }
 
     private void HandleMovement(float GetAxisX, float GetAxisY) {
@@ -209,14 +213,12 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
-        if (me.playerNum == keyboardControlledPlayer) {
-            Debug.Log("KeyboardPlayer handling: " + handling);
-        }
         rb.velocity = Vector2.Lerp(rb.velocity, move, handling);
     }
     private void DebugDash(float GetAxisX, float GetAxisY) {
         Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1);
         rb.velocity = move * pMovSpeed * 6;
+        setMovSpeed(pMovSpeedBase * 0.2f, 3f);
     }
 
     private void SetControls() {
@@ -359,9 +361,45 @@ public class PlayerController : MonoBehaviour {
         return pMovDisable;
     }
     
-    public bool setMovDisabled(bool disabled) {
+    public void setMovDisabled(bool disabled) {
         pMovDisable = disabled;
-        return disabled;
     }
+    public float getMovHandleBase() {
+        return pMovHandleBase;
+    }
+    public float getMovHandle() {
+        return pMovHandle;
+    }
+    public void setMovHandle(float value, float duration) {
+        if (pMovHandleResetCoroutine != null) {
+            StopCoroutine(pMovHandleResetCoroutine);
+        }
+        pMovHandle = value;
+        pMovHandleResetCoroutine = StartCoroutine(resetMovHandling(pMovHandleBase, duration));
+    }
+    // Coroutine: Waits duration seconds, then sets pMovHandle to value.
+    public IEnumerator resetMovHandling(float value, float duration) {
+        yield return new WaitForSeconds(duration);
+        pMovHandle = value;
+    }
+    public float getMovSpeedBase() {
+        return pMovSpeedBase;
+    }
+    public float getMovSpeed() {
+        return pMovSpeed;
+    }
+    public void setMovSpeed(float value, float duration) {
+        if (pMovSpeedResetCoroutine != null) {
+            StopCoroutine(pMovSpeedResetCoroutine);
+        }
+        pMovSpeed = value;
+        pMovSpeedResetCoroutine = StartCoroutine(resetMovSpeed(pMovSpeedBase, duration));
+    }
+    // Coroutine: Waits duration seconds, then sets pMovSpeed to value.
+    public IEnumerator resetMovSpeed(float value, float duration) {
+        yield return new WaitForSeconds(duration);
+        pMovSpeed = value;
+    }
+
 
 }
