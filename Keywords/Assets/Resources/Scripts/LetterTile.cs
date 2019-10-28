@@ -30,6 +30,12 @@ public class LetterTile : MonoBehaviour {
         letterSprite.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(spriteName);
     }
 
+    public void ChangeLetterSprite(char c)
+    {
+        string spriteName = "LetterSprites/" + c.ToString();
+        letterSprite.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(spriteName);
+    }
+
     public void SetLifespan(int newLifespan) {
         if (newLifespan < 0) {//out of range
             print("tried to set letter tile to weird number");
