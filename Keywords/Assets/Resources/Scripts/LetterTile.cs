@@ -59,11 +59,39 @@ public class LetterTile : MonoBehaviour {
         numberSprite.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(spriteName);
     }
 
-    //decrement
-    public void DecLifespan() {
-        //TODO: call animation to flash this letter tile
-        if (lifespan < 16) {
-            SetLifespan(lifespan - 1);
-        }
-    }
+	//decrement
+	public void DecLifespan()
+	{
+		//TODO: call animation to flash this letter tile
+		this.animate();
+
+		if (lifespan != 16)
+		{
+			SetLifespan(lifespan - 1);
+		}
+	}
+
+	public void animate()
+	{
+
+		Color flashColor = new Color();
+		Color returnColor = new Color();
+
+
+		GameObject square = transform.parent.gameObject;
+		if (square)
+		{
+			flashColor = square.GetComponent<SpriteRenderer>().color;
+			returnColor = this.GetComponent<SpriteRenderer>().color;
+
+
+			this.GetComponent<SpriteRenderer>().color = flashColor;
+
+
+
+			// this.GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
+		}
+
+
+	}
 }
