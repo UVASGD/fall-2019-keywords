@@ -175,4 +175,20 @@ public class GridControl : MonoBehaviour {
         }
         return result;
     }
+
+    // set the owner of the grid to the newOwner given its player number
+    public void SetOwnership(int newOwnerNum, GameObject newOwner)
+    {
+        ownerNum = newOwnerNum;
+        owner = newOwner;
+        foreach (Transform child in transform)
+        {
+            Color ownerColor = owner.GetComponent<SpriteRenderer>().color;
+            float d = 0.7f;
+            Color darkerColor = new Color(ownerColor.r * d, ownerColor.g * d, ownerColor.b * d, 1f);
+            child.gameObject.GetComponent<SpriteRenderer>().color = darkerColor;
+            child.gameObject.GetComponent<GridSquare>().normalColor = darkerColor;
+            child.gameObject.GetComponent<GridSquare>().highlightedColor = ownerColor;
+        }
+    }
 }

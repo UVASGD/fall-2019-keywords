@@ -258,6 +258,13 @@ public class PlayerController : MonoBehaviour {
                 activeSquare.transform.parent.gameObject.GetComponent<GridControl>().ValidateWords(x, y, gameObject);
             }
         }
+        // placing flag on the grid
+        if (itemToPlace.GetComponent<Flag>())
+        {
+            inventory.Remove();
+            activeSquare.transform.parent.gameObject.GetComponent<GridControl>().SetOwnership(playerNum, gameObject);
+        }
+
     }
 
     private void TakeFromSquare() {
@@ -302,5 +309,11 @@ public class PlayerController : MonoBehaviour {
         closestObject.transform.rotation = Quaternion.identity;
         Game.RepositionHeight(closestObject, Height.Held);
         Game.DisablePhysics(closestObject);
+
+        // pick up flag
+        if (closestObject.GetComponent<Flag>())
+        {
+            closestObject.GetComponent<Flag>().PickFlag(playerNum, gameObject);
+        }
     }
 }
