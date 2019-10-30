@@ -3483,7 +3483,7 @@ MonoBehaviour:
   loot:
   - {fileID: 1832904815124234, guid: 9ff508d6e02504db8a6c76f22b364b39, type: 3}
   - {fileID: 1832904815124234, guid: c2234a0f1cc7342f393c7171ad72e3ec, type: 3}
-  - {fileID: 1328259343011714, guid: bd6b5850f0c43485d822cc49b4daf17e, type: 3}
+  - {fileID: 1328259343011714, guid: 7d0507b58c53d4dd79cc140af0430199, type: 3}
   - {fileID: 1832904815124234, guid: 6d254133908ab4496a29796669f241ea, type: 3}
   - {fileID: 7136789706394162048, guid: 312a7f2faff732f42a37a92ce1489ffd, type: 3}
   - {fileID: 6076529990352003349, guid: c2d6847d36aa19a4c80aa8df1bbfeced, type: 3}

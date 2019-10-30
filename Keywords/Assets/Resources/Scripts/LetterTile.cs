@@ -10,10 +10,14 @@ public class LetterTile : MonoBehaviour {
 
     private Words words;
 
+
+    Animator anim;
+
     void Awake() {
+        anim = GetComponent<Animator>();
         words = GameManager.words;
-        letterSprite = transform.GetChild(0).gameObject;
-        numberSprite = transform.GetChild(1).gameObject;
+        letterSprite = transform.FindDeepChild("LetterSprite").gameObject;
+        numberSprite = transform.FindDeepChild("NumberSprite").gameObject;
         //		SetLetter (words.GetRandomSourceChar ());
         //		SetLetter ((char)Random.Range (97, 123));
         //		SetMatches (Random.Range(3,9));
@@ -53,39 +57,17 @@ public class LetterTile : MonoBehaviour {
         numberSprite.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(spriteName);
     }
 
-	//decrement
-	public void DecLifespan()
-	{
-		//TODO: call animation to flash this letter tile
-		this.animate();
+    //decrement
+    public void DecLifespan() {
+        //TODO: call animation to flash this letter tile
+        this.animate();
 
-		if (lifespan != 16)
-		{
-			SetLifespan(lifespan - 1);
-		}
-	}
+        if (lifespan != 16) {
+            SetLifespan(lifespan - 1);
+        }
+    }
 
-	public void animate()
-	{
-
-		Color flashColor = new Color();
-		Color returnColor = new Color();
-
-
-		GameObject square = transform.parent.gameObject;
-		if (square)
-		{
-			flashColor = square.GetComponent<SpriteRenderer>().color;
-			returnColor = this.GetComponent<SpriteRenderer>().color;
-
-
-			this.GetComponent<SpriteRenderer>().color = flashColor;
-
-
-
-			// this.GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
-		}
-
-
-	}
+    public void animate() {
+        anim.SetTrigger("Flash");
+    }
 }
