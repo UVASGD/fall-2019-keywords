@@ -638,7 +638,7 @@ public class MakeWalls : MonoBehaviour {
             for (int i = 0; i < 8; i++) {
                 startingTileSet += w.GetRandomSourceChar();
             }
-        } while (w.GetScoreExact(startingTileSet) < DoorBaseWeightFor(2));
+        } while (w.GetScoreExact(startingTileSet) < DoorBaseWeightFor(3));
         char[] startingTiles = startingTileSet.ToCharArray();
         for (int i = 0; i < 8; i++) {
             GameObject newTile = r.SpawnItem(Tile, Quaternion.Euler(0, 0, Random.Range(-30f, 30f)), TileContainer.transform);

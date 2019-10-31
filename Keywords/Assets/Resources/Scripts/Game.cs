@@ -95,16 +95,13 @@ public static class Game {
     }
 
     public static void DisablePhysics(GameObject obj) {
-        if (obj.GetComponent<BoxCollider2D>() != null) {
-            obj.GetComponent<BoxCollider2D>().enabled = false;
-        }
-        if (obj.GetComponent<Collider2D>() != null) {
-            obj.GetComponent<Collider2D>().enabled = false;
+        if (obj.GetComponents<Collider2D>() != null) {
+            foreach (Collider2D col in obj.GetComponents<Collider2D>()) {
+                col.enabled = false;
+            }
         }
         if (obj.GetComponent<Rigidbody2D>() != null) {
-            obj.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            obj.GetComponent<Rigidbody2D>().isKinematic = true;
-            obj.GetComponent<Rigidbody2D>().freezeRotation = true;
+            obj.GetComponent<Rigidbody2D>().simulated = false;
         }
         foreach (Transform child in obj.transform) {
             DisablePhysics(child.gameObject);
@@ -112,16 +109,13 @@ public static class Game {
     }
 
     public static void EnablePhysics(GameObject obj) {
-        if (obj.GetComponent<BoxCollider2D>() != null) {
-            obj.GetComponent<BoxCollider2D>().enabled = true;
-        }
-        if (obj.GetComponent<Collider2D>() != null) {
-            obj.GetComponent<Collider2D>().enabled = true;
+        if (obj.GetComponents<Collider2D>() != null) {
+            foreach (Collider2D col in obj.GetComponents<Collider2D>()) {
+                col.enabled = true;
+            }
         }
         if (obj.GetComponent<Rigidbody2D>() != null) {
-            obj.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            obj.GetComponent<Rigidbody2D>().isKinematic = false;
-            obj.GetComponent<Rigidbody2D>().freezeRotation = false;
+            obj.GetComponent<Rigidbody2D>().simulated = true;
         }
         foreach (Transform child in obj.transform) {
             EnablePhysics(child.gameObject);
