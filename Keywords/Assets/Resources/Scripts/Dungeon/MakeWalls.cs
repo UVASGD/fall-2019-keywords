@@ -565,6 +565,9 @@ public class MakeWalls : MonoBehaviour {
             return;
         }
         GameObject newFog = GameObject.Instantiate(Void, GetCellPositionFor(x, y), Quaternion.identity, FogOfWarContainer.transform);
+        newFog.GetComponent<FogOfWar>().room = rooms[x, y];
+        //GameObject debugDoor = Instantiate(Door, newFog.transform.position, Quaternion.identity, newFog.transform);
+        //debugDoor.GetComponent<Door>().keyNum = rooms[x, y];
         FogOfWarArray[x, y] = newFog;
         if (!ThereShouldBeARightWallAt(x - 1, y)) {
             newFog.GetComponent<FogOfWar>().neighbors.Add(FogOfWarArray[x - 1, y]);

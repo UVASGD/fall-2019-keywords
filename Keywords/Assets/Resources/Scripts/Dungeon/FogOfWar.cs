@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FogOfWar : MonoBehaviour {
 
+    public int room;
+
     public List<GameObject> neighbors;//Fog of War objects adjacent to this one and in the same room
 
     [HideInInspector]
