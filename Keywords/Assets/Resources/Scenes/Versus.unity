@@ -3515,7 +3515,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bf64fa501ac94800b98efe69c221461, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dictionaryFilePath: Assets/Dictionary.txt
+  dictionaryFilePath: Assets/Resources/Dictionary.txt
   minWordLength: 4
   maxWordLength: 100
   maxWordLengthForScoring: 7

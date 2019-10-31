@@ -64,6 +64,7 @@ public class Words : MonoBehaviour {
         //words = words.Where(w => w.Length >= minWordLength && w.Length <= maxWordLength).ToArray();
         var regex = new Regex(Regex.Escape("o"));
         var newText = regex.Replace("Hello World", "Foo", 1);
+        //string[] wordDefPairs = Resources.Load<TextAsset>(dictionaryFilePath).text.Split('\n');
         string[] wordDefPairs = File.ReadAllLines(dictionaryFilePath);
         words = new string[wordDefPairs.Length];
         dictionary = new Dictionary<string, string>();
