@@ -75,7 +75,7 @@ public class Words : MonoBehaviour {
             tokens = wordDefPairs[i].Split();
             currentWord = tokens[0];
 
-            currentDef = string.Join(" ", tokens.Skip(1));
+            currentDef = string.Join(" ", tokens.Skip(1)).Trim();
             string lowercaseWord = currentWord.ToLower();
             words[i] = lowercaseWord;
             dictionary.Add(lowercaseWord, currentDef);
