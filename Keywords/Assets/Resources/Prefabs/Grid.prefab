@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30a7855fcb0f744cb83b9dd91cad437b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 7
+  width: 4
   borderSize: 0.0115
   gridSquare: {fileID: 1328259343011714, guid: a64c45183dc9a40bc828aadf7196adb5, type: 3}
 --- !u!114 &114434821689505740
