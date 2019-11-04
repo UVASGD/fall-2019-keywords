@@ -94,10 +94,14 @@ public class PlayerController : MonoBehaviour {
                 inventory.IncSlot();
             } else {
                 print("activating held item");
-                Fireable f = inventory.Get().GetComponent<Fireable>();
-                if (f) {
-                    f.Fire(aim, gameObject);
-                }
+				if (inventory && inventory.Get()) {
+					Fireable f = inventory.Get().GetComponent<Fireable>();
+					if (f) {
+						f.Fire(aim, gameObject);
+					}
+				} else {
+					// PUNCH
+				}
             }
         }
         if (rt_pressed && trigger < 0.1f) {
