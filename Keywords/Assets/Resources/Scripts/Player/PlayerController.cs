@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour {
         if (aim_raw.sqrMagnitude < epsilon) {
             aim_raw = Vector2.zero;
             aimIndicator.GetComponent<SpriteRenderer>().enabled = false;
-        } else {
+        } else if (!inventory.Get() || inventory.Get().GetComponent<Fireable>()) {
             aimIndicator.GetComponent<SpriteRenderer>().enabled = true;
         }
         Vector2 aim = aim_raw.normalized;
@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour {
                         f.Fire(aim, gameObject);
                     }
                 } else {
-                    // PUNCH
+                    // TODO: PUNCH
                 }
             }
         }
