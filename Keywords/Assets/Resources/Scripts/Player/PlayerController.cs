@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour {
     private float pMovHandleBase = 0.8f; // Player movmement "handling" when player is "slow" (within max speed)
     private float pMovHandleFast = 0.05f; // When moving fast, drag/handling
     private bool pMovDisable = false; // Disables basic movement mechanics entirely; shouldn't be needed
-    private float pMovSpeed; 
+    private float pMovSpeed;
     private Coroutine pMovSpeedResetCoroutine;
     private float pMovHandle; // Current value of movement handling: used to lerp velocity to input velocity (0 to 1)
     private Coroutine pMovHandleResetCoroutine;
@@ -94,14 +94,14 @@ public class PlayerController : MonoBehaviour {
                 inventory.IncSlot();
             } else {
                 print("activating held item");
-				if (inventory && inventory.Get()) {
-					Fireable f = inventory.Get().GetComponent<Fireable>();
-					if (f) {
-						f.Fire(aim, gameObject);
-					}
-				} else {
-					// PUNCH
-				}
+                if (inventory.Get()) {
+                    Fireable f = inventory.Get().GetComponent<Fireable>();
+                    if (f) {
+                        f.Fire(aim, gameObject);
+                    }
+                } else {
+                    // PUNCH
+                }
             }
         }
         if (rt_pressed && trigger < 0.1f) {
@@ -263,7 +263,7 @@ public class PlayerController : MonoBehaviour {
         //		print ("interacting");
         bool x = (activeSquare != null);
         bool y = (inventory.Get() != null);
-        bool z = y ? inventory.Get().CompareTag("LetterTile") : false;
+        bool z = y ? inventory.Get().GetComponent<Placeable>() : false;
         bool w = x ? activeSquare.GetComponent<GridSquare>().tile != null : false;
         //		print (x + " " + y + " " + z + " " + w);
 
@@ -363,7 +363,7 @@ public class PlayerController : MonoBehaviour {
     public bool getMovDisabled() {
         return pMovDisable;
     }
-    
+
     public void setMovDisabled(bool disabled) {
         pMovDisable = disabled;
     }

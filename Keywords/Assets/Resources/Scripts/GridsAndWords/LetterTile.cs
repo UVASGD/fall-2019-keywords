@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LetterTile : MonoBehaviour {
+public class LetterTile : Placeable {
     public char letter;//what is my letter?
     public int lifespan;//how many more words can you make with me?
     private GameObject letterSprite;
@@ -34,8 +34,7 @@ public class LetterTile : MonoBehaviour {
         letterSprite.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(spriteName);
     }
 
-    public void ChangeLetterSprite(char c)
-    {
+    public void ChangeLetterSprite(char c) {
         string spriteName = "LetterSprites/" + c.ToString();
         letterSprite.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(spriteName);
     }
