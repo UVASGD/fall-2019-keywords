@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 //all enums go here
 
@@ -22,6 +23,9 @@ public static class Game {
     public static bool IsOnWindows = (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer);
     public static bool IsOnLinux = (Application.platform == RuntimePlatform.LinuxEditor || Application.platform == RuntimePlatform.LinuxPlayer);
 
+    public const int ascii_a = 97;
+    public const int ascii_z = 122;
+
     public static void SetInvis(GameObject obj, int playerNum) {
         if (obj.layer < 16) {//if it's not one of the visibility affected layers
             return;
@@ -36,12 +40,36 @@ public static class Game {
         RepositionInSortingOrder(obj, (int)height);
     }
     private static void RepositionInSortingOrder(GameObject obj, int height) {
-        int originalSortingOrder = obj.GetComponent<SpriteRenderer>().sortingOrder;
-        obj.GetComponent<SpriteRenderer>().sortingOrder = height;
+        int originalSortingOrder = 0;
+        if (obj.GetComponent<SpriteRenderer>()) {
+            originalSortingOrder = obj.GetComponent<SpriteRenderer>().sortingOrder;
+            obj.GetComponent<SpriteRenderer>().sortingOrder = height;
+        }
         foreach (Transform child in obj.transform) {
-            int diff = child.gameObject.GetComponent<SpriteRenderer>().sortingOrder - originalSortingOrder;
+            int diff = 0;
+            if (child.GetComponent<SpriteRenderer>()) {
+                diff = child.gameObject.GetComponent<SpriteRenderer>().sortingOrder - originalSortingOrder;
+            }
             RepositionInSortingOrder(child.gameObject, height + diff);
         }
+    }
+
+    public static Bounds GetBounds(GameObject obj) {
+        // Generate parent bounds object
+        Bounds bounds;
+        SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
+        if (sr != null)
+            bounds = sr.bounds;
+        else
+            bounds = new Bounds(obj.transform.position, Vector3.zero);
+        // Recursively expand bounds to accomodate children
+        // If no children, won't have to worry about recursive case
+        for (int i = 0; i < obj.transform.childCount; i++) {
+            GameObject childObj = obj.transform.GetChild(i).gameObject;
+            Bounds childBounds = GetBounds(childObj);
+            bounds.Encapsulate(childBounds);
+        }
+        return bounds;
     }
 
     //C# mod is not too useful. This one acts identically to the python one (and the math one)
@@ -70,16 +98,13 @@ public static class Game {
     }
 
     public static void DisablePhysics(GameObject obj) {
-        if (obj.GetComponent<BoxCollider2D>() != null) {
-            obj.GetComponent<BoxCollider2D>().enabled = false;
-        }
-        if (obj.GetComponent<Collider2D>() != null) {
-            obj.GetComponent<Collider2D>().enabled = false;
+        if (obj.GetComponents<Collider2D>() != null) {
+            foreach (Collider2D col in obj.GetComponents<Collider2D>()) {
+                col.enabled = false;
+            }
         }
         if (obj.GetComponent<Rigidbody2D>() != null) {
-            obj.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            obj.GetComponent<Rigidbody2D>().isKinematic = true;
-            obj.GetComponent<Rigidbody2D>().freezeRotation = true;
+            obj.GetComponent<Rigidbody2D>().simulated = false;
         }
         foreach (Transform child in obj.transform) {
             DisablePhysics(child.gameObject);
@@ -87,16 +112,13 @@ public static class Game {
     }
 
     public static void EnablePhysics(GameObject obj) {
-        if (obj.GetComponent<BoxCollider2D>() != null) {
-            obj.GetComponent<BoxCollider2D>().enabled = true;
-        }
-        if (obj.GetComponent<Collider2D>() != null) {
-            obj.GetComponent<Collider2D>().enabled = true;
+        if (obj.GetComponents<Collider2D>() != null) {
+            foreach (Collider2D col in obj.GetComponents<Collider2D>()) {
+                col.enabled = true;
+            }
         }
         if (obj.GetComponent<Rigidbody2D>() != null) {
-            obj.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            obj.GetComponent<Rigidbody2D>().isKinematic = false;
-            obj.GetComponent<Rigidbody2D>().freezeRotation = false;
+            obj.GetComponent<Rigidbody2D>().simulated = true;
         }
         foreach (Transform child in obj.transform) {
             EnablePhysics(child.gameObject);
@@ -116,3 +138,19 @@ public static class Game {
     }
 }
 
+
+public static class TransformDeepChildExtension {
+    //Breadth-first search
+    public static Transform FindDeepChild(this Transform aParent, string aName) {
+        Queue<Transform> queue = new Queue<Transform>();
+        queue.Enqueue(aParent);
+        while (queue.Count > 0) {
+            var c = queue.Dequeue();
+            if (c.name == aName)
+                return c;
+            foreach (Transform t in c)
+                queue.Enqueue(t);
+        }
+        return null;
+    }
+}
