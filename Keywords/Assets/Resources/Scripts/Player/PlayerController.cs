@@ -307,8 +307,7 @@ public class PlayerController : MonoBehaviour {
         activeSquare.GetComponent<GridSquare>().SetTile(itemToPlace);
         itemToPlace.GetComponent<Placeable>().PlaceOn(activeSquare, gameObject);
         inventory.Remove();
-        if (itemToPlace.GetComponent<Flag>())
-        {
+        if (itemToPlace.GetComponent<Flag>()) {
             inventory.Remove();
             activeSquare.transform.parent.gameObject.GetComponent<GridControl>().SetOwnership(playerNum, gameObject);
         }
@@ -354,8 +353,7 @@ public class PlayerController : MonoBehaviour {
         Game.DisablePhysics(closestObject);
 
         // pick up flag
-        if (closestObject.GetComponent<Flag>())
-        {
+        if (closestObject.GetComponent<Flag>()) {
             closestObject.GetComponent<Flag>().PickFlag(playerNum, gameObject);
         }
     }

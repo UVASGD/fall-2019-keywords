@@ -1,26 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Flag : MonoBehaviour {
+public class Flag : Placeable {
     public int ownerNum;
-    private GameObject flagSprite;
+    private SpriteRenderer flagSprite;
     private GameObject owner;
 
 
     // Use this for initialization
-    void Awake()
-    {
+    void Awake() {
         ownerNum = 0;
-        // flagSprite = ;
+        flagSprite = transform.Find("FlagSprite").GetComponent<SpriteRenderer>();
     }
 
     // when the flag is picked up
-    public void PickFlag(int newOwnerNum, GameObject owner)
-    {
-        // set the ownership of the tile to the player who owns the flag
+    public void PickFlag(int newOwnerNum, GameObject owner) {
+        // set the ownership of the flag to the player who picked it up
         ownerNum = newOwnerNum;
-        return;
+        flagSprite.color = owner.GetComponent<SpriteRenderer>().color;
+        owner.GetComponent<Inventory>().Remove();
+        owner.GetComponent<Inventory>().Add(gameObject);
+    }
+
+    public override void PlaceOn(GameObject square, GameObject placingPlayer) {
+        base.PlaceOn(square, placingPlayer);
+        square.transform.parent.gameObject.GetComponent<GridControl>().SetOwnership(ownerNum, placingPlayer);
+        Destroy(gameObject);
     }
 
 
