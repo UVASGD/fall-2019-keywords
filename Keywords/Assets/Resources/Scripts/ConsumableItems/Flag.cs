@@ -4,8 +4,6 @@ using UnityEngine;
 public class Flag : Placeable {
     public int ownerNum;
     private SpriteRenderer flagSprite;
-    private GameObject owner;
-
 
     // Use this for initialization
     void Awake() {
@@ -18,8 +16,6 @@ public class Flag : Placeable {
         // set the ownership of the flag to the player who picked it up
         ownerNum = newOwnerNum;
         flagSprite.color = owner.GetComponent<SpriteRenderer>().color;
-        owner.GetComponent<Inventory>().Remove();
-        owner.GetComponent<Inventory>().Add(gameObject);
     }
 
     public override void PlaceOn(GameObject square, GameObject placingPlayer) {

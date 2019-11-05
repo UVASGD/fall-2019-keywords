@@ -343,6 +343,10 @@ public class PlayerController : MonoBehaviour {
         if (closestObject == null) {
             return;
         }
+        // pick up flag
+        if (closestObject.GetComponent<Flag>()) {
+            closestObject.GetComponent<Flag>().PickFlag(playerNum, gameObject);
+        }
         //put item in inventory
         //inventory.Add(closestObject);
         closestObject.transform.SetParent(transform);
@@ -351,11 +355,6 @@ public class PlayerController : MonoBehaviour {
         closestObject.transform.rotation = Quaternion.identity;
         Game.RepositionHeight(closestObject, Height.Held);
         Game.DisablePhysics(closestObject);
-
-        // pick up flag
-        if (closestObject.GetComponent<Flag>()) {
-            closestObject.GetComponent<Flag>().PickFlag(playerNum, gameObject);
-        }
     }
 
     // movement modifier access
