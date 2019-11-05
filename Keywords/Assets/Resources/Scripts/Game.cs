@@ -23,6 +23,9 @@ public static class Game {
     public static bool IsOnWindows = (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer);
     public static bool IsOnLinux = (Application.platform == RuntimePlatform.LinuxEditor || Application.platform == RuntimePlatform.LinuxPlayer);
 
+    public const int ascii_a = 97;
+    public const int ascii_z = 122;
+
     public static void SetInvis(GameObject obj, int playerNum) {
         if (obj.layer < 16) {//if it's not one of the visibility affected layers
             return;

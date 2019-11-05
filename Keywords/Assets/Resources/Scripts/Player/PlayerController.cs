@@ -301,18 +301,12 @@ public class PlayerController : MonoBehaviour {
     private void PlaceOnSquare() {
         //		print ("placing tile on square");
         GameObject itemToPlace = inventory.Get();
-        if (itemToPlace.GetComponent<LetterTile>()) {
-            itemToPlace.transform.SetParent(activeSquare.transform);
-            itemToPlace.transform.position = activeSquare.transform.position;
-            Game.RepositionHeight(itemToPlace, Height.OnGridSquare);
-            activeSquare.GetComponent<GridSquare>().SetTile(itemToPlace);
-            inventory.Remove();
-            int x = activeSquare.GetComponent<GridSquare>().x;
-            int y = activeSquare.GetComponent<GridSquare>().y;
-            if (activeSquare.transform.parent.gameObject.GetComponent<GridControl>()) {
-                activeSquare.transform.parent.gameObject.GetComponent<GridControl>().ValidateWords(x, y, gameObject);
-            }
-        }
+        itemToPlace.transform.SetParent(activeSquare.transform);
+        itemToPlace.transform.position = activeSquare.transform.position;
+        Game.RepositionHeight(itemToPlace, Height.OnGridSquare);
+        activeSquare.GetComponent<GridSquare>().SetTile(itemToPlace);
+        itemToPlace.GetComponent<Placeable>().PlaceOn(activeSquare, gameObject);
+        inventory.Remove();
     }
 
     private void TakeFromSquare() {
@@ -324,11 +318,7 @@ public class PlayerController : MonoBehaviour {
         itemToTake.transform.rotation = Quaternion.identity;
         Game.RepositionHeight(itemToTake, Height.Held);
         activeSquare.GetComponent<GridSquare>().SetTile(null);
-        int x = activeSquare.GetComponent<GridSquare>().x;
-        int y = activeSquare.GetComponent<GridSquare>().y;
-        if (activeSquare.transform.parent.gameObject.GetComponent<GridControl>()) {
-            activeSquare.transform.parent.gameObject.GetComponent<GridControl>().ValidateWords(x, y, gameObject);
-        }
+        itemToTake.GetComponent<Placeable>().TakeFrom(activeSquare, gameObject);
     }
 
     private void SwapWithSquare() {

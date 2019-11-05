@@ -24,8 +24,27 @@ public class LetterTile : Placeable {
         //		Dec ();
 
     }
+
+    public override void PlaceOn(GameObject square, GameObject placingPlayer) {
+        base.PlaceOn(square, placingPlayer);
+        int x = square.GetComponent<GridSquare>().x;
+        int y = square.GetComponent<GridSquare>().y;
+        if (square.transform.parent.gameObject.GetComponent<GridControl>()) {
+            square.transform.parent.gameObject.GetComponent<GridControl>().ValidateWords(x, y, placingPlayer);
+        }
+    }
+
+    public override void TakeFrom(GameObject square, GameObject takingPlayer) {
+        base.TakeFrom(square, takingPlayer);
+        int x = square.GetComponent<GridSquare>().x;
+        int y = square.GetComponent<GridSquare>().y;
+        if (square.transform.parent.gameObject.GetComponent<GridControl>()) {
+            square.transform.parent.gameObject.GetComponent<GridControl>().ValidateWords(x, y, takingPlayer);
+        }
+    }
+
     public void SetLetter(char newletter) {
-        if ((int)newletter < 97 || (int)newletter > 122) {//not in a-z
+        if ((int)newletter < Game.ascii_a || (int)newletter > Game.ascii_z) {//not in a-z
             print("tried to set letter tile to weird char");
             return;
         }

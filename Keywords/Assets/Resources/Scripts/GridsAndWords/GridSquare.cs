@@ -37,15 +37,15 @@ public class GridSquare : MonoBehaviour {
     }
 
     public char GetLetter() {
-        if (tile == null) {
+        if (tile == null || !tile.GetComponent<LetterTile>()) {
             return transform.parent.gameObject.GetComponent<GridControl>().placeholder;
         }
         return tile.GetComponent<LetterTile>().letter;
     }
 
     public void SetTile(GameObject newTile) {
-        if (newTile != null && !newTile.CompareTag("LetterTile")) {
-            print("tried to set tile to something not tagged as LetterTile");
+        if (newTile != null && !newTile.GetComponent<Placeable>()) {
+            print("tried to set tile to something not placeable");
         }
         tile = newTile;
     }
