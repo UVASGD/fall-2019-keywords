@@ -261,24 +261,24 @@ public class PlayerController : MonoBehaviour {
 	 */
     private void Interact() {
         //		print ("interacting");
-        bool x = (activeSquare != null);
-        bool y = (inventory.Get() != null);
-        bool z = y ? inventory.Get().GetComponent<Placeable>() : false;
-        bool w = x ? activeSquare.GetComponent<GridSquare>().tile != null : false;
+        bool hoveringOverGrid = (activeSquare != null);
+        bool holdingItem = (inventory.Get() != null);
+        bool holdingLetterTile = holdingItem ? inventory.Get().GetComponent<Placeable>() : false;
+        bool squareContainsTile = hoveringOverGrid ? activeSquare.GetComponent<GridSquare>().tile != null : false;
         //		print (x + " " + y + " " + z + " " + w);
 
-        if (!y && !z && !w) {
+        if (!holdingItem && !holdingLetterTile && !squareContainsTile) {
             NormalGrab();
-        } else if (y && !z && !w) {
+        } else if (holdingItem && !holdingLetterTile && !squareContainsTile) {
             PerformItemAction();
-        } else if (x) {
-            if (y && z) {
-                if (w) {
+        } else if (hoveringOverGrid) {
+            if (holdingItem && holdingLetterTile) {
+                if (squareContainsTile) {
                     SwapWithSquare();
                 } else {
                     PlaceOnSquare();
                 }
-            } else if (!y && !z && w) {
+            } else if (!holdingItem && !holdingLetterTile && squareContainsTile) {
                 TakeFromSquare();
             }
         }
@@ -315,6 +315,7 @@ public class PlayerController : MonoBehaviour {
 
     private void TakeFromSquare() {
         //		print ("taking from square");
+		//if (activeSquare.GetComponent<GridSquare>().)
         GameObject itemToTake = activeSquare.GetComponent<GridSquare>().tile;
         itemToTake.transform.SetParent(transform);
         inventory.Add(itemToTake);
