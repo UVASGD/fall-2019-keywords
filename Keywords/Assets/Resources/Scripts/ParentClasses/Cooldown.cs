@@ -20,4 +20,12 @@ public class Cooldown {
     public void SetCooldown(float cooldownTime) {
         cooldown = cooldownTime;
     }
+
+    public bool Check() {
+        if (Ready()) {
+            Reset();
+            return true;
+        }
+        return false;
+    }
 }

@@ -16,7 +16,7 @@ public class Blink : Fireable {
     }
 
     public override void Fire(Vector2 v, GameObject firingPlayer) {
-        if (!CheckCooldown()) {
+        if (!cooldown.Check()) {
             return;
         }
         Rigidbody2D rb = firingPlayer.GetComponent<Rigidbody2D>();
