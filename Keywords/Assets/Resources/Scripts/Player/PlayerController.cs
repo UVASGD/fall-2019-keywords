@@ -172,8 +172,6 @@ public class PlayerController : MonoBehaviour {
         ////Adjust camera height
         if (Input.GetKeyDown(YButton) || (me.playerNum == keyboardControlledPlayer && Input.GetKeyDown(KeyCode.LeftShift))) {
             camScript.ToggleZoom();
-        } else {
-            camScript.ToggleZoom();
         }
 
         ////Change which item is active

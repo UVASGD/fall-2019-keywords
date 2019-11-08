@@ -12,7 +12,7 @@ namespace UnityStandardAssets._2D {
         //zooming
         private float minCamSize;
         public float maxCamSize = 5f;
-        private bool isZooming = true;
+        private bool isZooming = false;
         public float zoomOutRate = 0.2f;
         public float zoomInRate = 0.3f;
         private Camera cam;
