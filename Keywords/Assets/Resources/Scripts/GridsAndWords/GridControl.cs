@@ -17,6 +17,8 @@ public class GridControl : MonoBehaviour {
     private GameObject doors;//door container object
     private DoorCollisionCheck DCC;
 
+    private int width;
+
     void Awake() {
         doors = GameObject.Find("Doors");
         DCC = doors.GetComponent<DoorCollisionCheck>();
@@ -26,6 +28,7 @@ public class GridControl : MonoBehaviour {
     }
 
     void Start() {
+        width = GetComponent<MakeGrid>().width;
         words = GameManager.words;
         getKeySource = GameObject.Find("GetKeySFX").GetComponent<AudioSource>();
         globalGrid = ownerNum == 0;
@@ -178,20 +181,63 @@ public class GridControl : MonoBehaviour {
     }
 
     // set the owner of the grid to the newOwner given its player number
-    public void SetOwnership(int newOwnerNum, GameObject newOwner)
-    {
+    public void SetOwnership(int newOwnerNum, GameObject newOwner) {
         if (claimable) {
             ownerNum = newOwnerNum;
             owner = newOwner;
-            foreach (Transform child in transform)
-            {
-                Color ownerColor = owner.GetComponent<SpriteRenderer>().color;
-                float d = 0.7f;
-                Color darkerColor = new Color(ownerColor.r * d, ownerColor.g * d, ownerColor.b * d, 1f);
-                child.gameObject.GetComponent<SpriteRenderer>().color = darkerColor;
-                child.gameObject.GetComponent<GridSquare>().normalColor = darkerColor;
-                child.gameObject.GetComponent<GridSquare>().highlightedColor = ownerColor;
+        }
+    }
+
+    private bool InBounds(int x, int y) {
+        if (x >= 0 && x < width && y >= 0 && y < width) {
+            return true;
+        }
+        return false;
+    }
+
+    public List<GameObject> GetNeighbors(GameObject square) {
+        if (!square.GetComponent<GridSquare>()) {
+            return new List<GameObject>();
+        }
+        List<GameObject> result = new List<GameObject>();
+        int x = square.GetComponent<GridSquare>().x;
+        int y = square.GetComponent<GridSquare>().y;
+        if (InBounds(x + 1, y)) {
+            result.Add(grid[x + 1, y]);
+        }
+        if (InBounds(x - 1, y)) {
+            result.Add(grid[x - 1, y]);
+        }
+        if (InBounds(x, y + 1)) {
+            result.Add(grid[x, y + 1]);
+        }
+        if (InBounds(x, y - 1)) {
+            result.Add(grid[x, y - 1]);
+        }
+        return result;
+    }
+
+    public void StartRecoloring(Color ownerColor, Color darkerColor, GameObject square) {
+        StartCoroutine(Recolor(ownerColor, darkerColor, new List<GameObject> { square }));
+    }
+
+    private IEnumerator Recolor(Color ownerColor, Color darkerColor, List<GameObject> squaresToApply) {
+        yield return new WaitForSeconds(0.05f);
+        List<GameObject> nextRound = new List<GameObject>();
+        foreach (GameObject square in squaresToApply) {
+            square.GetComponent<SpriteRenderer>().color = darkerColor;
+            square.GetComponent<GridSquare>().normalColor = darkerColor;
+            square.GetComponent<GridSquare>().highlightedColor = ownerColor;
+            square.GetComponent<GridSquare>().Swell();
+            List<GameObject> neighbors = GetNeighbors(square);
+            foreach (GameObject neighbor in neighbors) {
+                if (neighbor.GetComponent<SpriteRenderer>().color != darkerColor && !nextRound.Contains(neighbor)) {
+                    nextRound.Add(neighbor);
+                }
             }
-        } 
+        }
+        if (nextRound.Count > 0) {
+            StartCoroutine(Recolor(ownerColor, darkerColor, nextRound));
+        }
     }
 }

@@ -12,11 +12,15 @@ public class GridSquare : MonoBehaviour {
     public int x;
     public int y;
     private int playersOnMe;
+    [HideInInspector]
+    public bool recolored;
 
+    private Animator anim;
     void Awake() {
         tile = null;
         sr = GetComponent<SpriteRenderer>();
         normalColor = sr.color;
+        anim = GetComponent<Animator>();
     }
     //TODO: make it rigorously impossible for there to be no active grid square if the player is within the confines of a grid
 
@@ -52,21 +56,7 @@ public class GridSquare : MonoBehaviour {
         tile = newTile;
     }
 
-    public IEnumerator Recolor(Color ownerColor, Color darkerColor)
-    {
-        yield return new WaitForSeconds(0.25f);
-        List<GameObject> neighbors = FindNeighbors();
-        foreach (GameObject neighbor in neighbors)
-        {
-            StartCoroutine(neighbor.GetComponent<GridSquare>().Recolor(ownerColor,darkerColor));
-        }
-        gameObject.GetComponent<SpriteRenderer>().color = darkerColor;
-        normalColor = darkerColor;
-        highlightedColor = ownerColor;
-    }
-
-    List<GameObject> FindNeighbors()
-    {
-
+    public void Swell() {
+        anim.SetTrigger("Swell");
     }
 }

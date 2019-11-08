@@ -27,7 +27,7 @@ public class FogOfWar : MonoBehaviour {
         }
     }
 
-    void HideMyselfAndMyNeighbors() {
+    void HideMyselfSoon() {
         Invoke("HideMyself", 0.05f);
     }
 
@@ -37,7 +37,7 @@ public class FogOfWar : MonoBehaviour {
                 neighbor.GetComponent<FogOfWar>().neighbors.Remove(gameObject);
             }
             neighbor.GetComponent<FogOfWar>().floorColor = floorColor;
-            neighbor.GetComponent<FogOfWar>().HideMyselfAndMyNeighbors();
+            neighbor.GetComponent<FogOfWar>().HideMyselfSoon();
         }
         Game.RepositionHeight(gameObject, Height.Background);
         //gameObject.GetComponent<SpriteRenderer>().enabled = false;
