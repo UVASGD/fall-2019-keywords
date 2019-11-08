@@ -30,7 +30,7 @@ public class Dash : Fireable {
     private void HitPlayer(Collision2D collision)
     {
         if (collision.collider.CompareTag("Player")) {
-            collision.collider.GetComponent<PlayerController>().Bonk(player.GetComponent<Rigidbody2D>().velocity.normalized, stun_duration);
+            collision.collider.GetComponent<PlayerController>().Bonk((collision.collider.transform.position-player.transform.position).normalized, stun_duration);
         }
     }
 }
