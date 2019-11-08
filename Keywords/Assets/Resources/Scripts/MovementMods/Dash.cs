@@ -8,6 +8,9 @@ public class Dash : Fireable {
     private float dashSpeed = 10f;
 
     public override void Fire(Vector2 v, GameObject firingPlayer) {
+        if (!CheckCooldown()) {
+            return;
+        }
         StartCoroutine(DashCR(v, firingPlayer.GetComponent<Rigidbody2D>()));
     }
 

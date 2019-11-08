@@ -4,8 +4,8 @@ public class Cooldown {
     float cooldown;
     float timeStarted;
 
-    public Cooldown(float myCooldown) {
-        cooldown = myCooldown;
+    public Cooldown(float cooldownTime) {
+        cooldown = cooldownTime;
         timeStarted = -cooldown - 1f;
     }
 
@@ -17,7 +17,7 @@ public class Cooldown {
         timeStarted = Time.time;
     }
 
-    public void SetCooldown(float newCooldown) {
-        cooldown = newCooldown;
+    public void SetCooldown(float cooldownTime) {
+        cooldown = cooldownTime;
     }
 }
