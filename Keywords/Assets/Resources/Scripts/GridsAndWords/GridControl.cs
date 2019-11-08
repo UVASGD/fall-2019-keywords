@@ -185,6 +185,7 @@ public class GridControl : MonoBehaviour {
         if (claimable) {
             ownerNum = newOwnerNum;
             owner = newOwner;
+            globalGrid = false;
         }
     }
 
