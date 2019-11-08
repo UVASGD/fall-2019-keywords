@@ -38,7 +38,16 @@ public class PlayerInfo : MonoBehaviour {
                 KeyCode.Joystick3Button1,
                 KeyCode.Joystick4Button1
             };
-        } else if (controlName == "LeftBumper") {
+        } else if (controlName == "Y")
+        {
+            controlSet = new KeyCode[4] {
+                KeyCode.Joystick1Button3,
+                KeyCode.Joystick2Button3,
+                KeyCode.Joystick3Button3,
+                KeyCode.Joystick4Button3
+            };
+        }
+        else if (controlName == "LeftBumper") {
             controlSet = new KeyCode[4] {
                 KeyCode.Joystick1Button4,
                 KeyCode.Joystick2Button4,
@@ -74,7 +83,16 @@ public class PlayerInfo : MonoBehaviour {
                 KeyCode.Joystick3Button17,
                 KeyCode.Joystick4Button17
             };
-        } else if (controlName == "LeftBumper") {
+        } else if (controlName == "Y")
+        {
+            controlSet = new KeyCode[4] {
+                KeyCode.Joystick1Button19,
+                KeyCode.Joystick2Button19,
+                KeyCode.Joystick3Button19,
+                KeyCode.Joystick4Button19
+            };
+        }
+        else if (controlName == "LeftBumper") {
             controlSet = new KeyCode[4] {
                 KeyCode.Joystick1Button13,
                 KeyCode.Joystick2Button13,

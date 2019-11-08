@@ -9,6 +9,14 @@ namespace UnityStandardAssets._2D {
         public float lookAheadReturnSpeed = 0.5f;
         public float lookAheadMoveThreshold = 0.1f;
 
+        //zooming
+        private float minCamSize;
+        public float maxCamSize = 5f;
+        public bool isZooming = true;
+        public float zoomOutRate = 0.2f;
+        public float zoomInRate = 0.3f;
+        private Camera cam;
+
         private float m_OffsetZ;
         private Vector3 m_LastTargetPosition;
         private Vector3 m_CurrentVelocity;
@@ -21,6 +29,8 @@ namespace UnityStandardAssets._2D {
             m_OffsetZ = (transform.position - target.position).z;
             transform.parent = null;
             ConstructCullingMask(target.gameObject.GetComponent<PlayerInfo>().playerNum);
+            cam = GetComponent<Camera>();
+            minCamSize = cam.orthographicSize;
         }
 
         private void ConstructCullingMask(int playerNum) {
@@ -74,6 +84,15 @@ namespace UnityStandardAssets._2D {
             transform.position = newPos;
 
             m_LastTargetPosition = target.position;
+
+            if (isZooming) {
+                if (cam.orthographicSize < maxCamSize) {
+                    cam.orthographicSize += zoomOutRate;
+                }
+            } else {
+                float curRate = zoomInRate * (cam.orthographicSize - minCamSize);
+                cam.orthographicSize -= curRate;
+            }
         }
     }
 }

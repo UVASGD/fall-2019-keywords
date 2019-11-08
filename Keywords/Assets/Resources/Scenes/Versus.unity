@@ -617,6 +617,10 @@ MonoBehaviour:
   lookAheadFactor: 0
   lookAheadReturnSpeed: 0.5
   lookAheadMoveThreshold: 0.1
+  maxCamSize: 16
+  isZooming: 0
+  zoomOutRate: 0.2
+  zoomInRate: 0.35
 --- !u!1 &65187046
 GameObject:
   m_ObjectHideFlags: 0
@@ -1991,6 +1995,11 @@ PrefabInstance:
       propertyPath: timeUntilLongIdle
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6672107738324264255, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 27585523}
     m_RemovedComponents:
     - {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 25d26f1ffb97540048bf7196146c6dfa, type: 3}
@@ -2097,6 +2106,11 @@ PrefabInstance:
       propertyPath: timeUntilLongIdle
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6672107738324264255, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 545235387}
     - target: {fileID: 6672107738324264232, guid: 25d26f1ffb97540048bf7196146c6dfa,
         type: 3}
       propertyPath: m_Color.r
@@ -2278,6 +2292,11 @@ PrefabInstance:
       propertyPath: timeUntilLongIdle
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6672107738324264255, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 987614327}
     - target: {fileID: 6672107738324264232, guid: 25d26f1ffb97540048bf7196146c6dfa,
         type: 3}
       propertyPath: m_Color.r
@@ -2514,6 +2533,10 @@ MonoBehaviour:
   lookAheadFactor: 0
   lookAheadReturnSpeed: 0.5
   lookAheadMoveThreshold: 0.1
+  maxCamSize: 16
+  isZooming: 0
+  zoomOutRate: 0.2
+  zoomInRate: 0.35
 --- !u!81 &545235385
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2751,6 +2774,10 @@ MonoBehaviour:
   lookAheadFactor: 0
   lookAheadReturnSpeed: 0.5
   lookAheadMoveThreshold: 0.1
+  maxCamSize: 16
+  isZooming: 0
+  zoomOutRate: 0.2
+  zoomInRate: 0.35
 --- !u!81 &662210672
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2935,6 +2962,10 @@ MonoBehaviour:
   lookAheadFactor: 0
   lookAheadReturnSpeed: 0.5
   lookAheadMoveThreshold: 0.1
+  maxCamSize: 16
+  isZooming: 0
+  zoomOutRate: 0.2
+  zoomInRate: 0.35
 --- !u!81 &987614325
 AudioListener:
   m_ObjectHideFlags: 0
@@ -4046,6 +4077,11 @@ PrefabInstance:
       propertyPath: timeUntilLongIdle
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6672107738324264255, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 662210674}
     - target: {fileID: 6672107738324264232, guid: 25d26f1ffb97540048bf7196146c6dfa,
         type: 3}
       propertyPath: m_Color.r

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityStandardAssets._2D;
 
 public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
@@ -10,12 +11,16 @@ public class PlayerController : MonoBehaviour {
     public GameObject activeSquare;//the grid square the player's currently on
     private GameObject TileContainer; //the parent object for the letter tiles
 
+    public Camera cam;
+    private Camera2DFollow camScript;
+
     //controls
     private PlayerInfo me;
     private KeyCode LeftBumper;
     private KeyCode RightBumper;
     private KeyCode AButton;
     private KeyCode BButton;
+    private KeyCode YButton;
 
     private float pMovSpeedBase = 2.2f;
     private float pMovHandleBase = 0.8f; // Player movmement "handling" when player is "slow" (within max speed)
@@ -57,6 +62,7 @@ public class PlayerController : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         rb.freezeRotation = true;
         me = GetComponent<PlayerInfo>();
+        camScript = cam.GetComponent<Camera2DFollow>();
         playerNum = me.playerNum;
         inventory = GetComponent<Inventory>();
         TileContainer = GameObject.Find("Tiles");
@@ -161,6 +167,13 @@ public class PlayerController : MonoBehaviour {
             Drop();
         }
 
+        ////Adjust camera height
+        if (Input.GetKey(YButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKey(KeyCode.T)))) {
+            camScript.isZooming = true;
+        } else {
+            camScript.isZooming = false;
+        }
+
         ////Change which item is active
         if (Input.GetKeyDown(LeftBumper) || (me.playerNum == keyboardControlledPlayer && Input.GetKeyDown(KeyCode.LeftArrow))) {
             inventory.DecSlot();
@@ -227,6 +240,7 @@ public class PlayerController : MonoBehaviour {
     private void SetControls() {
         AButton = me.GetKeyCode("A");
         BButton = me.GetKeyCode("B");
+        YButton = me.GetKeyCode("Y");
         LeftBumper = me.GetKeyCode("LeftBumper");
         RightBumper = me.GetKeyCode("RightBumper");
         GetAxis = me.GetAxisWindows;
