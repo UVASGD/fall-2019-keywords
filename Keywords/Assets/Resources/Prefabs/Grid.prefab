@@ -112,3 +112,4 @@ MonoBehaviour:
   placeholder: 32
   ownerNum: 0
   globalGrid: 0
+  claimable: 1
