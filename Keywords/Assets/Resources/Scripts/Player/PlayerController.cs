@@ -119,14 +119,15 @@ public class PlayerController : MonoBehaviour {
         //debug
         aimIndicator.transform.position = (Vector2)transform.position + aim;
         aimIndicator.GetComponent<SpriteRenderer>().color = new Color(trigger, trigger, trigger);
-        //if (!lt_pressed && trigger > 0.9f) {
-        //    //switch inventory slot
-        //    lt_pressed = true;
-        //    inventory.DecSlot();
-        //}
-        //if (lt_pressed && trigger < 0.1f) {
-        //    lt_pressed = false;
-        //}
+        float ltrigger = GetAxis("LTrigger");
+        if (!lt_pressed && ltrigger > triggerPressThreshold) {
+            //switch inventory slot
+            lt_pressed = true;
+            inventory.DecSlot();
+        }
+        if (lt_pressed && ltrigger < triggerReleaseThreshold) {
+            lt_pressed = false;
+        }
 
 
 
@@ -169,11 +170,10 @@ public class PlayerController : MonoBehaviour {
         }
 
         ////Adjust camera height
-        float ltrigger = GetAxis("LTrigger");
-        if ((ltrigger > triggerPressThreshold) || (me.playerNum == keyboardControlledPlayer && Input.GetKey(KeyCode.LeftShift))) {
-            camScript.isZooming = true;
+        if (Input.GetKeyDown(YButton) || (me.playerNum == keyboardControlledPlayer && Input.GetKeyDown(KeyCode.LeftShift))) {
+            camScript.ToggleZoom();
         } else {
-            camScript.isZooming = false;
+            camScript.ToggleZoom();
         }
 
         ////Change which item is active
