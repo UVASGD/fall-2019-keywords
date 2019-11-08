@@ -12,12 +12,14 @@ public class GridSquare : MonoBehaviour {
     public int x;
     public int y;
     private int playersOnMe;
+
     void Awake() {
         tile = null;
         sr = GetComponent<SpriteRenderer>();
         normalColor = sr.color;
     }
     //TODO: make it rigorously impossible for there to be no active grid square if the player is within the confines of a grid
+
     void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.name.Contains("Player") && other.isTrigger) {
             playersOnMe++;
@@ -48,5 +50,23 @@ public class GridSquare : MonoBehaviour {
             print("tried to set tile to something not placeable");
         }
         tile = newTile;
+    }
+
+    public IEnumerator Recolor(Color ownerColor, Color darkerColor)
+    {
+        yield return new WaitForSeconds(0.25f);
+        List<GameObject> neighbors = FindNeighbors();
+        foreach (GameObject neighbor in neighbors)
+        {
+            StartCoroutine(neighbor.GetComponent<GridSquare>().Recolor(ownerColor,darkerColor));
+        }
+        gameObject.GetComponent<SpriteRenderer>().color = darkerColor;
+        normalColor = darkerColor;
+        highlightedColor = ownerColor;
+    }
+
+    List<GameObject> FindNeighbors()
+    {
+
     }
 }
