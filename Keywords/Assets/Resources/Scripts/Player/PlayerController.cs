@@ -168,7 +168,7 @@ public class PlayerController : MonoBehaviour {
         }
 
         ////Adjust camera height
-        if (Input.GetKey(YButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKey(KeyCode.T)))) {
+        if (Input.GetKey(YButton) || (me.playerNum == keyboardControlledPlayer && Input.GetKey(KeyCode.LeftShift))) {
             camScript.isZooming = true;
         } else {
             camScript.isZooming = false;

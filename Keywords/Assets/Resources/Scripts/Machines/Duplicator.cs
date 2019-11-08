@@ -13,14 +13,13 @@ public class Duplicator : Machine {
         TileContainer = GameObject.Find("Tiles").transform;
     }
     protected override void PerformMachineAction() {
-        //duplicate tile
         GameObject tile = slot.GetComponent<GridSquare>().tile;
+        //cost: 1 tile lifespan
+        tile.GetComponent<LetterTile>().DecLifespan();
+        //duplicate tile
         Vector3 pos = transform.position + placePosition;
         GameObject newTile = Instantiate(Tile, pos, Quaternion.identity, TileContainer);
         newTile.GetComponent<LetterTile>().SetLetter(tile.GetComponent<LetterTile>().letter);
         newTile.GetComponent<LetterTile>().SetLifespan(tile.GetComponent<LetterTile>().lifespan);
-
-        //cost: 1 tile lifespan
-        tile.GetComponent<LetterTile>().DecLifespan();
     }
 }
