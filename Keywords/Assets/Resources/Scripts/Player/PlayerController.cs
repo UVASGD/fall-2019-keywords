@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour {
             //fire weapon/tool if aiming, else switch inventory slots
             rt_pressed = true;
             if (aim.Equals(Vector2.zero)) {
-                //inventory.IncSlot();
+                inventory.IncSlot();
             } else {
                 print("activating held item");
                 if (inventory.Get()) {

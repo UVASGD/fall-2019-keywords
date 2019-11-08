@@ -35,13 +35,9 @@ public class GridControl : MonoBehaviour {
         if (!globalGrid) {
             owner = GameObject.Find("Player" + ownerNum);
             //recolor grid squares
+            Color ownerColor = owner.GetComponent<SpriteRenderer>().color;
             foreach (Transform child in transform) {
-                Color ownerColor = owner.GetComponent<SpriteRenderer>().color;
-                float d = 0.7f;
-                Color darkerColor = new Color(ownerColor.r * d, ownerColor.g * d, ownerColor.b * d, 1f);
-                child.gameObject.GetComponent<SpriteRenderer>().color = darkerColor;
-                child.gameObject.GetComponent<GridSquare>().normalColor = darkerColor;
-                child.gameObject.GetComponent<GridSquare>().highlightedColor = ownerColor;
+                child.gameObject.GetComponent<GridSquare>().SetColor(ownerColor);
             }
         }
     }

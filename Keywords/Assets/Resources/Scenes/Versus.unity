@@ -619,7 +619,7 @@ MonoBehaviour:
   lookAheadMoveThreshold: 0.1
   maxCamSize: 11
   isZooming: 1
-  zoomOutRate: 0.11
+  zoomOutRate: 0.3
   zoomInRate: 0.35
 --- !u!1 &65187046
 GameObject:
@@ -2545,7 +2545,7 @@ MonoBehaviour:
   lookAheadMoveThreshold: 0.1
   maxCamSize: 11
   isZooming: 1
-  zoomOutRate: 0.11
+  zoomOutRate: 0.3
   zoomInRate: 0.35
 --- !u!81 &545235385
 AudioListener:
@@ -2786,7 +2786,7 @@ MonoBehaviour:
   lookAheadMoveThreshold: 0.1
   maxCamSize: 11
   isZooming: 1
-  zoomOutRate: 0.11
+  zoomOutRate: 0.3
   zoomInRate: 0.35
 --- !u!81 &662210672
 AudioListener:
@@ -2974,7 +2974,7 @@ MonoBehaviour:
   lookAheadMoveThreshold: 0.1
   maxCamSize: 11
   isZooming: 1
-  zoomOutRate: 0.11
+  zoomOutRate: 0.3
   zoomInRate: 0.35
 --- !u!81 &987614325
 AudioListener:
