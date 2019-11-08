@@ -4,6 +4,8 @@ using UnityEngine;
 using System;
 using UnityStandardAssets._2D;
 
+public delegate void CollisionEvent(Collision2D collision);
+
 public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
     private Inventory inventory;
@@ -25,7 +27,7 @@ public class PlayerController : MonoBehaviour {
     private float pMovSpeedBase = 2.2f;
     private float pMovHandleBase = 0.8f; // Player movmement "handling" when player is "slow" (within max speed)
     private float pMovHandleFast = 0.05f; // When moving fast, drag/handling
-    private bool pMovDisable = false; // Disables basic movement mechanics entirely; shouldn't be needed
+    private bool pMovDisable = false; // Disables basic movement mechanics entirely
     private float pMovSpeed;
     private Coroutine pMovSpeedResetCoroutine;
     private float pMovHandle; // Current value of movement handling: used to lerp velocity to input velocity (0 to 1)
@@ -57,6 +59,9 @@ public class PlayerController : MonoBehaviour {
     private bool rt_pressed;
     private bool lt_pressed;
 
+    private Fist fist;
+    public CollisionEvent CollisionEvent;
+
     // Use this for initialization
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -76,6 +81,9 @@ public class PlayerController : MonoBehaviour {
         // movement
         pMovSpeed = pMovSpeedBase;
         pMovHandle = pMovHandleBase;
+
+        // punching
+        fist = GetComponentInChildren<Fist>();
     }
 
     // Update is called once per frame
@@ -106,7 +114,7 @@ public class PlayerController : MonoBehaviour {
                         f.Fire(aim, gameObject);
                     }
                 } else {
-                    // TODO: PUNCH
+                    Punch(aim);
                 }
             }
         }
@@ -361,6 +369,10 @@ public class PlayerController : MonoBehaviour {
         if (closestObject.GetComponent<Flag>()) {
             closestObject.GetComponent<Flag>().PickFlag(playerNum, gameObject);
         }
+        if (closestObject.GetComponent<Fireable>())
+        {
+            closestObject.GetComponent<Fireable>().PickUp(gameObject);
+        }
         //put item in inventory
         //inventory.Add(closestObject);
         closestObject.transform.SetParent(transform);
@@ -416,5 +428,34 @@ public class PlayerController : MonoBehaviour {
         pMovSpeed = value;
     }
 
+    public void Punch(Vector2 dir)
+    {
+        fist.Punch(dir);
+    }
 
+    public void Bonk(Vector2 dir, float duration)
+    {
+        if (pMovDisable)
+            return;
+        DropAll(dir);
+        // fx and stuff
+        // play tweety bird animation
+        StartCoroutine(StayBonked(duration));
+    }
+
+    private IEnumerator StayBonked(float duration)
+    {
+        pMovDisable = false;
+        yield return new WaitForSeconds(duration);
+        pMovDisable = true;
+    }
+
+    private void DropAll(Vector2 dir)
+    {
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        CollisionEvent?.Invoke(collision);
+    }
 }

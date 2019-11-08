@@ -5,7 +5,14 @@ using UnityEngine;
 public class Dash : Fireable {
     [SerializeField]
     [Range(10f, 100f)]
-    private float dashSpeed = 10f;
+    private float dashSpeed = 10f, stun_duration = 2f;
+
+
+    public override void PickUp(GameObject player)
+    {
+        base.PickUp(player);
+        this.player.CollisionEvent += HitPlayer;
+    }
 
     public override void Fire(Vector2 v, GameObject firingPlayer) {
         StartCoroutine(DashCR(v, firingPlayer.GetComponent<Rigidbody2D>()));
@@ -17,6 +24,13 @@ public class Dash : Fireable {
             rb.velocity = v * dashSpeed;
             t += Time.deltaTime;
             yield return new WaitForEndOfFrame();
+        }
+    }
+
+    private void HitPlayer(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Player")) {
+            collision.collider.GetComponent<PlayerController>().Bonk(player.GetComponent<Rigidbody2D>().velocity.normalized, stun_duration);
         }
     }
 }
