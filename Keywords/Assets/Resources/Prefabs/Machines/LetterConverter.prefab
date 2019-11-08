@@ -99,6 +99,7 @@ MonoBehaviour:
   normalColor: {r: 0, g: 0, b: 0, a: 0}
   x: 0
   y: 0
+  recolored: 0
 --- !u!61 &61288199098200122
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -301,7 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d11e628320ef74e29b336aceb775380e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chargeTime: 20
+  chargeTime: 7
 --- !u!60 &60909820124226432
 PolygonCollider2D:
   m_ObjectHideFlags: 0
