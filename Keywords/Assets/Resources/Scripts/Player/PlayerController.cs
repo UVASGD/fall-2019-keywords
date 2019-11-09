@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour {
         inventory = GetComponent<Inventory>();
         TileContainer = GameObject.Find("Tiles");
         aimIndicator = transform.Find("AimIndicator").gameObject;
+        aimIndicator.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
         SetControls();
         //Idle
         timeSinceLastMoved = 0f;
@@ -83,7 +84,8 @@ public class PlayerController : MonoBehaviour {
         pMovHandle = pMovHandleBase;
 
         // punching
-        fist = GetComponentInChildren<Fist>();
+        fist = transform.Find("Fist").GetComponent<Fist>();
+        //print("I GOT DA FIST: " + fist);
     }
 
     // Update is called once per frame
@@ -124,8 +126,11 @@ public class PlayerController : MonoBehaviour {
 
         //debug
         aimIndicator.transform.position = (Vector2)transform.position + aim;
-        aimIndicator.GetComponent<SpriteRenderer>().color = new Color(trigger, trigger, trigger);
-
+        print("trigger:" + trigger);
+        float trigger_percentage = (trigger + 1) / 2;
+        Color trigger_color = (1 - trigger_percentage) * GetComponent<SpriteRenderer>().color;
+        aimIndicator.GetComponent<SpriteRenderer>().color = new Color(trigger_color.r, trigger_color.g, trigger_color.b);
+        ;
         trigger = GetAxis("LTrigger");
         if (!lt_pressed && trigger > 0.9f) {
             //switch inventory slot
@@ -369,8 +374,7 @@ public class PlayerController : MonoBehaviour {
         if (closestObject.GetComponent<Flag>()) {
             closestObject.GetComponent<Flag>().PickFlag(playerNum, gameObject);
         }
-        if (closestObject.GetComponent<Fireable>())
-        {
+        if (closestObject.GetComponent<Fireable>()) {
             closestObject.GetComponent<Fireable>().PickUp(gameObject);
         }
         //put item in inventory
@@ -428,34 +432,32 @@ public class PlayerController : MonoBehaviour {
         pMovSpeed = value;
     }
 
-    public void Punch(Vector2 dir)
-    {
+    public void Punch(Vector2 dir) {
+        if (pMovDisable)
+            return;
         fist.Punch(dir);
     }
 
-    public void Bonk(Vector2 dir, float duration)
-    {
+    public void Bonk(Vector2 dir, float duration) {
         if (pMovDisable)
             return;
         DropAll(dir);
+        rb.velocity = Vector2.zero;
         // fx and stuff
         // play tweety bird animation
         StartCoroutine(StayBonked(duration));
     }
 
-    private IEnumerator StayBonked(float duration)
-    {
-        pMovDisable = false;
-        yield return new WaitForSeconds(duration);
+    private IEnumerator StayBonked(float duration) {
         pMovDisable = true;
+        yield return new WaitForSeconds(duration);
+        pMovDisable = false;
     }
 
-    private void DropAll(Vector2 dir)
-    {
+    private void DropAll(Vector2 dir) {
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
+    public void OnCollisionEnter2D(Collision2D collision) {
         CollisionEvent?.Invoke(collision);
     }
 }

@@ -1975,21 +1975,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa,
-        type: 3}
-      propertyPath: doors
-      value: 
-      objectReference: {fileID: 541289254}
-    - target: {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa,
-        type: 3}
-      propertyPath: keyUI
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6672107738324264240, guid: 25d26f1ffb97540048bf7196146c6dfa,
-        type: 3}
-      propertyPath: keyUI
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6672107738324264240, guid: 25d26f1ffb97540048bf7196146c6dfa,
         type: 3}
       propertyPath: UI
@@ -1997,16 +1982,10 @@ PrefabInstance:
       objectReference: {fileID: 193016911}
     - target: {fileID: 6672107738324264255, guid: 25d26f1ffb97540048bf7196146c6dfa,
         type: 3}
-      propertyPath: timeUntilLongIdle
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6672107738324264255, guid: 25d26f1ffb97540048bf7196146c6dfa,
-        type: 3}
       propertyPath: cam
       value: 
       objectReference: {fileID: 27585523}
-    m_RemovedComponents:
-    - {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 25d26f1ffb97540048bf7196146c6dfa, type: 3}
 --- !u!1 &456748729 stripped
 GameObject:
