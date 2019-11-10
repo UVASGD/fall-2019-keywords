@@ -15,7 +15,7 @@ namespace UnityStandardAssets._2D {
         public float zoomRate;
         public float[] zoomTargets;
         private int zoomTargetIndex;
-        const float epsilon = 0.001f;
+        const float epsilon = 0.01f;
         private Camera cam;
 
         private float m_OffsetZ;
@@ -88,9 +88,10 @@ namespace UnityStandardAssets._2D {
             m_LastTargetPosition = target.position;
 
             if (isZooming) {
-                float zoomTarget = (float)zoomTargets[zoomTargetIndex];
+                float zoomTarget = zoomTargets[zoomTargetIndex];
                 float zoomDiff = cam.orthographicSize - zoomTarget;
-                cam.orthographicSize = zoomTarget + zoomDiff * zoomRate * Time.deltaTime;
+                print("zoom diff: " + zoomDiff);
+                cam.orthographicSize = zoomTarget + zoomDiff * zoomRate;
                 if (Math.Abs(zoomDiff) <= epsilon) {
                     isZooming = false;
                     cam.orthographicSize = zoomTarget;
