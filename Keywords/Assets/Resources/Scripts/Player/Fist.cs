@@ -5,7 +5,7 @@ using UnityEngine;
 public class Fist : MonoBehaviour {
 
     Vector2 dir;
-    float stun_duration = 5f, extend_duration = 0.3f;
+    float stun_duration = 5f, extend_duration = 0.1f;
 
     // Start is called before the first frame update
     void Awake() {

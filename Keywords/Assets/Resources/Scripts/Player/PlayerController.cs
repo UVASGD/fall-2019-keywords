@@ -7,6 +7,7 @@ using UnityStandardAssets._2D;
 public delegate void CollisionEvent(Collision2D collision);
 
 public class PlayerController : MonoBehaviour {
+    #region fields
     private Rigidbody2D rb;
     private Inventory inventory;
 
@@ -63,7 +64,9 @@ public class PlayerController : MonoBehaviour {
 
     private Fist fist;
     public CollisionEvent CollisionEvent;
+    #endregion
 
+    #region start
     // Use this for initialization
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -87,9 +90,23 @@ public class PlayerController : MonoBehaviour {
 
         // punching
         fist = transform.Find("Fist").GetComponent<Fist>();
-        //print("I GOT DA FIST: " + fist);
     }
+    private void SetControls() {
+        AButton = me.GetKeyCode("A");
+        BButton = me.GetKeyCode("B");
+        YButton = me.GetKeyCode("Y");
+        LeftBumper = me.GetKeyCode("LeftBumper");
+        RightBumper = me.GetKeyCode("RightBumper");
+        GetAxis = me.GetAxisWindows;
+        if (Game.IsOnOSX) {
+            GetAxis = me.GetAxisOSX;
+        } else if (Game.IsOnLinux) {
+            GetAxis = me.GetAxisLinux;
+        }
+    }
+    #endregion
 
+    #region update
     // Update is called once per frame
     void Update() {
         //movement
@@ -218,56 +235,16 @@ public class PlayerController : MonoBehaviour {
             axisX = GetAxis("Horizontal");
             axisY = GetAxis("Vertical");
         }
-        lsInput = new Vector2(axisX, axisY);
+        //lsInput = new Vector2(axisX, axisY);
         //rb.velocity = pMovSpeed * lsInput; 
         HandleMovement(axisX, axisY);
         // if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
         //     DebugDash(axisX, axisY);
         // }
     }
+    #endregion
 
-    private void HandleMovement(float GetAxisX, float GetAxisY) {
-        // Store movement vector.
-
-        if (pMovDisable) return;
-
-        Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1) * pMovSpeed;
-        float handling = pMovHandle;
-        // When above player max speed, we let reduce control so that momentum is preserved
-        if (rb.velocity.magnitude > pMovSpeed) {
-            handling = pMovHandleFast;
-        } else {
-            // can't reverse direction ezpz
-            if (Vector2.Dot(rb.velocity, move) < -0.1) {
-                handling *= 0.3f;
-            }
-        }
-
-        rb.velocity = Vector2.Lerp(rb.velocity, move, handling);
-    }
-    private void DebugDash(float GetAxisX, float GetAxisY) {
-        Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1);
-        rb.velocity = move * pMovSpeed * 6;
-    }
-
-    private void SetControls() {
-        AButton = me.GetKeyCode("A");
-        BButton = me.GetKeyCode("B");
-        YButton = me.GetKeyCode("Y");
-        LeftBumper = me.GetKeyCode("LeftBumper");
-        RightBumper = me.GetKeyCode("RightBumper");
-        GetAxis = me.GetAxisWindows;
-        if (Game.IsOnOSX) {
-            GetAxis = me.GetAxisOSX;
-        } else if (Game.IsOnLinux) {
-            GetAxis = me.GetAxisLinux;
-        }
-    }
-
-    public void SetActiveSquare(GameObject newSquare) {
-        activeSquare = newSquare;
-    }
-
+    #region interact
     //pseudocode of this:
     /*
 	x = is player hovering over a grid square?
@@ -390,6 +367,36 @@ public class PlayerController : MonoBehaviour {
         Game.DisablePhysics(closestObject);
     }
 
+    public void SetActiveSquare(GameObject newSquare) {
+        activeSquare = newSquare;
+    }
+    #endregion
+
+    #region handlemovement
+    private void HandleMovement(float GetAxisX, float GetAxisY) {
+        // Store movement vector.
+
+        if (pMovDisable) return;
+
+        Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1) * pMovSpeed;
+        float handling = pMovHandle;
+        // When above player max speed, we let reduce control so that momentum is preserved
+        if (rb.velocity.magnitude > pMovSpeed) {
+            handling = pMovHandleFast;
+        } else {
+            // can't reverse direction ezpz
+            if (Vector2.Dot(rb.velocity, move) < -0.1) {
+                handling *= 0.3f;
+            }
+        }
+
+        rb.velocity = Vector2.Lerp(rb.velocity, move, handling);
+    }
+    private void DebugDash(float GetAxisX, float GetAxisY) {
+        Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1);
+        rb.velocity = move * pMovSpeed * 6;
+    }
+
     // movement modifier access
     public bool getMovDisabled() {
         return pMovDisable;
@@ -434,7 +441,9 @@ public class PlayerController : MonoBehaviour {
         yield return new WaitForSeconds(duration);
         pMovSpeed = value;
     }
+    #endregion
 
+    #region punchandbonk
     public void Punch(Vector2 dir) {
         if (pMovDisable)
             return;
@@ -510,4 +519,5 @@ public class PlayerController : MonoBehaviour {
     public void OnCollisionEnter2D(Collision2D collision) {
         CollisionEvent?.Invoke(collision);
     }
+    #endregion
 }
