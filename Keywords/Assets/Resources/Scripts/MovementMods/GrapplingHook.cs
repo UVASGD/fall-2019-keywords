@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GrapplingHook : Fireable {
     // Start is called before the first frame update
-    Vector2 launchDirection = Vector2.right;
     public float launchSpeed, pullSpeed;
 
     Hook hook;

@@ -20,6 +20,9 @@ public class Dash : Fireable {
     }
 
     public override void Fire(Vector2 v, GameObject firingPlayer) {
+        if (!cooldown.Check()) {
+            return;
+        }
         if (dashing)
             return;
         StartCoroutine(DashCR(v, firingPlayer.GetComponent<Rigidbody2D>()));
