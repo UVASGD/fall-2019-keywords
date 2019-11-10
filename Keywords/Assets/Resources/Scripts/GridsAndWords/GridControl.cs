@@ -56,6 +56,9 @@ public class GridControl : MonoBehaviour {
             ValidateWord(x, y, ownerOrMakerNum, horizontal: true);
             ValidateWord(x, y, ownerOrMakerNum, horizontal: false);
         }
+        for (int i = 0; i < GetScore(validWordTiles.Count); i++) {
+            AddKey();
+        }
         foreach (GameObject tile in validWordTiles) {
             tile.GetComponent<LetterTile>().DecLifespan();
         }
@@ -70,9 +73,6 @@ public class GridControl : MonoBehaviour {
             word = GetVerticalWord(x, y);
         }
         if (words.ValidateWord(word, ownerOrMakerNum, globalGrid)) {
-            for (int i = 0; i < GetScore(word.Length); i++) {
-                AddKey();
-            }
             foreach (GameObject tile in reachedTiles) {
                 if (!validWordTiles.Contains(tile)) {
                     validWordTiles.Add(tile);

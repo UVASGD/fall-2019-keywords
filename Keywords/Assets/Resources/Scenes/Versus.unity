@@ -617,7 +617,7 @@ MonoBehaviour:
   lookAheadFactor: 0
   lookAheadReturnSpeed: 0.5
   lookAheadMoveThreshold: 0.1
-  zoomRate: 40
+  zoomRate: 0.7
   zoomTargets:
   - -69
   - 8
@@ -2544,7 +2544,7 @@ MonoBehaviour:
   lookAheadFactor: 0
   lookAheadReturnSpeed: 0.5
   lookAheadMoveThreshold: 0.1
-  zoomRate: 40
+  zoomRate: 0.7
   zoomTargets:
   - -69
   - 8
@@ -2786,7 +2786,7 @@ MonoBehaviour:
   lookAheadFactor: 0
   lookAheadReturnSpeed: 0.5
   lookAheadMoveThreshold: 0.1
-  zoomRate: 40
+  zoomRate: 0.7
   zoomTargets:
   - -69
   - 8
@@ -2975,7 +2975,7 @@ MonoBehaviour:
   lookAheadFactor: 0
   lookAheadReturnSpeed: 0.5
   lookAheadMoveThreshold: 0.1
-  zoomRate: 40
+  zoomRate: 0.7
   zoomTargets:
   - -69
   - 8
