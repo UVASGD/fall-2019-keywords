@@ -73,7 +73,7 @@ public static class Game {
     }
 
     //C# mod is not too useful. This one acts identically to the python one (and the math one)
-    public static int correctmod(int a, int n) {
+    public static int mod(int a, int n) {
         return ((a % n) + n) % n;
     }
 

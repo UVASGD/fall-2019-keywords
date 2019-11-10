@@ -11,10 +11,11 @@ namespace UnityStandardAssets._2D {
 
         //zooming
         private float minCamSize;
-        public float maxCamSize = 5f;
         private bool isZooming = false;
-        public float zoomOutRate = 0.2f;
-        public float zoomInRate = 0.3f;
+        public float zoomRate;
+        public float[] zoomTargets;
+        private int zoomTargetIndex;
+        const float epsilon = 0.001f;
         private Camera cam;
 
         private float m_OffsetZ;
@@ -30,7 +31,8 @@ namespace UnityStandardAssets._2D {
             transform.parent = null;
             ConstructCullingMask(target.gameObject.GetComponent<PlayerInfo>().playerNum);
             cam = GetComponent<Camera>();
-            minCamSize = cam.orthographicSize;
+            zoomTargets[0] = cam.orthographicSize;
+            zoomTargetIndex = 0;
         }
 
         private void ConstructCullingMask(int playerNum) {
@@ -86,17 +88,19 @@ namespace UnityStandardAssets._2D {
             m_LastTargetPosition = target.position;
 
             if (isZooming) {
-                if (cam.orthographicSize < maxCamSize) {
-                    cam.orthographicSize += zoomOutRate;
+                float zoomTarget = (float)zoomTargets[zoomTargetIndex];
+                float zoomDiff = cam.orthographicSize - zoomTarget;
+                cam.orthographicSize = zoomTarget + zoomDiff * zoomRate * Time.deltaTime;
+                if (Math.Abs(zoomDiff) <= epsilon) {
+                    isZooming = false;
+                    cam.orthographicSize = zoomTarget;
                 }
-            } else {
-                float curRate = zoomInRate * (cam.orthographicSize - minCamSize);
-                cam.orthographicSize -= curRate;
             }
         }
 
         public void ToggleZoom() {
-            isZooming = !isZooming;
+            isZooming = true;
+            zoomTargetIndex = Game.mod(zoomTargetIndex + 1, zoomTargets.Length);
         }
     }
 }
