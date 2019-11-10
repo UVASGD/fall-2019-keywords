@@ -97,4 +97,8 @@ public class Inventory : MonoBehaviour {
     public GameObject Get() {
         return items[activeSlot];
     }
+
+    public int Size() {
+        return inventorySize;
+    }
 }

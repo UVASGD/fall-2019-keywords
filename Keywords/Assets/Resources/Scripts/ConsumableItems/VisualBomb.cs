@@ -6,8 +6,11 @@ public class VisualBomb : Placeable {
     public GameObject indicator;
     public override void PlaceOn(GameObject square, GameObject placingPlayer) {
         base.PlaceOn(square, placingPlayer);
-        Explode(square.transform.parent.gameObject.GetComponent<GridControl>());
-        Destroy(gameObject);
+        GridControl gc = square.transform.parent.gameObject.GetComponent<GridControl>();
+        if (gc) {
+            Explode(gc);
+            Destroy(gameObject);
+        }
     }
     void Explode(GridControl grid) {
         foreach (GameObject go in grid.grid) {

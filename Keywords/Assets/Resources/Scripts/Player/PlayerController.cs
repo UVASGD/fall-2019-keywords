@@ -315,14 +315,15 @@ public class PlayerController : MonoBehaviour {
     }
     private void Drop() {
         //		print ("dropping");
-        if (activeSquare == null) {//do not drop if over a grid
-            GameObject itemToDrop = inventory.Get();
-            if (itemToDrop != null) {
-                itemToDrop.transform.SetParent(TileContainer.transform);
-                Game.RepositionHeight(itemToDrop, Height.OnFloor);
-                Game.EnablePhysics(itemToDrop);
-                inventory.Remove();
+        GameObject itemToDrop = inventory.Get();
+        if (itemToDrop != null) {
+            itemToDrop.transform.SetParent(TileContainer.transform);
+            Game.RepositionHeight(itemToDrop, Height.OnFloor);
+            Game.EnablePhysics(itemToDrop);
+            if (itemToDrop.GetComponent<Fireable>()) {
+                itemToDrop.GetComponent<Fireable>().Drop();
             }
+            inventory.Remove();
         }
     }
     private void PlaceOnSquare() {
@@ -335,8 +336,10 @@ public class PlayerController : MonoBehaviour {
         itemToPlace.GetComponent<Placeable>().PlaceOn(activeSquare, gameObject);
         inventory.Remove();
         if (itemToPlace.GetComponent<Flag>()) {
-            inventory.Remove();
-            activeSquare.transform.parent.gameObject.GetComponent<GridControl>().SetOwnership(playerNum, gameObject);
+            GridControl gc = activeSquare.transform.parent.gameObject.GetComponent<GridControl>();
+            if (gc) {
+                activeSquare.transform.parent.gameObject.GetComponent<GridControl>().SetOwnership(playerNum, gameObject);
+            }
         }
     }
 
@@ -455,6 +458,53 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void DropAll(Vector2 dir) {
+        //iterate over inventory slots
+        /*
+         * itemstoscatter = list<gameobject>
+         * for each slot:
+         *      if(item):
+         *          put ref into itemstoscatter
+         *          remove item
+         * for each item in itemstoscatter:
+         *      determine direction and distance
+         *      if (rigidbody and dynamic):
+         *          set velocity with dir and distance (scaled to drag)
+         *      else
+         *          raycast in direction
+         *          if you run into something
+         *              set the distance accordingly
+         *          lerp position
+         *   
+        */
+        //float maxDropDistance = 10f;
+        List<GameObject> itemsToScatter = new List<GameObject>();
+        for (int i = 0; i < inventory.Size(); i++) {
+            GameObject item = inventory.Get();
+            if (item) {
+                itemsToScatter.Add(item);
+                Drop();
+            }
+            inventory.IncSlot();
+        }
+        float maxDropDistance = 10f;
+        foreach (GameObject item in itemsToScatter) {
+            Vector2 targetVector = (dir + UnityEngine.Random.insideUnitCircle).normalized * UnityEngine.Random.Range(0f, maxDropDistance);
+            Rigidbody2D item_rb = item.GetComponent<Rigidbody2D>();
+            if (item_rb && !item_rb.isKinematic) {
+                float rb_scaleFactor = 10000f;
+                //item_rb.velocity = targetVector * item_rb.drag * rb_scaleFactor;
+                item_rb.velocity = targetVector * rb_scaleFactor;
+            } else {
+                RaycastHit2D[] hits = Physics2D.RaycastAll(item.transform.position, targetVector.normalized, targetVector.magnitude);
+                foreach (RaycastHit2D hit in hits) {
+                    if (hit.collider.gameObject != gameObject) {
+                        targetVector = hit.point;
+                        break;
+                    }
+                }
+                item.transform.position = targetVector;
+            }
+        }
     }
 
     public void OnCollisionEnter2D(Collision2D collision) {
