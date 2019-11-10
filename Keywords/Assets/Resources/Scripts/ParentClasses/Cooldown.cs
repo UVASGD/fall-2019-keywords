@@ -3,18 +3,27 @@
 public class Cooldown {
     float cooldown;
     float timeStarted;
+    AudioSource notReadySFX;
 
-    public Cooldown(float cooldownTime) {
+    public Cooldown(float cooldownTime, AudioSource notReady = null) {
         cooldown = cooldownTime;
         timeStarted = -cooldown - 1f;
+        notReadySFX = GameManager.instance.sfx["CooldownNotReadySFX"];
+        if (notReady) {
+            notReadySFX = notReady;
+        }
     }
 
     public bool Ready() {
         return Time.time - timeStarted >= cooldown;
     }
 
-    public void Reset() {
+    public void Start() {
         timeStarted = Time.time;
+    }
+
+    public void Reset() {
+        timeStarted = -cooldown - 1f;
     }
 
     public void SetCooldown(float cooldownTime) {
@@ -23,9 +32,11 @@ public class Cooldown {
 
     public bool Check() {
         if (Ready()) {
-            Reset();
+            Start();
             return true;
         }
+        if (notReadySFX)
+            notReadySFX.Play();
         return false;
     }
 }

@@ -25,6 +25,7 @@ public class Blink : Fireable {
         if (raycast.collider == null) {
             rb.position = dest;
         } else {
+            cooldown.Reset();
             // Debug.Log("Blink denied by " + raycast.collider.gameObject.name);
         }
     }

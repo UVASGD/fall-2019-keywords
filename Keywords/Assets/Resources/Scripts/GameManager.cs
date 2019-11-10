@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour {
     public TextOverlayHandler[] textOverlayHandlers;
     public Camera[] cameras;
 
+    public Dictionary<string, AudioSource> sfx;
+
     private void Awake() {
         if (instance) {
             Destroy(gameObject);
@@ -47,6 +49,13 @@ public class GameManager : MonoBehaviour {
             cameras[1] = GameObject.Find("Camera2").GetComponent<Camera>();
             cameras[2] = GameObject.Find("Camera3").GetComponent<Camera>();
             cameras[3] = GameObject.Find("Camera4").GetComponent<Camera>();
+        }
+        sfx = new Dictionary<string, AudioSource>();
+        GameObject sfxContainer = GameObject.Find("SFX");
+        foreach (Transform child in sfxContainer.transform) {
+            if (child.gameObject.GetComponent<AudioSource>()) {
+                sfx.Add(child.gameObject.name, child.gameObject.GetComponent<AudioSource>());
+            }
         }
     }
 
