@@ -48,45 +48,13 @@ public class GridControl : MonoBehaviour {
         validWordTiles.Clear();
         int ownerOrMakerNum = globalGrid ? player.GetComponent<PlayerInfo>().playerNum : ownerNum; //whose made words should be added to?
         if (grid[x, y].GetComponent<GridSquare>().GetLetter() == placeholder) {
-            if (words.ValidateWord(GetHorizontalWord(x - 1, y), ownerOrMakerNum, globalGrid)) {
-                AddKey();
-                foreach (GameObject tile in reachedTiles) {
-                    validWordTiles.Add(tile);
-                }
-            }
-            if (words.ValidateWord(GetHorizontalWord(x + 1, y), ownerOrMakerNum, globalGrid)) {
-                AddKey();
-                foreach (GameObject tile in reachedTiles) {
-                    validWordTiles.Add(tile);
-                }
-            }
-            if (words.ValidateWord(GetVerticalWord(x, y - 1), ownerOrMakerNum, globalGrid)) {
-                AddKey();
-                foreach (GameObject tile in reachedTiles) {
-                    validWordTiles.Add(tile);
-                }
-            }
-            if (words.ValidateWord(GetVerticalWord(x, y + 1), ownerOrMakerNum, globalGrid)) {
-                AddKey();
-                foreach (GameObject tile in reachedTiles) {
-                    validWordTiles.Add(tile);
-                }
-            }
+            ValidateWord(x - 1, y, ownerOrMakerNum, horizontal: true);
+            ValidateWord(x + 1, y, ownerOrMakerNum, horizontal: true);
+            ValidateWord(x, y - 1, ownerOrMakerNum, horizontal: false);
+            ValidateWord(x, y + 1, ownerOrMakerNum, horizontal: false);
         } else {
-            if (words.ValidateWord(GetHorizontalWord(x, y), ownerOrMakerNum, globalGrid)) {
-                AddKey();
-                foreach (GameObject tile in reachedTiles) {
-                    validWordTiles.Add(tile);
-                }
-            }
-            if (words.ValidateWord(GetVerticalWord(x, y), ownerOrMakerNum, globalGrid)) {
-                AddKey();
-                foreach (GameObject tile in reachedTiles) {
-                    if (!validWordTiles.Contains(tile)) {
-                        validWordTiles.Add(tile);
-                    }
-                }
-            }
+            ValidateWord(x, y, ownerOrMakerNum, horizontal: true);
+            ValidateWord(x, y, ownerOrMakerNum, horizontal: false);
         }
         foreach (GameObject tile in validWordTiles) {
             tile.GetComponent<LetterTile>().DecLifespan();
@@ -94,6 +62,24 @@ public class GridControl : MonoBehaviour {
         validWordTiles.Clear();
     }
 
+    public void ValidateWord(int x, int y, int ownerOrMakerNum, bool horizontal = false) {
+        string word;
+        if (horizontal) {
+            word = GetHorizontalWord(x, y);
+        } else {
+            word = GetVerticalWord(x, y);
+        }
+        if (words.ValidateWord(word, ownerOrMakerNum, globalGrid)) {
+            for (int i = 0; i < GetScore(word.Length); i++) {
+                AddKey();
+            }
+            foreach (GameObject tile in reachedTiles) {
+                if (!validWordTiles.Contains(tile)) {
+                    validWordTiles.Add(tile);
+                }
+            }
+        }
+    }
     public void AddKey() {
         if (globalGrid) {
             //give everyone a key
@@ -176,6 +162,17 @@ public class GridControl : MonoBehaviour {
         return result;
     }
 
+
+    public int GetScore(int wordLength) {
+        if (wordLength < 4) {
+            return 0;
+        }
+        if (wordLength < 7) {
+            return wordLength - 3;
+        }
+        return wordLength;
+    }
+
     // set the owner of the grid to the newOwner given its player number
     public void SetOwnership(int newOwnerNum, GameObject newOwner) {
         if (claimable) {
@@ -185,6 +182,7 @@ public class GridControl : MonoBehaviour {
         }
     }
 
+    //recolor animation upon placing flag
     private bool InBounds(int x, int y) {
         if (x >= 0 && x < width && y >= 0 && y < width) {
             return true;
