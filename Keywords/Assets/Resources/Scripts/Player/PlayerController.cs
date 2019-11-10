@@ -130,9 +130,10 @@ public class PlayerController : MonoBehaviour {
         aimIndicator.transform.position = (Vector2)transform.position + aim;
         float trigger_percentage = (trigger + 1) / 2;
         Color trigger_color = (1 - trigger_percentage) * GetComponent<SpriteRenderer>().color;
-        if (!lt_pressed && ltrigger > triggerPressThreshold) {
-        float ltrigger = GetAxis("LTrigger");
         aimIndicator.GetComponent<SpriteRenderer>().color = new Color(trigger_color.r, trigger_color.g, trigger_color.b);
+
+        float ltrigger = GetAxis("LTrigger");
+        if (!lt_pressed && ltrigger > triggerPressThreshold) {
             //switch inventory slot
             lt_pressed = true;
             inventory.DecSlot();
