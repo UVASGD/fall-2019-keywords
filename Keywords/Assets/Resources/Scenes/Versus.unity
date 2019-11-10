@@ -617,9 +617,11 @@ MonoBehaviour:
   lookAheadFactor: 0
   lookAheadReturnSpeed: 0.5
   lookAheadMoveThreshold: 0.1
-  maxCamSize: 11
-  zoomOutRate: 0.3
-  zoomInRate: 0.35
+  zoomRate: 40
+  zoomTargets:
+  - -69
+  - 8
+  - 15
 --- !u!1 &65187046
 GameObject:
   m_ObjectHideFlags: 0
@@ -2521,9 +2523,11 @@ MonoBehaviour:
   lookAheadFactor: 0
   lookAheadReturnSpeed: 0.5
   lookAheadMoveThreshold: 0.1
-  maxCamSize: 11
-  zoomOutRate: 0.3
-  zoomInRate: 0.35
+  zoomRate: 40
+  zoomTargets:
+  - -69
+  - 8
+  - 15
 --- !u!81 &545235385
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2761,9 +2765,11 @@ MonoBehaviour:
   lookAheadFactor: 0
   lookAheadReturnSpeed: 0.5
   lookAheadMoveThreshold: 0.1
-  maxCamSize: 11
-  zoomOutRate: 0.3
-  zoomInRate: 0.35
+  zoomRate: 40
+  zoomTargets:
+  - -69
+  - 8
+  - 15
 --- !u!81 &662210672
 AudioListener:
   m_ObjectHideFlags: 0
@@ -3075,9 +3081,11 @@ MonoBehaviour:
   lookAheadFactor: 0
   lookAheadReturnSpeed: 0.5
   lookAheadMoveThreshold: 0.1
-  maxCamSize: 11
-  zoomOutRate: 0.3
-  zoomInRate: 0.35
+  zoomRate: 40
+  zoomTargets:
+  - -69
+  - 8
+  - 15
 --- !u!81 &987614325
 AudioListener:
   m_ObjectHideFlags: 0
