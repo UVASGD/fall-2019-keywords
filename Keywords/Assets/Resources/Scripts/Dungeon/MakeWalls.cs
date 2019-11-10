@@ -93,9 +93,9 @@ public class MakeWalls : MonoBehaviour {
     public GameObject Corner;
     public GameObject Door;
     public GameObject WallSmall;
+    public GameObject Void;//fog of war objects
     public GameObject Tile;
     public GameObject Grid;//grid prefab
-    public GameObject Void;//fog of war objects
     public GameObject[] loot;
     #endregion
 
@@ -345,7 +345,7 @@ public class MakeWalls : MonoBehaviour {
                             neighbor.neighbors.Remove(a);
                             MakeBorderBetween(a, neighbor, true, w);
                         } else {
-                            MakeBorderBetween(a, neighbor, false, w, doorChance: 0.1f);
+                            MakeBorderBetween(a, neighbor, false, w, doorChance: 0.15f);
                             neighbor.neighbors.Remove(a);
                         }
                     }

@@ -59,4 +59,12 @@ public class GridSquare : MonoBehaviour {
     public void Swell() {
         anim.SetTrigger("Swell");
     }
+
+    public void SetColor(Color color) {
+        float d = 0.7f;
+        Color darkerColor = new Color(color.r * d, color.g * d, color.b * d, 1f);
+        GetComponent<SpriteRenderer>().color = darkerColor;
+        normalColor = darkerColor;
+        highlightedColor = color;
+    }
 }

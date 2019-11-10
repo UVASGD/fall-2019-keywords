@@ -18,6 +18,7 @@ public class Machine : MonoBehaviour {
         timer = chargeTime;
 
         slot.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
+        slot.GetComponent<GridSquare>().normalColor = GetComponent<SpriteRenderer>().color;
     }
 
     protected virtual void Update() {

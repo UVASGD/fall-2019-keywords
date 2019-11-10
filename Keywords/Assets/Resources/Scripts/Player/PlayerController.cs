@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour {
     private Coroutine pMovHandleResetCoroutine;
     const float pickupRadius = 0.2f; //how far away can the player pick up an object?
     public Vector3 holdOffset; //what's the hold position of the currently held inventory item?
-    private float epsilon = 0.001f;
+    const float epsilon = 0.001f;
 
     private int playerNum;
     private int keyboardControlledPlayer = 0; //for debug / testing without controllers - one player can be controlled by the keyboard at a time;
@@ -58,6 +58,8 @@ public class PlayerController : MonoBehaviour {
 
     private bool rt_pressed;
     private bool lt_pressed;
+    const float triggerPressThreshold = 0.9f;
+    const float triggerReleaseThreshold = 0.1f;
 
     private Fist fist;
     public CollisionEvent CollisionEvent;
@@ -103,7 +105,7 @@ public class PlayerController : MonoBehaviour {
         }
         Vector2 aim = aim_raw.normalized;
         float trigger = GetAxis("RTrigger");
-        if (!rt_pressed && trigger > 0.9f) {
+        if (!rt_pressed && trigger > triggerPressThreshold) {
             //fire weapon/tool if aiming, else switch inventory slots
             rt_pressed = true;
             if (aim.Equals(Vector2.zero)) {
@@ -120,26 +122,25 @@ public class PlayerController : MonoBehaviour {
                 }
             }
         }
-        if (rt_pressed && trigger < 0.1f) {
+        if (rt_pressed && trigger < triggerReleaseThreshold) {
             rt_pressed = false;
         }
 
         //debug
         aimIndicator.transform.position = (Vector2)transform.position + aim;
-        print("trigger:" + trigger);
         float trigger_percentage = (trigger + 1) / 2;
         Color trigger_color = (1 - trigger_percentage) * GetComponent<SpriteRenderer>().color;
+        if (!lt_pressed && ltrigger > triggerPressThreshold) {
+        float ltrigger = GetAxis("LTrigger");
         aimIndicator.GetComponent<SpriteRenderer>().color = new Color(trigger_color.r, trigger_color.g, trigger_color.b);
-        ;
-        trigger = GetAxis("LTrigger");
-        if (!lt_pressed && trigger > 0.9f) {
             //switch inventory slot
             lt_pressed = true;
             inventory.DecSlot();
         }
-        if (lt_pressed && trigger < 0.1f) {
+        if (lt_pressed && ltrigger < triggerReleaseThreshold) {
             lt_pressed = false;
         }
+
 
 
         if (rb.velocity.sqrMagnitude > float.Epsilon * float.Epsilon) {
@@ -181,10 +182,8 @@ public class PlayerController : MonoBehaviour {
         }
 
         ////Adjust camera height
-        if (Input.GetKey(YButton) || (me.playerNum == keyboardControlledPlayer && Input.GetKey(KeyCode.LeftShift))) {
-            camScript.isZooming = true;
-        } else {
-            camScript.isZooming = false;
+        if (Input.GetKeyDown(YButton) || (me.playerNum == keyboardControlledPlayer && Input.GetKeyDown(KeyCode.LeftShift))) {
+            camScript.ToggleZoom();
         }
 
         ////Change which item is active
