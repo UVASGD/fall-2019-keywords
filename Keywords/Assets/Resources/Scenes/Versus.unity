@@ -620,8 +620,8 @@ MonoBehaviour:
   zoomRate: 40
   zoomTargets:
   - -69
-  - 8
-  - 15
+  - 5
+  - 13
 --- !u!1 &65187046
 GameObject:
   m_ObjectHideFlags: 0
@@ -2526,8 +2526,8 @@ MonoBehaviour:
   zoomRate: 40
   zoomTargets:
   - -69
-  - 8
-  - 15
+  - 5
+  - 13
 --- !u!81 &545235385
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2768,8 +2768,8 @@ MonoBehaviour:
   zoomRate: 40
   zoomTargets:
   - -69
-  - 8
-  - 15
+  - 5
+  - 13
 --- !u!81 &662210672
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2886,7 +2886,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: a0f4a84b99a3d4f73b4492921749fbe7, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.076
+  m_Volume: 0.119
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3084,8 +3084,8 @@ MonoBehaviour:
   zoomRate: 40
   zoomTargets:
   - -69
-  - 8
-  - 15
+  - 5
+  - 13
 --- !u!81 &987614325
 AudioListener:
   m_ObjectHideFlags: 0
