@@ -3683,6 +3683,11 @@ MonoBehaviour:
   - {fileID: 7014245699955614395, guid: 3c700b2a758836b4aaef73414e4528d8, type: 3}
   - {fileID: 8342463343188959437, guid: 5793925995b49455ba01e913690976d2, type: 3}
   - {fileID: 3779795911219908349, guid: b61a29e9721a64c3faaa476031f80986, type: 3}
+  CloseLoot:
+  - {fileID: 1832904815124234, guid: 9ff508d6e02504db8a6c76f22b364b39, type: 3}
+  DeepLoot:
+  - {fileID: 1832904815124234, guid: 6d254133908ab4496a29796669f241ea, type: 3}
+  - {fileID: 3779795911219908349, guid: b61a29e9721a64c3faaa476031f80986, type: 3}
 --- !u!114 &1569157445
 MonoBehaviour:
   m_ObjectHideFlags: 0

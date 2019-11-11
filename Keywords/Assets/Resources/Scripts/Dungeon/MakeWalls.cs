@@ -591,8 +591,7 @@ public class MakeWalls : MonoBehaviour {
 
         List<GameObject> thingsToSpawn = new List<GameObject>();
         List<GameObject> itemPool = CloseLoot;
-        if (depth >= 4)
-        {
+        if (depth >= 4) {
             itemPool = DeepLoot;
         }
 
@@ -607,7 +606,7 @@ public class MakeWalls : MonoBehaviour {
             }
         }
         if (r.squares.Count > 30) {//spawn grid in center of big enough room
-            if (depth >= 3) { //do not spawn new grids too close to starting rooms
+            if (depth >= 4) { //do not spawn new grids too close to starting rooms
                 if (r.roomID != -5) {//do not spawn in boss chamber
                     r.SpawnItemAtCenter(Grid, GridContainer.transform);
                 }
