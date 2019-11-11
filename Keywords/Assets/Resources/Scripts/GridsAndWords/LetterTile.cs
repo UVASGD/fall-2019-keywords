@@ -51,6 +51,11 @@ public class LetterTile : Placeable {
         letter = newletter;
         string spriteName = "LetterSprites/" + letter.ToString();
         letterSprite.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(spriteName);
+
+        Transform indicator;
+        if (indicator = transform.Find("SwapBombIndicator(Clone)")){
+            Destroy(indicator.gameObject);
+        }
     }
 
     public void ChangeLetterSprite(char c) {

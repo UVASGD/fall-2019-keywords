@@ -19,9 +19,7 @@ public class VisualBomb : Placeable {
             if (gs && gs.tile) {
                 LetterTile lt = gs.tile.GetComponent<LetterTile>();
                 if (lt) {
-                    int changedLetter = lt.letter + cipher;
-                    if (changedLetter > Game.ascii_z)
-                        changedLetter = changedLetter - (Game.ascii_z + 1 - Game.ascii_a);
+                    int changedLetter = lt.letter + cipher - Game.ascii_z;
                     lt.ChangeLetterSprite((char)changedLetter);
                     Instantiate(indicator, gs.tile.transform);
                 }
