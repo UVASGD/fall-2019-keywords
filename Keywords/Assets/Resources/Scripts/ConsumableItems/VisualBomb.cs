@@ -13,12 +13,16 @@ public class VisualBomb : Placeable {
         }
     }
     void Explode(GridControl grid) {
+        int cipher = Random.Range(Game.ascii_a, Game.ascii_z + 1);
         foreach (GameObject go in grid.grid) {
             GridSquare gs = go.GetComponent<GridSquare>();
             if (gs && gs.tile) {
                 LetterTile lt = gs.tile.GetComponent<LetterTile>();
                 if (lt) {
-                    lt.ChangeLetterSprite((char)Random.Range(Game.ascii_a, Game.ascii_z + 1));
+                    int changedLetter = lt.letter + cipher;
+                    if (changedLetter > Game.ascii_z)
+                        changedLetter = changedLetter - (Game.ascii_z + 1 - Game.ascii_a);
+                    lt.ChangeLetterSprite((char)changedLetter);
                     Instantiate(indicator, gs.tile.transform);
                 }
             }
