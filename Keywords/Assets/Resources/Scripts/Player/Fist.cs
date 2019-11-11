@@ -13,10 +13,10 @@ public class Fist : MonoBehaviour {
     void Awake() {
         // ignore collisions with your player
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), transform.parent.GetComponent<Collider2D>());
-        punchCooldown = new Cooldown(missCooldownTime);
 }
 
     public void Punch(Vector2 dir) {
+        if (punchCooldown == null) punchCooldown = new Cooldown(missCooldownTime);
         if (!punchCooldown.Check())
             return;
         if (gameObject.activeSelf)
