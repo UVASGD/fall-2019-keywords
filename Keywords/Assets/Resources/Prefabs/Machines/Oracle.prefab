@@ -453,15 +453,15 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 7297548469490769876, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4569867206330890909, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
         type: 3}
       propertyPath: m_text
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4569867206330890909, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
+        type: 3}
+      propertyPath: m_fontColor.a
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4569867206330890909, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
         type: 3}
@@ -481,11 +481,6 @@ PrefabInstance:
     - target: {fileID: 4569867206330890909, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
         type: 3}
       propertyPath: m_textInfo.pageCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4569867206330890909, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
-        type: 3}
-      propertyPath: m_textInfo.spaceCount
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
