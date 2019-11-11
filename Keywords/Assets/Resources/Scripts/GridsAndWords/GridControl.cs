@@ -167,8 +167,11 @@ public class GridControl : MonoBehaviour {
         if (wordLength < 4) {
             return 0;
         }
-        if (wordLength < 7) {
-            return wordLength - 3;
+        if (wordLength < 6) {
+            return 1;
+        }
+        if (wordLength == 6) {
+            return 2;
         }
         return wordLength;
     }
