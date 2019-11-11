@@ -5,7 +5,7 @@ using UnityEngine;
 public class Fist : MonoBehaviour {
 
     Vector2 dir;
-    float stun_duration = 5f, extend_duration = 0.1f;
+    float stun_duration = 5f, extend_duration = 0.2f;
     private Cooldown punchCooldown;
     public float missCooldownTime = 1f, hitCooldownTime = 7f;
 
@@ -13,7 +13,7 @@ public class Fist : MonoBehaviour {
     void Awake() {
         // ignore collisions with your player
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), transform.parent.GetComponent<Collider2D>());
-}
+    }
 
     public void Punch(Vector2 dir) {
         if (punchCooldown == null) punchCooldown = new Cooldown(missCooldownTime);

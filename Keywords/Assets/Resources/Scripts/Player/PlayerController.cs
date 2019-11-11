@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour {
     const float epsilon = 0.001f;
 
     private int playerNum;
+    private Color mycolor;
     private int keyboardControlledPlayer = 0; //for debug / testing without controllers - one player can be controlled by the keyboard at a time;
 
     //Idle variables
@@ -76,8 +77,9 @@ public class PlayerController : MonoBehaviour {
         playerNum = me.playerNum;
         inventory = GetComponent<Inventory>();
         TileContainer = GameObject.Find("Tiles");
+        mycolor = GetComponent<SpriteRenderer>().color;
         aimIndicator = transform.Find("AimIndicator").gameObject;
-        aimIndicator.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
+        aimIndicator.GetComponent<SpriteRenderer>().color = mycolor;
         SetControls();
         //Idle
         timeSinceLastMoved = 0f;
@@ -90,6 +92,7 @@ public class PlayerController : MonoBehaviour {
 
         // punching
         fist = transform.Find("Fist").GetComponent<Fist>();
+        transform.FindDeepChild("FistSprite").GetComponent<SpriteRenderer>().color = mycolor;
     }
     private void SetControls() {
         AButton = me.GetKeyCode("A");
@@ -456,7 +459,7 @@ public class PlayerController : MonoBehaviour {
         // fx and stuff
         // play tweety bird animation
         setMovHandle(0.002f, duration);
-        setMovSpeed(pMovSpeedBase*0.2f, duration);
+        setMovSpeed(pMovSpeedBase * 0.2f, duration);
     }
 
     private void DropAll(Vector2 dir) {
