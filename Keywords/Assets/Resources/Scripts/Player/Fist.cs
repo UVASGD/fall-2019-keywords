@@ -5,7 +5,7 @@ using UnityEngine;
 public class Fist : MonoBehaviour {
 
     Vector2 dir;
-    float stun_duration = 5f, extend_duration = 0.2f;
+    float stun_duration = 5f, extend_duration = 0.12f;
     private Cooldown punchCooldown;
     public float missCooldownTime = 1f, hitCooldownTime = 7f;
 
