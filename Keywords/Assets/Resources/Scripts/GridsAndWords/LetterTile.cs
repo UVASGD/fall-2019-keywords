@@ -94,6 +94,13 @@ public class LetterTile : Placeable {
         if (lifespan != 16) {
             SetLifespan(lifespan - 1);
         }
+
+        Transform indicator;
+        if (indicator = transform.Find("SwapBombIndicator(Clone)"))
+        {
+            Destroy(indicator.gameObject);
+            ChangeLetterSprite(letter);
+        }
     }
 
     public void animate() {
