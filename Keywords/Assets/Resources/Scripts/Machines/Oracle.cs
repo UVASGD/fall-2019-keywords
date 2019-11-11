@@ -19,9 +19,12 @@ public class Oracle : Machine {
     protected override void PerformMachineAction() {
         //delete tile
         GameObject tile = slot.GetComponent<GridSquare>().tile;
-        word_displayer.DisplayWord(words.GetRandomUnmadeWord(Mathf.Clamp(tile.GetComponent<LetterTile>().lifespan, 4, 10)));
-        Destroy(tile);
-        slot.GetComponent<GridSquare>().tile = null;
+        int tileLifespan = tile.GetComponent<LetterTile>().lifespan;
+        if (tileLifespan >= 4) {
+            word_displayer.DisplayWord(words.GetRandomUnmadeWord(Mathf.Clamp(tileLifespan, 4, 10)));
+            Destroy(tile);
+            slot.GetComponent<GridSquare>().tile = null;
+        }
         //TODO: make piece of paper object with this word instead of printing
     }
 }
