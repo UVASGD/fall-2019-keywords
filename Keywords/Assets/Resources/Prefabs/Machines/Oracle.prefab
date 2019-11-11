@@ -334,7 +334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bddb8290d553e42d8a02f2c9d940e153, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chargeTime: 7
+  chargeTime: 0.5
   words: {fileID: 0}
 --- !u!1001 &6579779483481945682
 PrefabInstance:
@@ -406,12 +406,12 @@ PrefabInstance:
     - target: {fileID: 2374219960418957327, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.03
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2374219960418957327, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.32
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2374219960418957327, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
         type: 3}
@@ -453,35 +453,15 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 4569867206330890909, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
+    - target: {fileID: 5690913101650064467, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
         type: 3}
-      propertyPath: m_text
+      propertyPath: m_SortingOrder
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 7297548469490769876, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
+        type: 3}
+      propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4569867206330890909, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
-        type: 3}
-      propertyPath: m_fontColor.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4569867206330890909, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4569867206330890909, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4569867206330890909, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
-        type: 3}
-      propertyPath: m_textInfo.lineCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4569867206330890909, guid: 7b7a2e4b02c914e4fa43bd54afa001e8,
-        type: 3}
-      propertyPath: m_textInfo.pageCount
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b7a2e4b02c914e4fa43bd54afa001e8, type: 3}

@@ -7,13 +7,11 @@ public class Oracle : Machine {
     public Words words;
     WordDisplayer word_displayer;
 
-    private void Awake()
-    {
-        word_displayer = GetComponentInChildren<WordDisplayer>();
+    private void Awake() {
+        word_displayer = transform.Find("WordDisplayer").GetComponent<WordDisplayer>();
     }
 
-    protected override void Start()
-    {
+    protected override void Start() {
         base.Start();
         words = GameManager.words;
     }
