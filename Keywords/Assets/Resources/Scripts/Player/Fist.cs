@@ -29,6 +29,7 @@ public class Fist : MonoBehaviour {
 
     private IEnumerator ExtendFist(Vector2 dir) {
         transform.up = dir;
+        this.dir = dir;
         yield return new WaitForSeconds(extend_duration);
         gameObject.SetActive(false);
     }
