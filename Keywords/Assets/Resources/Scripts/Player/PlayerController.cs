@@ -451,19 +451,12 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void Bonk(Vector2 dir, float duration) {
-        if (pMovDisable)
-            return;
         DropAll(dir);
-        rb.velocity = Vector2.zero;
+        rb.velocity = dir.normalized * 0.5f;
         // fx and stuff
         // play tweety bird animation
-        StartCoroutine(StayBonked(duration));
-    }
-
-    private IEnumerator StayBonked(float duration) {
-        pMovDisable = true;
-        yield return new WaitForSeconds(duration);
-        pMovDisable = false;
+        setMovHandle(0.002f, duration);
+        setMovSpeed(pMovSpeedBase*0.2f, duration);
     }
 
     private void DropAll(Vector2 dir) {
