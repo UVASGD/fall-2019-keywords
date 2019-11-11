@@ -84,14 +84,14 @@ public class LetterTile : Placeable {
     //decrement
     public void DecLifespan() {
         //TODO: call animation to flash this letter tile
-        this.animate();
+        this.Animate();
 
         if (lifespan != 16) {
             SetLifespan(lifespan - 1);
         }
     }
 
-    public void animate() {
+    public void Animate() {
         anim.SetTrigger("Flash");
     }
 }

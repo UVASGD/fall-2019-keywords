@@ -76,6 +76,7 @@ public class MakeWalls : MonoBehaviour {
     Dictionary<int, Room> roomGraph;
 
 
+
     //front end - generated game objects
     private const float epsilon = 0.005f; //makes borders between walls/corners look better
     private const float smallWallOffset = 0.32f;
@@ -97,6 +98,8 @@ public class MakeWalls : MonoBehaviour {
     public GameObject Tile;
     public GameObject Grid;//grid prefab
     public GameObject[] loot;
+    public List<GameObject> CloseLoot;  // loot nearby
+    public List<GameObject> DeepLoot; // loot far away
     #endregion
 
     #region main
@@ -587,14 +590,20 @@ public class MakeWalls : MonoBehaviour {
         // room is the place to spawn, depth is the difficulty
 
         List<GameObject> thingsToSpawn = new List<GameObject>();
+        List<GameObject> itemPool = CloseLoot;
+        if (depth >= 4)
+        {
+            itemPool = DeepLoot;
+        }
+
         // figure out what to spawn in r
         if (depth > 1 && r.squares.Count > 3) {//do not make loot in starting rooms or really small rooms
             float diceRoll = Random.value;
             if (diceRoll < 0.4f) {//spawn loot 40% of the time (for now, this is too often for real gameplay)
-                thingsToSpawn.Add(loot[Random.Range(0, loot.Length)]);
+                thingsToSpawn.Add(itemPool[Random.Range(0, itemPool.Count)]);
             }
             if (r.squares.Count > 30) {//definitely spawn loot in big enough room
-                thingsToSpawn.Add(loot[Random.Range(0, loot.Length)]);
+                thingsToSpawn.Add(itemPool[Random.Range(0, itemPool.Count)]);
             }
         }
         if (r.squares.Count > 30) {//spawn grid in center of big enough room
