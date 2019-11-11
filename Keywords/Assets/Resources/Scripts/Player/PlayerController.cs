@@ -64,8 +64,6 @@ public class PlayerController : MonoBehaviour {
 
     private Fist fist;
     public CollisionEvent CollisionEvent;
-    public float punchCooldownTime = 10f;
-    private Cooldown punchCooldown;
     #endregion
 
     #region start
@@ -92,7 +90,6 @@ public class PlayerController : MonoBehaviour {
 
         // punching
         fist = transform.Find("Fist").GetComponent<Fist>();
-        punchCooldown = new Cooldown(punchCooldownTime);
     }
     private void SetControls() {
         AButton = me.GetKeyCode("A");
@@ -449,8 +446,6 @@ public class PlayerController : MonoBehaviour {
     #region punchandbonk
     public void Punch(Vector2 dir) {
         if (pMovDisable)
-            return;
-        if (!punchCooldown.Check())
             return;
         fist.Punch(dir);
     }
