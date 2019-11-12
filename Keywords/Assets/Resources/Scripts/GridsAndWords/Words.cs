@@ -64,8 +64,8 @@ public class Words : MonoBehaviour {
         //words = words.Where(w => w.Length >= minWordLength && w.Length <= maxWordLength).ToArray();
         var regex = new Regex(Regex.Escape("o"));
         var newText = regex.Replace("Hello World", "Foo", 1);
-        //string[] wordDefPairs = Resources.Load<TextAsset>(dictionaryFilePath).text.Split('\n');
-        string[] wordDefPairs = File.ReadAllLines(dictionaryFilePath);
+        string[] wordDefPairs = Resources.Load<TextAsset>("Dictionary").text.Split('\n');
+        //string[] wordDefPairs = File.ReadAllLines(dictionaryFilePath);
         words = new string[wordDefPairs.Length];
         dictionary = new Dictionary<string, string>();
 
@@ -81,7 +81,7 @@ public class Words : MonoBehaviour {
             words[i] = lowercaseWord;
             dictionary.Add(lowercaseWord, currentDef);
         }
-
+        dictionary.Remove("");
         numletterwords = GetNumLetterWords();
         currentSourceWords = GetSomeSourceWords(numLevels, 75, 250);
         currentSourceChars = new List<char>();
