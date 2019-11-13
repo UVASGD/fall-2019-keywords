@@ -186,7 +186,7 @@ public class Words : MonoBehaviour {
         do {
             result = (char)Random.Range(Game.ascii_a, Game.ascii_z + 1);
         } while (currentSourceChars.Contains(result));
-        return (char)Random.Range(Game.ascii_a, Game.ascii_z + 1);
+        return result;
     }
 
     public char GetRandomVowel() {
