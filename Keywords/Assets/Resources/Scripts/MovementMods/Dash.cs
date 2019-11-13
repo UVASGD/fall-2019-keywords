@@ -47,4 +47,9 @@ public class Dash : Fireable {
             }
         }
     }
+
+    private void OnDisable() {
+        StopAllCoroutines();
+        dashing = false;
+    }
 }

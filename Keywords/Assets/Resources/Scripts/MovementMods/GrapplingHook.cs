@@ -19,4 +19,8 @@ public class GrapplingHook : Fireable {
         hook = GetComponentInChildren<Hook>();
         hook.Setup(player, gameObject);
     }
+
+    //private void OnDisable() {
+    //    hook.Stop();
+    //}
 }

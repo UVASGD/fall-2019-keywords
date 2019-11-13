@@ -585,17 +585,21 @@ public class MakeWalls : MonoBehaviour {
 
     #region loot
     //will be called on each room in the dungeon during GenerateWallsAndLoot
-    //TODO: Make a design doc for loot generation, stop hardcoding numbers. Formalize this entire process
     void MakeLootInRoom(Room r, int depth) {
         // room is the place to spawn, depth is the difficulty
-
         List<GameObject> thingsToSpawn = new List<GameObject>();
-        List<GameObject> itemPool = CloseLoot;
+        List<GameObject> itemPool = new List<GameObject>(loot);
         if (depth >= 4) {
             itemPool = DeepLoot;
         }
 
         // figure out what to spawn in r
+        if (depth == 1) {
+            PlaceGoodTilesInRoom(r);
+        }
+        if (depth == 2) {
+            PlaceTilesInRoom(r, 2);
+        }
         if (depth > 1 && r.squares.Count > 3) {//do not make loot in starting rooms or really small rooms
             float diceRoll = Random.value;
             if (diceRoll < 0.4f) {//spawn loot 40% of the time (for now, this is too often for real gameplay)
@@ -628,21 +632,10 @@ public class MakeWalls : MonoBehaviour {
             newTile.GetComponent<LetterTile>().SetLetter(w.GetRandomSourceChar());
             newTile.GetComponent<LetterTile>().SetLifespan(Random.Range(3, 9));
         }
-        PlaceGoodTilesInRoom(-1);
-        if (!coop) {
-            PlaceGoodTilesInRoom(-2);
-            PlaceGoodTilesInRoom(-3);
-            PlaceGoodTilesInRoom(-4);
-            PlaceGoodTilesInRoom(-5);
-        }
     }
 
-    void PlaceGoodTilesInRoom(int roomNum) {
-        if (!roomGraph.ContainsKey(roomNum)) {
-            return;
-        }
+    void PlaceGoodTilesInRoom(Room r) {
         Words w = GetComponent<Words>();
-        Room r = roomGraph[roomNum];
         string startingTileSet = "";
         do {
             startingTileSet = "";
@@ -652,6 +645,20 @@ public class MakeWalls : MonoBehaviour {
         } while (w.GetScoreExact(startingTileSet) < DoorBaseWeightFor(3));
         char[] startingTiles = startingTileSet.ToCharArray();
         for (int i = 0; i < 8; i++) {
+            GameObject newTile = r.SpawnItem(Tile, Quaternion.Euler(0, 0, Random.Range(-30f, 30f)), TileContainer.transform);
+            newTile.GetComponent<LetterTile>().SetLetter(startingTiles[i]);
+            newTile.GetComponent<LetterTile>().SetLifespan(Random.Range(3, 9));
+        }
+    }
+
+    void PlaceTilesInRoom(Room r, int numTiles) {
+        Words w = GetComponent<Words>();
+        string startingTileSet = "";
+        for (int i = 0; i < numTiles; i++) {
+            startingTileSet += w.GetRandomSourceChar();
+        }
+        char[] startingTiles = startingTileSet.ToCharArray();
+        for (int i = 0; i < numTiles; i++) {
             GameObject newTile = r.SpawnItem(Tile, Quaternion.Euler(0, 0, Random.Range(-30f, 30f)), TileContainer.transform);
             newTile.GetComponent<LetterTile>().SetLetter(startingTiles[i]);
             newTile.GetComponent<LetterTile>().SetLifespan(Random.Range(3, 9));
