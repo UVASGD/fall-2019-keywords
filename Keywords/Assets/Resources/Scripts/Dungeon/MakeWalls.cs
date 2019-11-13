@@ -390,7 +390,7 @@ public class MakeWalls : MonoBehaviour {
         if (depth == 1) {
             return 2;
         }
-        int deepestAmount = (int)((w.minWordsForLevel * w.humanKnowledgeFactor + w.levelScore * w.humanKnowledgeFactor) / 2f);//scale according to how good the level is
+        int deepestAmount = (int)((80 + w.levelScore * w.humanKnowledgeFactor) / 2f);//scale according to how good the level is
         float howDeepAmI = (float)(depth * depth) / (averageMaxDepth * averageMaxDepth);//scale quadratically with depth
                                                                                         //		float howDeepAmI = (float)(depth) / (averageMaxDepth);//scale linearly with depth
         return (int)(deepestAmount * howDeepAmI);
@@ -623,7 +623,7 @@ public class MakeWalls : MonoBehaviour {
             GameObject objSpawned = r.SpawnItem(g, LootContainer.transform);
             Game.RepositionHeight(objSpawned, Height.OnFloor);
             if (objSpawned.name.Contains("ExoticTile")) {
-                objSpawned.GetComponent<LetterTile>().SetLetter(w.GetRandomChar());
+                objSpawned.GetComponent<LetterTile>().SetLetter(w.GetRandomNonSourceChar());
                 objSpawned.GetComponent<LetterTile>().SetLifespan(Random.Range(10, 16));
             } else if (objSpawned.name.Contains("InfiniteTile")) {
                 objSpawned.GetComponent<LetterTile>().SetLetter(w.GetRandomVowel());

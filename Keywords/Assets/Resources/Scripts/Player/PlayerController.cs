@@ -147,7 +147,7 @@ public class PlayerController : MonoBehaviour {
         }
 
         //debug
-        aimIndicator.transform.position = (Vector2)transform.position + aim;
+        aimIndicator.transform.position = (Vector2)transform.position + aim_raw;
         float trigger_percentage = (trigger + 1) / 2;
         Color trigger_color = (1 - trigger_percentage) * GetComponent<SpriteRenderer>().color;
         aimIndicator.GetComponent<SpriteRenderer>().color = new Color(trigger_color.r, trigger_color.g, trigger_color.b);

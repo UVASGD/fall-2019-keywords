@@ -181,7 +181,11 @@ public class Words : MonoBehaviour {
         return currentSourceChars[Random.Range(0, currentSourceChars.Count)];
     }
 
-    public char GetRandomChar() {
+    public char GetRandomNonSourceChar() {
+        char result = 'a';
+        do {
+            result = (char)Random.Range(Game.ascii_a, Game.ascii_z + 1);
+        } while (currentSourceChars.Contains(result));
         return (char)Random.Range(Game.ascii_a, Game.ascii_z + 1);
     }
 
