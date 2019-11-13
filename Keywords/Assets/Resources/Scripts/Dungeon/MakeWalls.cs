@@ -117,7 +117,7 @@ public class MakeWalls : MonoBehaviour {
         GenerateWallsAndLoot();
         //PlaceDebugDoors();
         PlaceFogOfWar();
-        MakeLoot();
+        MakeLetterTiles();
         print("level Score: " + GetComponent<Words>().levelScore);
     }
     #endregion
@@ -390,7 +390,7 @@ public class MakeWalls : MonoBehaviour {
         if (depth == 1) {
             return 2;
         }
-        int deepestAmount = (int)(w.levelScore * w.humanKnowledgeFactor);//scale according to how good the level is
+        int deepestAmount = (int)((w.minWordsForLevel * w.humanKnowledgeFactor + w.levelScore * w.humanKnowledgeFactor) / 2f);//scale according to how good the level is
         float howDeepAmI = (float)(depth * depth) / (averageMaxDepth * averageMaxDepth);//scale quadratically with depth
                                                                                         //		float howDeepAmI = (float)(depth) / (averageMaxDepth);//scale linearly with depth
         return (int)(deepestAmount * howDeepAmI);
@@ -525,24 +525,24 @@ public class MakeWalls : MonoBehaviour {
         return new Vector3(basePosition.x + x * cellSize, basePosition.y - y * cellSize, basePosition.z);
     }
     GameObject PlaceRightDoorAt(int x, int y, int keyNum) {
-        GameObject.Instantiate(WallSmall, GetCellPositionFor(x, y) + new Vector3(cellSize * 0.5f, cellSize * smallWallOffset, 0f), vertical, WallContainer.transform);
-        GameObject newDoor = GameObject.Instantiate(Door, GetCellPositionFor(x, y) + new Vector3(cellSize * 0.5f, 0f, 0f), vertical, DoorContainer.transform);
-        GameObject.Instantiate(WallSmall, GetCellPositionFor(x, y) + new Vector3(cellSize * 0.5f, -cellSize * smallWallOffset, 0f), vertical, WallContainer.transform);
+        Instantiate(WallSmall, GetCellPositionFor(x, y) + new Vector3(cellSize * 0.5f, cellSize * smallWallOffset, 0f), vertical, WallContainer.transform);
+        GameObject newDoor = Instantiate(Door, GetCellPositionFor(x, y) + new Vector3(cellSize * 0.5f, 0f, 0f), vertical, DoorContainer.transform);
+        Instantiate(WallSmall, GetCellPositionFor(x, y) + new Vector3(cellSize * 0.5f, -cellSize * smallWallOffset, 0f), vertical, WallContainer.transform);
         newDoor.GetComponent<Door>().keyNum = keyNum;
         return newDoor;
     }
     GameObject PlaceBottomDoorAt(int x, int y, int keyNum) {
-        GameObject.Instantiate(WallSmall, GetCellPositionFor(x, y) + new Vector3(cellSize * smallWallOffset, -cellSize * 0.5f, 0f), Quaternion.identity, WallContainer.transform);
-        GameObject newDoor = GameObject.Instantiate(Door, GetCellPositionFor(x, y) + new Vector3(0f, -cellSize * 0.5f, 0f), Quaternion.identity, DoorContainer.transform);
-        GameObject.Instantiate(WallSmall, GetCellPositionFor(x, y) + new Vector3(-cellSize * smallWallOffset, -cellSize * 0.5f, 0f), Quaternion.identity, WallContainer.transform);
+        Instantiate(WallSmall, GetCellPositionFor(x, y) + new Vector3(cellSize * smallWallOffset, -cellSize * 0.5f, 0f), Quaternion.identity, WallContainer.transform);
+        GameObject newDoor = Instantiate(Door, GetCellPositionFor(x, y) + new Vector3(0f, -cellSize * 0.5f, 0f), Quaternion.identity, DoorContainer.transform);
+        Instantiate(WallSmall, GetCellPositionFor(x, y) + new Vector3(-cellSize * smallWallOffset, -cellSize * 0.5f, 0f), Quaternion.identity, WallContainer.transform);
         newDoor.GetComponent<Door>().keyNum = keyNum;
         return newDoor;
     }
     GameObject PlaceRightWallAt(int x, int y) {
-        return GameObject.Instantiate(Wall, GetCellPositionFor(x, y) + new Vector3(cellSize * 0.5f, 0f, 0f), vertical, WallContainer.transform);
+        return Instantiate(Wall, GetCellPositionFor(x, y) + new Vector3(cellSize * 0.5f, 0f, 0f), vertical, WallContainer.transform);
     }
     GameObject PlaceBottomWallAt(int x, int y) {
-        return GameObject.Instantiate(Wall, GetCellPositionFor(x, y) + new Vector3(0f, -cellSize * 0.5f, 0f), Quaternion.identity, WallContainer.transform);
+        return Instantiate(Wall, GetCellPositionFor(x, y) + new Vector3(0f, -cellSize * 0.5f, 0f), Quaternion.identity, WallContainer.transform);
     }
     GameObject PlaceRightWallAndMaybeDoorAt(int x, int y, float doorChance, int weight) {
         float randy = Random.value;
@@ -559,15 +559,15 @@ public class MakeWalls : MonoBehaviour {
         return PlaceBottomWallAt(x, y);
     }
     void PlaceBottomRightCornerAt(int x, int y) {
-        GameObject.Instantiate(Corner, GetCellPositionFor(x, y) + new Vector3(cellSize * 0.5f, -cellSize * 0.5f, 0f), Quaternion.identity, WallContainer.transform);
+        Instantiate(Corner, GetCellPositionFor(x, y) + new Vector3(cellSize * 0.5f, -cellSize * 0.5f, 0f), Quaternion.identity, WallContainer.transform);
     }
 
     void PlaceFogOfWarAt(int x, int y) {
         if (!InBounds(x, y)) {
-            GameObject.Instantiate(Void, GetCellPositionFor(x, y), Quaternion.identity, FogOfWarContainer.transform);
+            Instantiate(Void, GetCellPositionFor(x, y), Quaternion.identity, FogOfWarContainer.transform);
             return;
         }
-        GameObject newFog = GameObject.Instantiate(Void, GetCellPositionFor(x, y), Quaternion.identity, FogOfWarContainer.transform);
+        GameObject newFog = Instantiate(Void, GetCellPositionFor(x, y), Quaternion.identity, FogOfWarContainer.transform);
         newFog.GetComponent<FogOfWar>().room = rooms[x, y];
         //GameObject debugDoor = Instantiate(Door, newFog.transform.position, Quaternion.identity, newFog.transform);
         //debugDoor.GetComponent<Door>().keyNum = rooms[x, y];
@@ -586,6 +586,7 @@ public class MakeWalls : MonoBehaviour {
     #region loot
     //will be called on each room in the dungeon during GenerateWallsAndLoot
     void MakeLootInRoom(Room r, int depth) {
+        Words w = GetComponent<Words>();
         // room is the place to spawn, depth is the difficulty
         List<GameObject> thingsToSpawn = new List<GameObject>();
         List<GameObject> itemPool = new List<GameObject>(loot);
@@ -595,7 +596,7 @@ public class MakeWalls : MonoBehaviour {
 
         // figure out what to spawn in r
         if (depth == 1) {
-            PlaceGoodTilesInRoom(r);
+            PlaceGoodTilesInRoom(r, 8);
         }
         if (depth == 2) {
             PlaceTilesInRoom(r, 2);
@@ -621,30 +622,37 @@ public class MakeWalls : MonoBehaviour {
         foreach (GameObject g in thingsToSpawn) {
             GameObject objSpawned = r.SpawnItem(g, LootContainer.transform);
             Game.RepositionHeight(objSpawned, Height.OnFloor);
+            if (objSpawned.name.Contains("ExoticTile")) {
+                objSpawned.GetComponent<LetterTile>().SetLetter(w.GetRandomChar());
+                objSpawned.GetComponent<LetterTile>().SetLifespan(Random.Range(10, 16));
+            } else if (objSpawned.name.Contains("InfiniteTile")) {
+                objSpawned.GetComponent<LetterTile>().SetLetter(w.GetRandomVowel());
+                objSpawned.GetComponent<LetterTile>().SetLifespan(16);
+            }
         }
     }
 
-    void MakeLoot() {
+    void MakeLetterTiles() {
         print("making some sweet loot");
         Words w = GetComponent<Words>();
         for (int i = 0; i < (width * width) / 16; i++) {
-            GameObject newTile = GameObject.Instantiate(Tile, Random.insideUnitCircle * cellSize * width / 2, Quaternion.Euler(0, 0, Random.Range(-30f, 30f)), TileContainer.transform);
+            GameObject newTile = Instantiate(Tile, Random.insideUnitCircle * cellSize * width / 2, Quaternion.Euler(0, 0, Random.Range(-30f, 30f)), TileContainer.transform);
             newTile.GetComponent<LetterTile>().SetLetter(w.GetRandomSourceChar());
             newTile.GetComponent<LetterTile>().SetLifespan(Random.Range(3, 9));
         }
     }
 
-    void PlaceGoodTilesInRoom(Room r) {
+    void PlaceGoodTilesInRoom(Room r, int numTiles) {
         Words w = GetComponent<Words>();
         string startingTileSet = "";
         do {
             startingTileSet = "";
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < numTiles; i++) {
                 startingTileSet += w.GetRandomSourceChar();
             }
         } while (w.GetScoreExact(startingTileSet) < DoorBaseWeightFor(3));
         char[] startingTiles = startingTileSet.ToCharArray();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < numTiles; i++) {
             GameObject newTile = r.SpawnItem(Tile, Quaternion.Euler(0, 0, Random.Range(-30f, 30f)), TileContainer.transform);
             newTile.GetComponent<LetterTile>().SetLetter(startingTiles[i]);
             newTile.GetComponent<LetterTile>().SetLifespan(Random.Range(3, 9));
