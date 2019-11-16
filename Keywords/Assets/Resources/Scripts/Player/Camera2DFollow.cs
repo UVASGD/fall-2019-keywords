@@ -128,7 +128,7 @@ namespace UnityStandardAssets._2D {
             string targetName = "Shake-" + initialTarget.name;
             GameObject shakePoint = new GameObject(targetName);
             target = shakePoint.transform;
-            print("Start Target: " + target.name);
+            //print("Start Target: " + target.name);
             damping = shakeDamping;
             while (t < duration) {
                 target.position = initialTarget.position + (Vector3)GetRandomGaussian() * shakeMagnitude;
@@ -138,7 +138,7 @@ namespace UnityStandardAssets._2D {
             Destroy(target.gameObject);
             damping = initialDamping;
             target = initialTarget;
-            print("Target: " + target.name + "   InitialTarget: " + initialTarget.name);
+            //print("Target: " + target.name + "   InitialTarget: " + initialTarget.name);
             shaking = false;
 		}
 
