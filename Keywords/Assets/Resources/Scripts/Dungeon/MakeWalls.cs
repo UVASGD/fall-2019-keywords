@@ -107,7 +107,7 @@ public class MakeWalls : MonoBehaviour {
     void Awake() {
         Destroy(GetComponent<SpriteRenderer>());
         cellSize = Wall.transform.localScale.x + Corner.transform.localScale.x - epsilon;
-        print("cellSize: " + cellSize);
+        // print("cellSize: " + cellSize);
         basePosition = new Vector3(-(width / 2) * cellSize, (width / 2) * cellSize, 0f);
         vertical = Quaternion.Euler(0, 0, 90);
         FogOfWarArray = new GameObject[width, width];
@@ -118,7 +118,7 @@ public class MakeWalls : MonoBehaviour {
         //PlaceDebugDoors();
         PlaceFogOfWar();
         MakeLetterTiles();
-        print("level Score: " + GetComponent<Words>().levelScore);
+        // print("level Score: " + GetComponent<Words>().levelScore);
     }
     #endregion
 
@@ -316,7 +316,7 @@ public class MakeWalls : MonoBehaviour {
     //FRONT END
     //runs BFS starting from player starting rooms.
     void GenerateWallsAndLoot() {
-        print("makin dungeon walls");
+        // print("makin dungeon walls");
         Queue<Room> q1 = new Queue<Room>();//all rooms at the current layer of depth
         Queue<Room> q2 = new Queue<Room>();//all rooms at the next layer of depth
 
@@ -470,7 +470,7 @@ public class MakeWalls : MonoBehaviour {
     }
 
     void PlaceFogOfWar() {
-        print("placing fog of war objects");
+        // print("placing fog of war objects");
         for (int x = -3; x < width + 3; x++) {
             for (int y = -3; y < width + 3; y++) {
                 PlaceFogOfWarAt(x, y);
@@ -633,7 +633,7 @@ public class MakeWalls : MonoBehaviour {
     }
 
     void MakeLetterTiles() {
-        print("making some sweet loot");
+        // print("making some sweet loot");
         Words w = GetComponent<Words>();
         for (int i = 0; i < (width * width) / 16; i++) {
             GameObject newTile = Instantiate(Tile, Random.insideUnitCircle * cellSize * width / 2, Quaternion.Euler(0, 0, Random.Range(-30f, 30f)), TileContainer.transform);
