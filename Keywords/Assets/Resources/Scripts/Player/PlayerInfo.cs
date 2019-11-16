@@ -61,7 +61,15 @@ public class PlayerInfo : MonoBehaviour {
                 KeyCode.Joystick3Button5,
                 KeyCode.Joystick4Button5
             };
-        } else {
+        } else if (controlName == "Start") {
+            controlSet = new KeyCode[4] {
+                KeyCode.Joystick1Button7,
+                KeyCode.Joystick2Button7,
+                KeyCode.Joystick3Button7,
+                KeyCode.Joystick4Button7
+            };
+        }
+        else {
             print("control name not recognized");
         }
         return controlSet[playerNum - 1];
@@ -106,7 +114,15 @@ public class PlayerInfo : MonoBehaviour {
                 KeyCode.Joystick3Button14,
                 KeyCode.Joystick4Button14
             };
-        } else {
+        } else if (controlName == "RightBumper") {
+            controlSet = new KeyCode[4] {
+                KeyCode.Joystick1Button9,
+                KeyCode.Joystick2Button9,
+                KeyCode.Joystick3Button9,
+                KeyCode.Joystick4Button9
+            };
+        }
+        else {
             print("control name not recognized");
         }
         return controlSet[playerNum - 1];
