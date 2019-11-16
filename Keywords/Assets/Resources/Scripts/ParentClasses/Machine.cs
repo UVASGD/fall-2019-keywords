@@ -22,7 +22,9 @@ public class Machine : MonoBehaviour {
     }
 
     protected virtual void Update() {
-        if (slot.GetComponent<GridSquare>().tile != null) {
+        if (slot.GetComponent<GridSquare>().tile
+            && slot.GetComponent<GridSquare>().tile.GetComponent<LetterTile>()
+            && !slot.GetComponent<GridSquare>().tile.GetComponent<LetterTile>().infinite) {
             ticking = true;
             if (!performedFirstAction) {
                 PerformMachineAction();
