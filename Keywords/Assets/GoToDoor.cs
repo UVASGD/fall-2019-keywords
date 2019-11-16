@@ -21,7 +21,6 @@ public class GoToDoor : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         if (!target) return;
-        print("REEEEEEEE");
         transform.position = Vector3.SmoothDamp(transform.position, target.position, ref velocity, 1f);
 
         if (Vector3.SqrMagnitude(transform.position - target.position) < 0.1f * 0.1f) {
