@@ -105,7 +105,7 @@ namespace UnityStandardAssets._2D {
         }
 
 		public void Shake (float duration) {
-            if (shaking) StopCoroutine("ShakeCR");
+            if (shaking) return;
             StartCoroutine(ShakeCR(duration));
 		}
 
@@ -126,15 +126,19 @@ namespace UnityStandardAssets._2D {
             float initialDamping = damping;
             Transform initialTarget = target;
             string targetName = "Shake-" + initialTarget.name;
-            target = new GameObject(targetName).transform;
+            GameObject shakePoint = new GameObject(targetName);
+            target = shakePoint.transform;
+            print("Start Target: " + target.name);
             damping = shakeDamping;
             while (t < duration) {
                 target.position = initialTarget.position + (Vector3)GetRandomGaussian() * shakeMagnitude;
                 t += Time.deltaTime;
                 yield return new WaitForEndOfFrame();
             }
+            Destroy(target.gameObject);
             damping = initialDamping;
             target = initialTarget;
+            print("Target: " + target.name + "   InitialTarget: " + initialTarget.name);
             shaking = false;
 		}
 
