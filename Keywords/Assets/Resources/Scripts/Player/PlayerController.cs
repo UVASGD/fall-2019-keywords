@@ -489,6 +489,7 @@ public class PlayerController : MonoBehaviour {
         setMovHandle(0.002f, duration);
         setMovSpeed(pMovSpeedBase * 0.2f, duration);
         bonkSFX.Play();
+        camScript.Shake(0.35f);
     }
 
     private void DropAll(Vector2 dir) {
