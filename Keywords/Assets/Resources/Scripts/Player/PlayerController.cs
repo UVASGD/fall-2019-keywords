@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour {
     [HideInInspector]
     public bool longIdle;
     private bool longIdleLF;
-
+    GameObject stars;
     private float timeSinceLastMoved;
 
     public Vector2 lsInput;
@@ -73,6 +73,7 @@ public class PlayerController : MonoBehaviour {
     #region start
     // Use this for initialization
     void Start() {
+        stars = transform.Find("Stars").gameObject;
         rb = GetComponent<Rigidbody2D>();
         rb.freezeRotation = true;
         me = GetComponent<PlayerInfo>();
@@ -116,6 +117,11 @@ public class PlayerController : MonoBehaviour {
     #region update
     // Update is called once per frame
     void Update() {
+        stars = transform.Find("Stars").gameObject;
+        foreach (Transform star in stars.transform)
+        {
+            star.gameObject.GetComponent<Star>().Circle(transform.position);
+        }
         // Pause menu
         if (GameManager.instance.pauseMenu.GetPaused()) {
             float lsVert = GetAxis("Vertical");
@@ -481,15 +487,22 @@ public class PlayerController : MonoBehaviour {
 
     public void Bonk(Vector2 dir, float duration) {
         bonkSFX = GameManager.instance.sfx["BonkSFX"];
-
         DropAll(dir);
         rb.velocity = dir.normalized * 0.5f;
         // fx and stuff
         // play tweety bird animation
         setMovHandle(0.002f, duration);
+        StartCoroutine(StarsActive(duration));
         setMovSpeed(pMovSpeedBase * 0.2f, duration);
         bonkSFX.Play();
     }
+    public IEnumerator StarsActive(float duration)
+    {
+        stars.SetActive(true);
+        yield return new WaitForSeconds(10f);
+        stars.SetActive(false);
+    }
+
 
     private void DropAll(Vector2 dir) {
         //iterate over inventory slots
