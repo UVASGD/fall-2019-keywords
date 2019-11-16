@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4429579189190186249}
+  - component: {fileID: 485224367772249585}
   m_Layer: 0
   m_Name: BlinkFX
   m_TagString: Untagged
@@ -31,6 +32,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &485224367772249585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4429579189190186248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77a310643d4c34c4fbf438ed18a6784b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifetime: 4
 --- !u!1 &4429579189875300367
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,7 +267,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.43718857, g: 0.31181028, b: 0.46226418, a: 0.7490196}
+      maxColor: {r: 0.2618131, g: 0.05918476, b: 0.3584906, a: 0.6039216}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -835,7 +849,7 @@ ParticleSystem:
           m_RotationOrder: 4
     arc:
       value: 360
-      mode: 0
+      mode: 3
       spread: 0
       speed:
         serializedVersion: 2
@@ -1006,7 +1020,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 50
+        scalar: 20
         minScalar: 30
         maxCurve:
           serializedVersion: 2

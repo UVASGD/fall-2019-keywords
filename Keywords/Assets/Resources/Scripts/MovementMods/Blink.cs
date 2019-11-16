@@ -10,6 +10,7 @@ public class Blink : Fireable {
     private float DISTANCE = 1.2f;
     private LayerMask WALL_LAYER_MASK;
     AudioSource blinkSFX;
+    public GameObject blinkParticles;
 
     protected override void Start() {
         base.Start();
@@ -26,7 +27,9 @@ public class Blink : Fireable {
         RaycastHit2D raycast = Physics2D.CircleCast(dest, 0.05f, Vector2.up, 0.01f, WALL_LAYER_MASK);
         blinkSFX.Play();
         if (raycast.collider == null) {
+            Instantiate(blinkParticles,rb.position,Quaternion.identity,null);
             rb.position = dest;
+            Instantiate(blinkParticles, rb.position, Quaternion.identity, null);
         } else {
             cooldown.Reset();
             // Debug.Log("Blink denied by " + raycast.collider.gameObject.name);

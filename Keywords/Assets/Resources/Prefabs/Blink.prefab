@@ -144,3 +144,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldownTime: 8
   DASH_SPEED: 3000
+  blinkParticles: {fileID: 4429579189190186248, guid: 3c9d000bf7ac04a1aba7723f3338b390,
+    type: 3}
