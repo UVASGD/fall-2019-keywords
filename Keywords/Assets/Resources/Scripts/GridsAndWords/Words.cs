@@ -251,7 +251,7 @@ public class Words : MonoBehaviour {
                 randomword = numletterwords[Random.Range(0, numletterwords.Length)];
                 score = GetScore(randomword);
             }
-            print(randomword + score);
+            // print(randomword + score);
             result.Add(randomword);
         }
         return result.ToArray();

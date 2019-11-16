@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections;
 
 namespace UnityStandardAssets._2D {
     public class Camera2DFollow : MonoBehaviour {
@@ -22,6 +23,10 @@ namespace UnityStandardAssets._2D {
         private Vector3 m_LastTargetPosition;
         private Vector3 m_CurrentVelocity;
         private Vector3 m_LookAheadPos;
+        
+        private bool shaking;
+        public float shakeMagnitude = 1f;
+        public float shakeDamping = 0f;
 
         // Use this for initialization
         private void Start() {
@@ -33,6 +38,7 @@ namespace UnityStandardAssets._2D {
             cam = GetComponent<Camera>();
             zoomTargets[0] = cam.orthographicSize;
             zoomTargetIndex = 0;
+            shaking = false;
         }
 
         private void ConstructCullingMask(int playerNum) {
@@ -97,6 +103,44 @@ namespace UnityStandardAssets._2D {
                 }
             }
         }
+
+		public void Shake (float duration) {
+            if (shaking) return;
+            StartCoroutine(ShakeCR(duration));
+		}
+
+        private Vector2 GetRandomGaussian () {
+            float v1 = UnityEngine.Random.value;
+            float v2 = UnityEngine.Random.value;
+            float r = Mathf.Sqrt(-2 * Mathf.Log10(v1));
+            float theta = 2 * Mathf.PI * v2;
+
+            float x = r * Mathf.Cos(theta);
+            float y = r * Mathf.Sin(theta);
+            return new Vector2(x, y);
+        }
+
+		private IEnumerator ShakeCR (float duration) {
+            shaking = true;
+            float t = 0f;
+            float initialDamping = damping;
+            Transform initialTarget = target;
+            string targetName = "Shake-" + initialTarget.name;
+            GameObject shakePoint = new GameObject(targetName);
+            target = shakePoint.transform;
+            print("Start Target: " + target.name);
+            damping = shakeDamping;
+            while (t < duration) {
+                target.position = initialTarget.position + (Vector3)GetRandomGaussian() * shakeMagnitude;
+                t += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+            Destroy(target.gameObject);
+            damping = initialDamping;
+            target = initialTarget;
+            print("Target: " + target.name + "   InitialTarget: " + initialTarget.name);
+            shaking = false;
+		}
 
         public void ToggleZoom() {
             isZooming = true;

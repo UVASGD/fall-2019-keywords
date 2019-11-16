@@ -9,7 +9,7 @@ public class PauseMenu : MonoBehaviour {
 
     private void Start() {
         PauseMenuUI = transform.Find("PauseMenu").gameObject;
-        print("aguheuhguheg " + PauseMenuUI.name);
+        // print("aguheuhguheg " + PauseMenuUI.name);
     }
 
     private void Update() {
