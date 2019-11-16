@@ -2061,6 +2061,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: doors
+      value: 
+      objectReference: {fileID: 541289254}
+    - target: {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: keyUI
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6672107738324264240, guid: 25d26f1ffb97540048bf7196146c6dfa,
         type: 3}
       propertyPath: playerNum
@@ -2086,16 +2096,6 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 545235387}
-    - target: {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa,
-        type: 3}
-      propertyPath: doors
-      value: 
-      objectReference: {fileID: 541289254}
-    - target: {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa,
-        type: 3}
-      propertyPath: keyUI
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6672107738324264232, guid: 25d26f1ffb97540048bf7196146c6dfa,
         type: 3}
       propertyPath: m_Color.r
@@ -2252,6 +2252,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: doors
+      value: 
+      objectReference: {fileID: 541289254}
+    - target: {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: keyUI
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6672107738324264240, guid: 25d26f1ffb97540048bf7196146c6dfa,
         type: 3}
       propertyPath: playerNum
@@ -2277,16 +2287,6 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 987614327}
-    - target: {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa,
-        type: 3}
-      propertyPath: doors
-      value: 
-      objectReference: {fileID: 541289254}
-    - target: {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa,
-        type: 3}
-      propertyPath: keyUI
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6672107738324264232, guid: 25d26f1ffb97540048bf7196146c6dfa,
         type: 3}
       propertyPath: m_Color.r
@@ -4325,6 +4325,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: doors
+      value: 
+      objectReference: {fileID: 541289254}
+    - target: {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa,
+        type: 3}
+      propertyPath: keyUI
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6672107738324264240, guid: 25d26f1ffb97540048bf7196146c6dfa,
         type: 3}
       propertyPath: playerNum
@@ -4350,16 +4360,6 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 662210674}
-    - target: {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa,
-        type: 3}
-      propertyPath: doors
-      value: 
-      objectReference: {fileID: 541289254}
-    - target: {fileID: 6672107738324264244, guid: 25d26f1ffb97540048bf7196146c6dfa,
-        type: 3}
-      propertyPath: keyUI
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6672107738324264232, guid: 25d26f1ffb97540048bf7196146c6dfa,
         type: 3}
       propertyPath: m_Color.r
