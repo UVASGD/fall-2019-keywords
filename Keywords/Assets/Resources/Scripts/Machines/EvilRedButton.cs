@@ -15,5 +15,7 @@ public class EvilRedButton : Machine {
         //TODO: if not toggled already, freeze all tiles in place on all grids and toggled = true
         //if toggled already, unfreeze all tiles on all grids and toggled = false
         //TODO: keep track of which player has activated the machine. Each player can only activate it twice
+
+        base.PerformMachineAction();
     }
 }

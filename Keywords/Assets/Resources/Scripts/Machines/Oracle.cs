@@ -25,6 +25,8 @@ public class Oracle : Machine {
             tile.GetComponent<LetterTile>().Die();
             slot.GetComponent<GridSquare>().tile = null;
         }
+
+        base.PerformMachineAction();
         //TODO: make piece of paper object with this word instead of printing
     }
 }
