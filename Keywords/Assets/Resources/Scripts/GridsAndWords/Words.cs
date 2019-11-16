@@ -96,7 +96,7 @@ public class Words : MonoBehaviour {
     void Start() {
         GetKeySFX = GameObject.Find("GetKeySFX").GetComponent<AudioSource>();
         AlreadyMadeWordSFX = GameObject.Find("AlreadyMadeWordSFX").GetComponent<AudioSource>();
-        BigKeySFX = GameManager.instance.sfx["BigKeySFX"];
+        BigKeySFX = GameManager.instance.sfx["MakeLongWordSFX"];
     }
 
     public string GetDefinition(string word) {
@@ -234,7 +234,7 @@ public class Words : MonoBehaviour {
             } else {
                 GetKeySFX.Play();
             }
-           
+
 
             GameManager.GetTextOverlayHandler(playerNum).CreateWord(word);
             return true;
