@@ -8,5 +8,6 @@ public class Deleter : Machine {
         GameObject tile = slot.GetComponent<GridSquare>().tile;
         tile.GetComponent<LetterTile>().Die();
         slot.GetComponent<GridSquare>().tile = null;
+        base.PerformMachineAction();
     }
 }

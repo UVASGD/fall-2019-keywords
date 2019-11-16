@@ -58,6 +58,7 @@ public class Words : MonoBehaviour {
     public float humanKnowledgeFactor = 0.7f; //approximately what percentage of words less than 8 letters long does the average player actually know?
 
     private AudioSource GetKeySFX;
+    private AudioSource BigKeySFX;
     private AudioSource AlreadyMadeWordSFX;
 
     void Awake() {
@@ -95,6 +96,7 @@ public class Words : MonoBehaviour {
     void Start() {
         GetKeySFX = GameObject.Find("GetKeySFX").GetComponent<AudioSource>();
         AlreadyMadeWordSFX = GameObject.Find("AlreadyMadeWordSFX").GetComponent<AudioSource>();
+        BigKeySFX = GameManager.instance.sfx["BigKeySFX"];
     }
 
     public string GetDefinition(string word) {
@@ -227,7 +229,12 @@ public class Words : MonoBehaviour {
             unmadeLevelWords.Remove(word);
             madeWords.Add(word);
             madeLevelWords.Add(word);
-            GetKeySFX.Play();
+            if (word.Length >= 6) {
+                BigKeySFX.Play();
+            } else {
+                GetKeySFX.Play();
+            }
+           
 
             GameManager.GetTextOverlayHandler(playerNum).CreateWord(word);
             return true;
@@ -244,7 +251,7 @@ public class Words : MonoBehaviour {
                 randomword = numletterwords[Random.Range(0, numletterwords.Length)];
                 score = GetScore(randomword);
             }
-            print(randomword + score);
+            // print(randomword + score);
             result.Add(randomword);
         }
         return result.ToArray();

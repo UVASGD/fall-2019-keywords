@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
     public static GameManager instance;
@@ -51,6 +52,7 @@ public class GameManager : MonoBehaviour {
             cameras[2] = GameObject.Find("Camera3").GetComponent<Camera>();
             cameras[3] = GameObject.Find("Camera4").GetComponent<Camera>();
         }
+        SceneManager.sceneLoaded += FindPauseMenu;
         sfx = new Dictionary<string, AudioSource>();
         GameObject sfxContainer = GameObject.Find("SFX");
         foreach (Transform child in sfxContainer.transform) {
@@ -59,7 +61,6 @@ public class GameManager : MonoBehaviour {
             }
         }
     }
-
     public static GameObject[] GetPlayers() {
         return instance.players;
     }
@@ -82,5 +83,11 @@ public class GameManager : MonoBehaviour {
 
     public static Camera GetCamera(int playerNum) {
         return instance.cameras[playerNum - 1];
+    }
+
+    private void FindPauseMenu(Scene scene, LoadSceneMode mode) {
+        if (!pauseMenu) {
+            pauseMenu = GameObject.Find("Menu").GetComponent<PauseMenu>();
+        }
     }
 }

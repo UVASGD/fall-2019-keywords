@@ -8,6 +8,7 @@ public delegate void CollisionEvent(Collision2D collision);
 
 public class PlayerController : MonoBehaviour {
     #region fields
+    private bool allInputDisabled;
     private Rigidbody2D rb;
     private Inventory inventory;
 
@@ -123,9 +124,11 @@ public class PlayerController : MonoBehaviour {
             star.gameObject.GetComponent<Star>().Circle(transform.position);
         }
         // Pause menu
+        if (Input.GetKeyDown(StartButton)) {
+            GameManager.instance.pauseMenu.Toggle();
+        }
         if (GameManager.instance.pauseMenu.GetPaused()) {
             float lsVert = GetAxis("Vertical");
-            print(lsVert);
             if (!ls_pressed && Mathf.Abs(lsVert) > lsPressThreshold) {
                 ls_pressed = true;
                 if (lsVert > 0f) {
@@ -134,11 +137,12 @@ public class PlayerController : MonoBehaviour {
 
                 }
             }
-        }
-        if (Input.GetKeyDown(StartButton)) {
-            GameManager.instance.pauseMenu.Toggle();
+            return;
         }
 
+        if (allInputDisabled) {
+            return;
+        }
 
         //movement
         //rb.velocity = pMovSpeed * lsInput;
@@ -495,6 +499,7 @@ public class PlayerController : MonoBehaviour {
         StartCoroutine(StarsActive(duration));
         setMovSpeed(pMovSpeedBase * 0.2f, duration);
         bonkSFX.Play();
+        camScript.Shake(0.35f);
     }
     public IEnumerator StarsActive(float duration)
     {

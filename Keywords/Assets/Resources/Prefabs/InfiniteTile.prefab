@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 9025715065563310000}
   - component: {fileID: 4424814682436285935}
   m_Layer: 9
-  m_Name: SpecialLetterTile
+  m_Name: InfiniteTile
   m_TagString: LetterTile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,6 +236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   letter: 101
   lifespan: 16
+  infinite: 1
 --- !u!50 &50236903801542184
 Rigidbody2D:
   serializedVersion: 4

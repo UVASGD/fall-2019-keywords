@@ -9,10 +9,12 @@ public class Blink : Fireable {
     private float DASH_SPEED = 3000f;
     private float DISTANCE = 1.2f;
     private LayerMask WALL_LAYER_MASK;
+    AudioSource blinkSFX;
 
     protected override void Start() {
         base.Start();
         WALL_LAYER_MASK = LayerMask.GetMask("Wall");
+        blinkSFX = GameManager.instance.sfx["BlinkSFX"];
     }
 
     public override void Fire(Vector2 v, GameObject firingPlayer) {
@@ -22,6 +24,7 @@ public class Blink : Fireable {
         Rigidbody2D rb = firingPlayer.GetComponent<Rigidbody2D>();
         Vector2 dest = rb.position + v * DISTANCE;
         RaycastHit2D raycast = Physics2D.CircleCast(dest, 0.05f, Vector2.up, 0.01f, WALL_LAYER_MASK);
+        blinkSFX.Play();
         if (raycast.collider == null) {
             rb.position = dest;
         } else {

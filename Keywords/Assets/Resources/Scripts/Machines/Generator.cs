@@ -10,5 +10,7 @@ public class Generator : Machine {
         Destroy(tile);
         slot.GetComponent<GridSquare>().tile = null;
         //TODO: find all other machines (besides this one) and complete their cooldowns
+
+        base.PerformMachineAction();
     }
 }

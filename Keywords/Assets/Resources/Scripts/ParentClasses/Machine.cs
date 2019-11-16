@@ -9,6 +9,7 @@ public class Machine : MonoBehaviour {
     private float timer;
     protected bool ticking;
     private bool performedFirstAction;
+    AudioSource dingSFX;
 
     // Use this for initialization
     protected virtual void Start() {
@@ -19,10 +20,14 @@ public class Machine : MonoBehaviour {
 
         slot.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
         slot.GetComponent<GridSquare>().normalColor = GetComponent<SpriteRenderer>().color;
+
+        dingSFX = GameManager.instance.sfx["DingSFX"];
     }
 
     protected virtual void Update() {
-        if (slot.GetComponent<GridSquare>().tile != null) {
+        if (slot.GetComponent<GridSquare>().tile
+            && slot.GetComponent<GridSquare>().tile.GetComponent<LetterTile>()
+            && !slot.GetComponent<GridSquare>().tile.GetComponent<LetterTile>().infinite) {
             ticking = true;
             if (!performedFirstAction) {
                 PerformMachineAction();
@@ -45,7 +50,7 @@ public class Machine : MonoBehaviour {
     }
 
     protected virtual void PerformMachineAction() {
-        print("Im a machine doin a thing");
+        dingSFX.Play();
     }
 
 }

@@ -8,5 +8,7 @@ public class DumbWaiter : Machine {
         //get tile
         GameObject tile = slot.GetComponent<GridSquare>().tile;
         //TODO: pass this tile down to next level (or something similar)
+
+        base.PerformMachineAction();
     }
 }

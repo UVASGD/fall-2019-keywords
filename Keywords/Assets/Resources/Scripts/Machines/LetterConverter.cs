@@ -16,5 +16,7 @@ public class LetterConverter : Machine {
 
         //cost: 1 tile lifespan
         tile.DecLifespan();
+
+        base.PerformMachineAction();
     }
 }
