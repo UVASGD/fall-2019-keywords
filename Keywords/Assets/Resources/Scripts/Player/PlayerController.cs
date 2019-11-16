@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour {
     private KeyCode AButton;
     private KeyCode BButton;
     private KeyCode YButton;
+    private KeyCode StartButton;
 
     private float pMovSpeedBase = 2.2f;
     private float pMovHandleBase = 0.8f; // Player movmement "handling" when player is "slow" (within max speed)
@@ -50,6 +51,8 @@ public class PlayerController : MonoBehaviour {
     private float timeSinceLastMoved;
 
     public Vector2 lsInput;
+    private bool ls_pressed;
+    const float lsPressThreshold = 0.75f;
     private Func<string, float> GetAxis;
 
     private GameObject aimIndicator;
@@ -82,6 +85,24 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        // Pause menu
+        if (GameManager.instance.pauseMenu.GetPaused()) {
+            float lsVert = GetAxis("Vertical");
+            print(lsVert);
+            if (!ls_pressed && Mathf.Abs(lsVert) > lsPressThreshold) {
+                ls_pressed = true;
+                if (lsVert > 0f) {
+
+                } else {
+
+                }
+            }
+        }
+        if (Input.GetKeyDown(StartButton)) {
+            GameManager.instance.pauseMenu.Toggle();
+        }
+
+
         //movement
         //rb.velocity = pMovSpeed * lsInput;
 
@@ -243,6 +264,7 @@ public class PlayerController : MonoBehaviour {
         YButton = me.GetKeyCode("Y");
         LeftBumper = me.GetKeyCode("LeftBumper");
         RightBumper = me.GetKeyCode("RightBumper");
+        StartButton = me.GetKeyCode("Start");
         GetAxis = me.GetAxisWindows;
         if (Game.IsOnOSX) {
             GetAxis = me.GetAxisOSX;

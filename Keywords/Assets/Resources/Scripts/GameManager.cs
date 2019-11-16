@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour {
     public GameObject[] players;
     public TextOverlayHandler[] textOverlayHandlers;
     public Camera[] cameras;
+    public PauseMenu pauseMenu;
 
     private void Awake() {
         if (instance) {
