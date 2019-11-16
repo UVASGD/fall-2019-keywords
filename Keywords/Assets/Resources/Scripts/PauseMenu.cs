@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PauseMenu : MonoBehaviour
-{
+public class PauseMenu : MonoBehaviour {
     private bool isPaused = false;
-    public GameObject PauseMenuUI;
+    private GameObject PauseMenuUI;
+
+    private void Start() {
+        PauseMenuUI = transform.Find("PauseMenu").gameObject;
+        print("aguheuhguheg " + PauseMenuUI.name);
+    }
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -15,8 +19,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     public void Toggle() {
-        if (isPaused) { Resume(); }
-        else { Pause(); }
+        if (isPaused) { Resume(); } else { Pause(); }
     }
 
     public void Resume() {

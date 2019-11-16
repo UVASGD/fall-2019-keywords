@@ -3,14 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Oracle : Machine {
-    public Words words = GameManager.words;
+    [HideInInspector]
+    public Words words;
+    WordDisplayer word_displayer;
+
+    private void Awake() {
+        word_displayer = transform.Find("WordDisplayer").GetComponent<WordDisplayer>();
+    }
+
+    protected override void Start() {
+        base.Start();
+        words = GameManager.words;
+    }
 
     protected override void PerformMachineAction() {
         //delete tile
         GameObject tile = slot.GetComponent<GridSquare>().tile;
-        Destroy(tile);
-        slot.GetComponent<GridSquare>().tile = null;
+        int tileLifespan = tile.GetComponent<LetterTile>().lifespan;
+        if (tileLifespan >= 4) {
+            word_displayer.DisplayWord(words.GetRandomUnmadeWord(Mathf.Clamp(tileLifespan, 4, 10)));
+            tile.GetComponent<LetterTile>().Die();
+            slot.GetComponent<GridSquare>().tile = null;
+        }
         //TODO: make piece of paper object with this word instead of printing
-        print(words.GetRandomUnmadeWord());
     }
 }

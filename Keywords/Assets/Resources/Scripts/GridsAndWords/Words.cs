@@ -6,8 +6,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 
 public class Words : MonoBehaviour {
-    public string dictionaryFilePath;
-
     public int minWordLength; //minimum word length allowed
     public int maxWordLength; //maximum word length allowed
     public int maxWordLengthForScoring; //maximum word length taken into consideration when determining how many words can be made from a set of letters
@@ -41,6 +39,7 @@ public class Words : MonoBehaviour {
         {'q',575}
     };
     private const int sumOfCharacterFrequencies = 323730;
+    public readonly char[] vowels = { 'a', 'e', 'i', 'o', 'u' };
     private const int numLettersInSource = 7;
     string[] words;//all words in the dictionary file
     public Dictionary<string, string> dictionary;
@@ -54,18 +53,17 @@ public class Words : MonoBehaviour {
     List<char> currentSourceChars;//all chars in the current source word.
     [HideInInspector]
     public int levelScore;//how fertile are the characters in the level?
+    public readonly int minWordsForLevel = 75;
+    public readonly int maxWordsForLevel = 250;
     public float humanKnowledgeFactor = 0.7f; //approximately what percentage of words less than 8 letters long does the average player actually know?
 
     private AudioSource GetKeySFX;
     private AudioSource AlreadyMadeWordSFX;
 
     void Awake() {
-        //words = File.ReadAllLines(wordsFilePath);
-        //words = words.Where(w => w.Length >= minWordLength && w.Length <= maxWordLength).ToArray();
         var regex = new Regex(Regex.Escape("o"));
         var newText = regex.Replace("Hello World", "Foo", 1);
-        //string[] wordDefPairs = Resources.Load<TextAsset>(dictionaryFilePath).text.Split('\n');
-        string[] wordDefPairs = File.ReadAllLines(dictionaryFilePath);
+        string[] wordDefPairs = Resources.Load<TextAsset>("Dictionary").text.Split('\n');
         words = new string[wordDefPairs.Length];
         dictionary = new Dictionary<string, string>();
 
@@ -81,9 +79,9 @@ public class Words : MonoBehaviour {
             words[i] = lowercaseWord;
             dictionary.Add(lowercaseWord, currentDef);
         }
-
+        dictionary.Remove("");
         numletterwords = GetNumLetterWords();
-        currentSourceWords = GetSomeSourceWords(numLevels, 75, 250);
+        currentSourceWords = GetSomeSourceWords(numLevels, minWordsForLevel, maxWordsForLevel);
         currentSourceChars = new List<char>();
         madeLevelWords = new List<string>();
         madeLevelWordsForEachPlayer = new List<string>[4];
@@ -183,6 +181,18 @@ public class Words : MonoBehaviour {
         return currentSourceChars[Random.Range(0, currentSourceChars.Count)];
     }
 
+    public char GetRandomNonSourceChar() {
+        char result = 'a';
+        do {
+            result = (char)Random.Range(Game.ascii_a, Game.ascii_z + 1);
+        } while (currentSourceChars.Contains(result));
+        return result;
+    }
+
+    public char GetRandomVowel() {
+        return vowels[Random.Range(0, vowels.Length)];
+    }
+
     //if not global grid:
     //	if owner's made words contains word:
     //		return false
@@ -240,7 +250,16 @@ public class Words : MonoBehaviour {
         return result.ToArray();
     }
 
-    public string GetRandomUnmadeWord() {
-        return unmadeLevelWords[Random.Range(0, unmadeLevelWords.Count)];
+    public string GetRandomUnmadeWord(int word_length = 4) {
+        List<string> result = new List<string>(
+                                from s in unmadeLevelWords
+                                where s.Length == word_length
+                                select s);
+        if (result.Count == 0) {
+            if (unmadeLevelWords.Count > 0)
+                return unmadeLevelWords[Random.Range(0, unmadeLevelWords.Count)];
+            return "haha stinky poopoo";
+        }
+        return result[Random.Range(0, result.Count)];
     }
 }

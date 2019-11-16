@@ -4,7 +4,10 @@ using UnityEngine;
 using System;
 using UnityStandardAssets._2D;
 
+public delegate void CollisionEvent(Collision2D collision);
+
 public class PlayerController : MonoBehaviour {
+    #region fields
     private Rigidbody2D rb;
     private Inventory inventory;
 
@@ -26,7 +29,7 @@ public class PlayerController : MonoBehaviour {
     private float pMovSpeedBase = 2.2f;
     private float pMovHandleBase = 0.8f; // Player movmement "handling" when player is "slow" (within max speed)
     private float pMovHandleFast = 0.05f; // When moving fast, drag/handling
-    private bool pMovDisable = false; // Disables basic movement mechanics entirely; shouldn't be needed
+    private bool pMovDisable = false; // Disables basic movement mechanics entirely
     private float pMovSpeed;
     private Coroutine pMovSpeedResetCoroutine;
     private float pMovHandle; // Current value of movement handling: used to lerp velocity to input velocity (0 to 1)
@@ -36,6 +39,7 @@ public class PlayerController : MonoBehaviour {
     const float epsilon = 0.001f;
 
     private int playerNum;
+    private Color mycolor;
     private int keyboardControlledPlayer = 0; //for debug / testing without controllers - one player can be controlled by the keyboard at a time;
 
     //Idle variables
@@ -62,6 +66,11 @@ public class PlayerController : MonoBehaviour {
     const float triggerPressThreshold = 0.9f;
     const float triggerReleaseThreshold = 0.1f;
 
+    private Fist fist;
+    public CollisionEvent CollisionEvent;
+    #endregion
+
+    #region start
     // Use this for initialization
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -71,7 +80,9 @@ public class PlayerController : MonoBehaviour {
         playerNum = me.playerNum;
         inventory = GetComponent<Inventory>();
         TileContainer = GameObject.Find("Tiles");
+        mycolor = GetComponent<SpriteRenderer>().color;
         aimIndicator = transform.Find("AimIndicator").gameObject;
+        aimIndicator.GetComponent<SpriteRenderer>().color = mycolor;
         SetControls();
         //Idle
         timeSinceLastMoved = 0f;
@@ -81,8 +92,28 @@ public class PlayerController : MonoBehaviour {
         // movement
         pMovSpeed = pMovSpeedBase;
         pMovHandle = pMovHandleBase;
-    }
 
+        // punching
+        fist = transform.Find("Fist").GetComponent<Fist>();
+        transform.FindDeepChild("FistSprite").GetComponent<SpriteRenderer>().color = mycolor;
+    }
+    private void SetControls() {
+        AButton = me.GetKeyCode("A");
+        BButton = me.GetKeyCode("B");
+        YButton = me.GetKeyCode("Y");
+        StartButton = me.GetKeyCode("Start");
+        LeftBumper = me.GetKeyCode("LeftBumper");
+        RightBumper = me.GetKeyCode("RightBumper");
+        GetAxis = me.GetAxisWindows;
+        if (Game.IsOnOSX) {
+            GetAxis = me.GetAxisOSX;
+        } else if (Game.IsOnLinux) {
+            GetAxis = me.GetAxisLinux;
+        }
+    }
+    #endregion
+
+    #region update
     // Update is called once per frame
     void Update() {
         // Pause menu
@@ -129,7 +160,7 @@ public class PlayerController : MonoBehaviour {
                         f.Fire(aim, gameObject);
                     }
                 } else {
-                    // TODO: PUNCH
+                    Punch(aim);
                 }
             }
         }
@@ -138,8 +169,11 @@ public class PlayerController : MonoBehaviour {
         }
 
         //debug
-        aimIndicator.transform.position = (Vector2)transform.position + aim;
-        aimIndicator.GetComponent<SpriteRenderer>().color = new Color(trigger, trigger, trigger);
+        aimIndicator.transform.position = (Vector2)transform.position + aim_raw;
+        float trigger_percentage = (trigger + 1) / 2;
+        Color trigger_color = (1 - trigger_percentage) * GetComponent<SpriteRenderer>().color;
+        aimIndicator.GetComponent<SpriteRenderer>().color = new Color(trigger_color.r, trigger_color.g, trigger_color.b);
+
         float ltrigger = GetAxis("LTrigger");
         if (!lt_pressed && ltrigger > triggerPressThreshold) {
             //switch inventory slot
@@ -226,57 +260,16 @@ public class PlayerController : MonoBehaviour {
             axisX = GetAxis("Horizontal");
             axisY = GetAxis("Vertical");
         }
-        lsInput = new Vector2(axisX, axisY);
+        //lsInput = new Vector2(axisX, axisY);
         //rb.velocity = pMovSpeed * lsInput; 
         HandleMovement(axisX, axisY);
         // if (Input.GetKeyDown(AButton) || (me.playerNum == keyboardControlledPlayer && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E)))) {
         //     DebugDash(axisX, axisY);
         // }
     }
+    #endregion
 
-    private void HandleMovement(float GetAxisX, float GetAxisY) {
-        // Store movement vector.
-
-        if (pMovDisable) return;
-
-        Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1) * pMovSpeed;
-        float handling = pMovHandle;
-        // When above player max speed, we let reduce control so that momentum is preserved
-        if (rb.velocity.magnitude > pMovSpeed) {
-            handling = pMovHandleFast;
-        } else {
-            // can't reverse direction ezpz
-            if (Vector2.Dot(rb.velocity, move) < -0.1) {
-                handling *= 0.3f;
-            }
-        }
-
-        rb.velocity = Vector2.Lerp(rb.velocity, move, handling);
-    }
-    private void DebugDash(float GetAxisX, float GetAxisY) {
-        Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1);
-        rb.velocity = move * pMovSpeed * 6;
-    }
-
-    private void SetControls() {
-        AButton = me.GetKeyCode("A");
-        BButton = me.GetKeyCode("B");
-        YButton = me.GetKeyCode("Y");
-        LeftBumper = me.GetKeyCode("LeftBumper");
-        RightBumper = me.GetKeyCode("RightBumper");
-        StartButton = me.GetKeyCode("Start");
-        GetAxis = me.GetAxisWindows;
-        if (Game.IsOnOSX) {
-            GetAxis = me.GetAxisOSX;
-        } else if (Game.IsOnLinux) {
-            GetAxis = me.GetAxisLinux;
-        }
-    }
-
-    public void SetActiveSquare(GameObject newSquare) {
-        activeSquare = newSquare;
-    }
-
+    #region interact
     //pseudocode of this:
     /*
 	x = is player hovering over a grid square?
@@ -324,14 +317,15 @@ public class PlayerController : MonoBehaviour {
     }
     private void Drop() {
         //		print ("dropping");
-        if (activeSquare == null) {//do not drop if over a grid
-            GameObject itemToDrop = inventory.Get();
-            if (itemToDrop != null) {
-                itemToDrop.transform.SetParent(TileContainer.transform);
-                Game.RepositionHeight(itemToDrop, Height.OnFloor);
-                Game.EnablePhysics(itemToDrop);
-                inventory.Remove();
+        GameObject itemToDrop = inventory.Get();
+        if (itemToDrop != null) {
+            itemToDrop.transform.SetParent(TileContainer.transform);
+            Game.RepositionHeight(itemToDrop, Height.OnFloor);
+            Game.EnablePhysics(itemToDrop);
+            if (itemToDrop.GetComponent<Fireable>()) {
+                itemToDrop.GetComponent<Fireable>().Drop();
             }
+            inventory.Remove();
         }
     }
     private void PlaceOnSquare() {
@@ -344,8 +338,10 @@ public class PlayerController : MonoBehaviour {
         itemToPlace.GetComponent<Placeable>().PlaceOn(activeSquare, gameObject);
         inventory.Remove();
         if (itemToPlace.GetComponent<Flag>()) {
-            inventory.Remove();
-            activeSquare.transform.parent.gameObject.GetComponent<GridControl>().SetOwnership(playerNum, gameObject);
+            GridControl gc = activeSquare.transform.parent.gameObject.GetComponent<GridControl>();
+            if (gc) {
+                activeSquare.transform.parent.gameObject.GetComponent<GridControl>().SetOwnership(playerNum, gameObject);
+            }
         }
     }
 
@@ -383,6 +379,9 @@ public class PlayerController : MonoBehaviour {
         if (closestObject.GetComponent<Flag>()) {
             closestObject.GetComponent<Flag>().PickFlag(playerNum, gameObject);
         }
+        if (closestObject.GetComponent<Fireable>()) {
+            closestObject.GetComponent<Fireable>().PickUp(gameObject);
+        }
         //put item in inventory
         //inventory.Add(closestObject);
         closestObject.transform.SetParent(transform);
@@ -391,6 +390,36 @@ public class PlayerController : MonoBehaviour {
         closestObject.transform.rotation = Quaternion.identity;
         Game.RepositionHeight(closestObject, Height.Held);
         Game.DisablePhysics(closestObject);
+    }
+
+    public void SetActiveSquare(GameObject newSquare) {
+        activeSquare = newSquare;
+    }
+    #endregion
+
+    #region handlemovement
+    private void HandleMovement(float GetAxisX, float GetAxisY) {
+        // Store movement vector.
+
+        if (pMovDisable) return;
+
+        Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1) * pMovSpeed;
+        float handling = pMovHandle;
+        // When above player max speed, we let reduce control so that momentum is preserved
+        if (rb.velocity.magnitude > pMovSpeed) {
+            handling = pMovHandleFast;
+        } else {
+            // can't reverse direction ezpz
+            if (Vector2.Dot(rb.velocity, move) < -0.1) {
+                handling *= 0.3f;
+            }
+        }
+
+        rb.velocity = Vector2.Lerp(rb.velocity, move, handling);
+    }
+    private void DebugDash(float GetAxisX, float GetAxisY) {
+        Vector2 move = Vector2.ClampMagnitude(new Vector2(GetAxisX, GetAxisY), 1);
+        rb.velocity = move * pMovSpeed * 6;
     }
 
     // movement modifier access
@@ -437,6 +466,83 @@ public class PlayerController : MonoBehaviour {
         yield return new WaitForSeconds(duration);
         pMovSpeed = value;
     }
+    #endregion
 
+    #region punchandbonk
 
+    AudioSource bonkSFX;
+
+    public void Punch(Vector2 dir) {
+        if (pMovDisable)
+            return;
+        fist.Punch(dir);
+
+    }
+
+    public void Bonk(Vector2 dir, float duration) {
+        bonkSFX = GameManager.instance.sfx["BonkSFX"];
+
+        DropAll(dir);
+        rb.velocity = dir.normalized * 0.5f;
+        // fx and stuff
+        // play tweety bird animation
+        setMovHandle(0.002f, duration);
+        setMovSpeed(pMovSpeedBase * 0.2f, duration);
+        bonkSFX.Play();
+    }
+
+    private void DropAll(Vector2 dir) {
+        //iterate over inventory slots
+        /*
+         * itemstoscatter = list<gameobject>
+         * for each slot:
+         *      if(item):
+         *          put ref into itemstoscatter
+         *          remove item
+         * for each item in itemstoscatter:
+         *      determine direction and distance
+         *      if (rigidbody and dynamic):
+         *          set velocity with dir and distance (scaled to drag)
+         *      else
+         *          raycast in direction
+         *          if you run into something
+         *              set the distance accordingly
+         *          lerp position
+         *   
+        */
+        //float maxDropDistance = 10f;
+        List<GameObject> itemsToScatter = new List<GameObject>();
+        for (int i = 0; i < inventory.Size(); i++) {
+            GameObject item = inventory.Get();
+            if (item) {
+                itemsToScatter.Add(item);
+                Drop();
+            }
+            inventory.IncSlot();
+        }
+        float maxDropDistance = 10f;
+        foreach (GameObject item in itemsToScatter) {
+            Vector2 targetVector = (dir + UnityEngine.Random.insideUnitCircle).normalized * UnityEngine.Random.Range(0f, maxDropDistance);
+            Rigidbody2D item_rb = item.GetComponent<Rigidbody2D>();
+            if (item_rb && !item_rb.isKinematic) {
+                float rb_scaleFactor = 10000f;
+                //item_rb.velocity = targetVector * item_rb.drag * rb_scaleFactor;
+                item_rb.velocity = targetVector * rb_scaleFactor;
+            } else {
+                RaycastHit2D[] hits = Physics2D.RaycastAll(item.transform.position, targetVector.normalized, targetVector.magnitude);
+                foreach (RaycastHit2D hit in hits) {
+                    if (hit.collider.gameObject != gameObject) {
+                        targetVector = hit.point;
+                        break;
+                    }
+                }
+                item.transform.position = targetVector;
+            }
+        }
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision) {
+        CollisionEvent?.Invoke(collision);
+    }
+    #endregion
 }

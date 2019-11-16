@@ -25,6 +25,7 @@ public class Hook : MonoBehaviour {
 
         Game.EnablePhysics(gameObject);
         transform.parent = null; //Separate Hook from GrapplingHook Body
+        gameObject.GetComponent<Rigidbody2D>().position = rbPlayer.position;
         hasFired = true;
         hasHit = false;
         this.dir = dir;

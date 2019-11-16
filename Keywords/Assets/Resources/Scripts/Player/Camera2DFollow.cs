@@ -90,7 +90,6 @@ namespace UnityStandardAssets._2D {
             if (isZooming) {
                 float zoomTarget = zoomTargets[zoomTargetIndex];
                 float zoomDiff = cam.orthographicSize - zoomTarget;
-                print("zoom diff: " + zoomDiff);
                 cam.orthographicSize = zoomTarget + zoomDiff * zoomRate;
                 if (Math.Abs(zoomDiff) <= epsilon) {
                     isZooming = false;

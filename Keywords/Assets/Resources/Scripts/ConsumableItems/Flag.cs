@@ -20,8 +20,8 @@ public class Flag : Placeable {
 
     public override void PlaceOn(GameObject square, GameObject placingPlayer) {
         base.PlaceOn(square, placingPlayer);
-        bool claiming = square.transform.parent.gameObject.GetComponent<GridControl>().claimable;
-        if (claiming) {
+        GridControl gc = square.transform.parent.gameObject.GetComponent<GridControl>();
+        if (gc && gc.claimable) {
             square.transform.parent.gameObject.GetComponent<GridControl>().SetOwnership(ownerNum, placingPlayer);
             Color ownerColor = placingPlayer.GetComponent<SpriteRenderer>().color;
             float d = 0.7f;
