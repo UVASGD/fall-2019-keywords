@@ -173,7 +173,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 2
+  orthographic size: 4
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -272,6 +272,75 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 25d26f1ffb97540048bf7196146c6dfa, type: 3}
+--- !u!1001 &1237051819479688212
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1237051819506481738, guid: 7d40b294c7c70415cb3dacbf8c9ba6b6,
+        type: 3}
+      propertyPath: m_Name
+      value: GlowingOrbFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 1237051819506481739, guid: 7d40b294c7c70415cb3dacbf8c9ba6b6,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 1237051819506481739, guid: 7d40b294c7c70415cb3dacbf8c9ba6b6,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 1237051819506481739, guid: 7d40b294c7c70415cb3dacbf8c9ba6b6,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1237051819506481739, guid: 7d40b294c7c70415cb3dacbf8c9ba6b6,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1237051819506481739, guid: 7d40b294c7c70415cb3dacbf8c9ba6b6,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1237051819506481739, guid: 7d40b294c7c70415cb3dacbf8c9ba6b6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1237051819506481739, guid: 7d40b294c7c70415cb3dacbf8c9ba6b6,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1237051819506481739, guid: 7d40b294c7c70415cb3dacbf8c9ba6b6,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1237051819506481739, guid: 7d40b294c7c70415cb3dacbf8c9ba6b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1237051819506481739, guid: 7d40b294c7c70415cb3dacbf8c9ba6b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1237051819506481739, guid: 7d40b294c7c70415cb3dacbf8c9ba6b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7d40b294c7c70415cb3dacbf8c9ba6b6, type: 3}
 --- !u!1001 &4429579188299996252
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -283,6 +352,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BlinkFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 4429579189190186248, guid: 3c9d000bf7ac04a1aba7723f3338b390,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4429579189190186249, guid: 3c9d000bf7ac04a1aba7723f3338b390,
         type: 3}
