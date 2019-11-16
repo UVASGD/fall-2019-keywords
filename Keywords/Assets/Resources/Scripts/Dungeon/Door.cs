@@ -35,4 +35,8 @@ public class Door : MonoBehaviour {
             unlockDoorSFX.Play();
         }
     }
+
+    public bool CheckLocked(int playerNum) {
+        return locked[playerNum-1];
+    }
 }
