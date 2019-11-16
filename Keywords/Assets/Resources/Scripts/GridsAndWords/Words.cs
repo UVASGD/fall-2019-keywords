@@ -55,7 +55,7 @@ public class Words : MonoBehaviour {
     public int levelScore;//how fertile are the characters in the level?
     public readonly int minWordsForLevel = 75;
     public readonly int maxWordsForLevel = 250;
-    public float humanKnowledgeFactor = 0.7f; //approximately what percentage of words less than 8 letters long does the average player actually know?
+    public float humanKnowledgeFactor = 0.6f; //approximately what percentage of words less than 8 letters long does the average player actually know?
 
     private AudioSource GetKeySFX;
     private AudioSource BigKeySFX;
@@ -99,6 +99,9 @@ public class Words : MonoBehaviour {
         BigKeySFX = GameManager.instance.sfx["MakeLongWordSFX"];
     }
 
+    public string GetSourceWord(int level){
+        return currentSourceWords[level];
+    }
     public string GetDefinition(string word) {
         return dictionary[word];
     }

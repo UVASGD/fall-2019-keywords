@@ -5267,7 +5267,6 @@ GameObject:
   - component: {fileID: 1569157445}
   - component: {fileID: 1569157444}
   - component: {fileID: 1569157447}
-  - component: {fileID: 1569157449}
   - component: {fileID: 1569157450}
   m_Layer: 0
   m_Name: GM
@@ -5321,9 +5320,8 @@ MonoBehaviour:
   - {fileID: 1328259343011714, guid: 21bd9984c89ec4823aba0c59616c3931, type: 3}
   - {fileID: 1832904815124234, guid: f05112c426a92254a83b82ea2315e869, type: 3}
   - {fileID: 1832904815124234, guid: 9ff508d6e02504db8a6c76f22b364b39, type: 3}
-  - {fileID: 7014245699955614395, guid: 3c700b2a758836b4aaef73414e4528d8, type: 3}
-  - {fileID: 8342463343188959437, guid: 5793925995b49455ba01e913690976d2, type: 3}
   - {fileID: 1328259343011714, guid: 7d0507b58c53d4dd79cc140af0430199, type: 3}
+  - {fileID: 8342463343188959437, guid: 5793925995b49455ba01e913690976d2, type: 3}
 --- !u!114 &1569157445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5433,18 +5431,6 @@ MonoBehaviour:
   - {fileID: 545235387}
   - {fileID: 987614327}
   pauseMenu: {fileID: 1344598364}
---- !u!114 &1569157449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1569157443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b654e178802de4567a93b3cd7d262a86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1569157450
 MonoBehaviour:
   m_ObjectHideFlags: 0

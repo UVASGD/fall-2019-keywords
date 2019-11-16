@@ -15,7 +15,7 @@ public class GoToDoor : MonoBehaviour {
     public void GoTo(Transform t) {
         target = t;
         traversing = true;
-        print("Going to " + target.name + " Traversing = " + traversing);
+        //print("Going to " + target.name + " Traversing = " + traversing);
     }
 
     // Update is called once per frame

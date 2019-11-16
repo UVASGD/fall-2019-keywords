@@ -27,6 +27,5 @@ public class Oracle : Machine {
         }
 
         base.PerformMachineAction();
-        //TODO: make piece of paper object with this word instead of printing
     }
 }

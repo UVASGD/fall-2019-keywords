@@ -118,7 +118,7 @@ public class MakeWalls : MonoBehaviour {
         //PlaceDebugDoors();
         PlaceFogOfWar();
         MakeLetterTiles();
-        // print("level Score: " + GetComponent<Words>().levelScore);
+        print("source word: " + GetComponent<Words>().GetSourceWord(0) + " score: " + GetComponent<Words>().levelScore);
     }
     #endregion
 
@@ -143,7 +143,7 @@ public class MakeWalls : MonoBehaviour {
             return;
         }
         int num = 6;//how far are player starting rooms from the center?
-        MakeRoom(halfX, halfX, 7, 7, -5);//Boss Chamber
+        MakeRoom(halfX, halfX, 7, 7, -5);//Central Chamber
         MakeRoom(halfX - num, halfX - num, 3, 3, -1);//P1 start
         MakeRoom(halfX + num, halfX - num, 3, 3, -2);//P2 start
         MakeRoom(halfX - num, halfX + num, 3, 3, -3);//P3 start
@@ -390,9 +390,9 @@ public class MakeWalls : MonoBehaviour {
         if (depth == 1) {
             return 2;
         }
-        int deepestAmount = (int)((80 + w.levelScore * w.humanKnowledgeFactor) / 2f);//scale according to how good the level is
+        int deepestAmount = (int)(w.levelScore * w.humanKnowledgeFactor);//scale according to how good the level is
         float howDeepAmI = (float)(depth * depth) / (averageMaxDepth * averageMaxDepth);//scale quadratically with depth
-                                                                                        //		float howDeepAmI = (float)(depth) / (averageMaxDepth);//scale linearly with depth
+        //float howDeepAmI = (float)(depth) / (averageMaxDepth);//scale linearly with depth
         return (int)(deepestAmount * howDeepAmI);
     }
 
@@ -586,6 +586,7 @@ public class MakeWalls : MonoBehaviour {
     #region loot
     //will be called on each room in the dungeon during GenerateWallsAndLoot
     void MakeLootInRoom(Room r, int depth) {
+        //print("room " + r.roomID + " depth: " + depth);
         Words w = GetComponent<Words>();
         // room is the place to spawn, depth is the difficulty
         List<GameObject> thingsToSpawn = new List<GameObject>();
@@ -601,7 +602,7 @@ public class MakeWalls : MonoBehaviour {
         if (depth == 2) {
             PlaceTilesInRoom(r, 2);
         }
-        if (depth > 1 && r.squares.Count > 3) {//do not make loot in starting rooms or really small rooms
+        if (depth > 1 && r.squares.Count > 3 && r.roomID != -5) {//do not make loot in starting rooms or really small rooms or the central chamber
             float diceRoll = Random.value;
             if (diceRoll < 0.4f) {//spawn loot 40% of the time (for now, this is too often for real gameplay)
                 thingsToSpawn.Add(itemPool[Random.Range(0, itemPool.Count)]);
@@ -612,7 +613,7 @@ public class MakeWalls : MonoBehaviour {
         }
         if (r.squares.Count > 30) {//spawn grid in center of big enough room
             if (depth >= 4) { //do not spawn new grids too close to starting rooms
-                if (r.roomID != -5) {//do not spawn in boss chamber
+                if (r.roomID != -5) {//do not spawn in central chamber
                     r.SpawnItemAtCenter(Grid, GridContainer.transform);
                 }
             }

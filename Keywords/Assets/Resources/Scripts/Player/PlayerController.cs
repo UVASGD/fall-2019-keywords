@@ -169,7 +169,7 @@ public class PlayerController : MonoBehaviour {
             if (aim.Equals(Vector2.zero)) {
                 inventory.IncSlot();
             } else {
-                print("activating held item");
+                //print("activating held item");
                 if (inventory.Get()) {
                     Fireable f = inventory.Get().GetComponent<Fireable>();
                     if (f) {
@@ -329,7 +329,7 @@ public class PlayerController : MonoBehaviour {
         }
     }
     private void PerformItemAction() {
-        print("performing super cool item action");
+        //print("performing super cool item action");
     }
     private void Drop() {
         //		print ("dropping");
