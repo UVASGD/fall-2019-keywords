@@ -468,19 +468,26 @@ public class PlayerController : MonoBehaviour {
     #endregion
 
     #region punchandbonk
+
+    AudioSource bonkSFX;
+
     public void Punch(Vector2 dir) {
         if (pMovDisable)
             return;
         fist.Punch(dir);
+
     }
 
     public void Bonk(Vector2 dir, float duration) {
+        bonkSFX = GameManager.instance.sfx["BonkSFX"];
+
         DropAll(dir);
         rb.velocity = dir.normalized * 0.5f;
         // fx and stuff
         // play tweety bird animation
         setMovHandle(0.002f, duration);
         setMovSpeed(pMovSpeedBase * 0.2f, duration);
+        bonkSFX.Play();
     }
 
     private void DropAll(Vector2 dir) {
