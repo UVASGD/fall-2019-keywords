@@ -38,16 +38,14 @@ public class PlayerInfo : MonoBehaviour {
                 KeyCode.Joystick3Button1,
                 KeyCode.Joystick4Button1
             };
-        } else if (controlName == "Y")
-        {
+        } else if (controlName == "Y") {
             controlSet = new KeyCode[4] {
                 KeyCode.Joystick1Button3,
                 KeyCode.Joystick2Button3,
                 KeyCode.Joystick3Button3,
                 KeyCode.Joystick4Button3
             };
-        }
-        else if (controlName == "LeftBumper") {
+        } else if (controlName == "LeftBumper") {
             controlSet = new KeyCode[4] {
                 KeyCode.Joystick1Button4,
                 KeyCode.Joystick2Button4,
@@ -60,6 +58,13 @@ public class PlayerInfo : MonoBehaviour {
                 KeyCode.Joystick2Button5,
                 KeyCode.Joystick3Button5,
                 KeyCode.Joystick4Button5
+            };
+        } else if (controlName == "Start") {
+            controlSet = new KeyCode[4] {
+                KeyCode.Joystick1Button7,
+                KeyCode.Joystick2Button7,
+                KeyCode.Joystick3Button7,
+                KeyCode.Joystick4Button7
             };
         } else {
             print("control name not recognized");
@@ -83,16 +88,14 @@ public class PlayerInfo : MonoBehaviour {
                 KeyCode.Joystick3Button17,
                 KeyCode.Joystick4Button17
             };
-        } else if (controlName == "Y")
-        {
+        } else if (controlName == "Y") {
             controlSet = new KeyCode[4] {
                 KeyCode.Joystick1Button19,
                 KeyCode.Joystick2Button19,
                 KeyCode.Joystick3Button19,
                 KeyCode.Joystick4Button19
             };
-        }
-        else if (controlName == "LeftBumper") {
+        } else if (controlName == "LeftBumper") {
             controlSet = new KeyCode[4] {
                 KeyCode.Joystick1Button13,
                 KeyCode.Joystick2Button13,
@@ -105,6 +108,13 @@ public class PlayerInfo : MonoBehaviour {
                 KeyCode.Joystick2Button14,
                 KeyCode.Joystick3Button14,
                 KeyCode.Joystick4Button14
+            };
+        } else if (controlName == "Start") {
+            controlSet = new KeyCode[4] {
+                KeyCode.Joystick1Button9,
+                KeyCode.Joystick2Button9,
+                KeyCode.Joystick3Button9,
+                KeyCode.Joystick4Button9
             };
         } else {
             print("control name not recognized");
