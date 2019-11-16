@@ -38,7 +38,7 @@ public class DoorCollisionCheck : MonoBehaviour {
                     GameObject adoorable = Instantiate(Resources.Load("Prefabs/FX/GlowingOrbFX"), player.transform.position, Quaternion.identity) as GameObject;
                     adoorable.GetComponent<GoToDoor>().GoTo(door.transform);
                     string layerName = "P" + playerNum.ToString();
-                    adoorable.layer = LayerMask.NameToLayer(layerName);
+                    Game.SetLayer(adoorable, LayerMask.NameToLayer(layerName));
                 }
             }
         }
