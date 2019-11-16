@@ -22,7 +22,7 @@ public class Oracle : Machine {
         int tileLifespan = tile.GetComponent<LetterTile>().lifespan;
         if (tileLifespan >= 4) {
             word_displayer.DisplayWord(words.GetRandomUnmadeWord(Mathf.Clamp(tileLifespan, 4, 10)));
-            Destroy(tile);
+            tile.GetComponent<LetterTile>().Die();
             slot.GetComponent<GridSquare>().tile = null;
         }
         //TODO: make piece of paper object with this word instead of printing

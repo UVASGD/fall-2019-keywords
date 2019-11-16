@@ -83,16 +83,7 @@ public class LetterTile : Placeable
         lifespan = newLifespan;
         if (newLifespan == 0)
         {
-            //			print ("tile dead");
-            GridSquare gs = transform.parent.gameObject.GetComponent<GridSquare>();
-            if (gs != null)
-            {
-                gs.SetTile(null);
-            }
-            anim.SetTrigger("Death");
-            Destroy(this.gameObject, .45f);
-        
-            //Destroy(gameObject);
+            Die();
             return;
         }
         string spriteName = "NumberSprites/" + lifespan.ToString();
@@ -133,5 +124,18 @@ public class LetterTile : Placeable
     public void Animate()
     {
         anim.SetTrigger("Flash");
+    }
+    public void Die()
+    {
+        //			print ("tile dead");
+        GridSquare gs = transform.parent.gameObject.GetComponent<GridSquare>();
+        if (gs != null)
+        {
+            gs.SetTile(null);
+        }
+        anim.SetTrigger("Death");
+        Destroy(this.gameObject, .45f);
+ 
+        //Destroy(gameObject);
     }
 }
