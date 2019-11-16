@@ -8,6 +8,7 @@ public delegate void CollisionEvent(Collision2D collision);
 
 public class PlayerController : MonoBehaviour {
     #region fields
+    private bool allInputDisabled;
     private Rigidbody2D rb;
     private Inventory inventory;
 
@@ -117,9 +118,11 @@ public class PlayerController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         // Pause menu
+        if (Input.GetKeyDown(StartButton)) {
+            GameManager.instance.pauseMenu.Toggle();
+        }
         if (GameManager.instance.pauseMenu.GetPaused()) {
             float lsVert = GetAxis("Vertical");
-            print(lsVert);
             if (!ls_pressed && Mathf.Abs(lsVert) > lsPressThreshold) {
                 ls_pressed = true;
                 if (lsVert > 0f) {
@@ -128,11 +131,12 @@ public class PlayerController : MonoBehaviour {
 
                 }
             }
-        }
-        if (Input.GetKeyDown(StartButton)) {
-            GameManager.instance.pauseMenu.Toggle();
+            return;
         }
 
+        if (allInputDisabled) {
+            return;
+        }
 
         //movement
         //rb.velocity = pMovSpeed * lsInput;
