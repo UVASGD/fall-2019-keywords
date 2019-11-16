@@ -30,9 +30,16 @@ public class DoorCollisionCheck : MonoBehaviour {
         foreach (Transform child in doors) {
             Door door = child.gameObject.GetComponent<Door>();
             if (player.keys >= door.keyNum) {
-                //				print ("Ayy");
                 door.Unlock(playerNum);
                 Physics2D.IgnoreCollision(player.gameObject.GetComponent<CircleCollider2D>(), door.GetComponent<BoxCollider2D>());
+                
+                // Create indicator that goes towards the door when it unlocks. If it's close or it's mid/late game
+                if (player.keys > 13 || (door.transform.position - player.transform.position).magnitude < 15f) {
+                    GameObject adoorable = Instantiate(Resources.Load("Prefabs/FX/GlowingOrbFX"), player.transform.position, Quaternion.identity) as GameObject;
+                    adoorable.GetComponent<GoToDoor>().GoTo(door.transform);
+                    string layerName = "P" + playerNum.ToString();
+                    adoorable.layer = LayerMask.NameToLayer(layerName);
+                }
             } else {
                 //				print ("yyA");
                 Physics2D.IgnoreCollision(player.gameObject.GetComponent<CircleCollider2D>(), door.GetComponent<BoxCollider2D>(), false);
