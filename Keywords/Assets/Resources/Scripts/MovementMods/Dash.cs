@@ -7,7 +7,7 @@ public class Dash : Fireable {
     [Range(10f, 100f)]
     private float dashSpeed = 10f, stun_duration = 2f, dashTime = 1f;
     bool dashing;
-
+    AudioSource dashSFX;
 
     public override void PickUp(GameObject player) {
         base.PickUp(player);
@@ -31,6 +31,8 @@ public class Dash : Fireable {
     private IEnumerator DashCR(Vector2 v, Rigidbody2D rb) {
         float t = 0f;
         dashing = true;
+        dashSFX = GameManager.instance.sfx["DashSFX"];
+        dashSFX.Play();
         while (t < .25f) {
             rb.velocity = v * dashSpeed;
             t += Time.deltaTime;
