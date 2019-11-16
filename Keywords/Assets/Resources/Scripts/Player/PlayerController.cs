@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour {
         AButton = me.GetKeyCode("A");
         BButton = me.GetKeyCode("B");
         YButton = me.GetKeyCode("Y");
+        StartButton = me.GetKeyCode("Start");
         LeftBumper = me.GetKeyCode("LeftBumper");
         RightBumper = me.GetKeyCode("RightBumper");
         GetAxis = me.GetAxisWindows;
