@@ -170,10 +170,10 @@ public class GridControl : MonoBehaviour {
         if (wordLength < 6) {
             return 1;
         }
-        if (wordLength == 6) {
+        if (wordLength == 6){
             return 2;
         }
-        return 3;
+        return wordLength - 4;
     }
 
     // set the owner of the grid to the newOwner given its player number

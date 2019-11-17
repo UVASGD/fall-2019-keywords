@@ -20,11 +20,9 @@ public class Oracle : Machine {
         //delete tile
         GameObject tile = slot.GetComponent<GridSquare>().tile;
         int tileLifespan = tile.GetComponent<LetterTile>().lifespan;
-        if (tileLifespan >= 4) {
-            word_displayer.DisplayWord(words.GetRandomUnmadeWord(Mathf.Clamp(tileLifespan, 4, 10)));
-            tile.GetComponent<LetterTile>().Die();
-            slot.GetComponent<GridSquare>().tile = null;
-        }
+        word_displayer.DisplayWord(words.GetRandomUnmadeWord(Mathf.Clamp(tileLifespan, 4, 10)));
+        tile.GetComponent<LetterTile>().Die();
+        slot.GetComponent<GridSquare>().tile = null;
 
         base.PerformMachineAction();
     }
