@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class VisualBomb : Placeable {
     public GameObject indicator;
-    AudioSource VisualBombSFX;
+    AudioSource SwapBombSFX;
     public override void PlaceOn(GameObject square, GameObject placingPlayer) {
-        VisualBombSFX = GameManager.instance.sfx["VisualBombSFX"];
+        SwapBombSFX = GameManager.instance.sfx["SwapBombSFX"];
         base.PlaceOn(square, placingPlayer);
         GridControl gc = square.transform.parent.gameObject.GetComponent<GridControl>();
         if (gc) {
@@ -15,7 +15,7 @@ public class VisualBomb : Placeable {
         }
     }
     void Explode(GridControl grid) {
-        VisualBombSFX.Play();
+        SwapBombSFX.Play();
         int cipher = Random.Range(1, 26);
         foreach (GameObject go in grid.grid) {
             GridSquare gs = go.GetComponent<GridSquare>();
