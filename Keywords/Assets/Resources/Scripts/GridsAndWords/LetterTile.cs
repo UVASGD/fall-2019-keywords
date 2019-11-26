@@ -12,6 +12,8 @@ public class LetterTile : Placeable {
 
     public bool infinite;
 
+    private AudioSource DestroyTileSFX;
+
 
     Animator anim;
 
@@ -20,6 +22,7 @@ public class LetterTile : Placeable {
         words = GameManager.words;
         letterSprite = transform.FindDeepChild("LetterSprite").gameObject;
         numberSprite = transform.FindDeepChild("NumberSprite").gameObject;
+        DestroyTileSFX = GameManager.instance.sfx["DestroyTileSFX"];
         //		SetLetter (words.GetRandomSourceChar ());
         //		SetLetter ((char)Random.Range (97, 123));
         //		SetMatches (Random.Range(3,9));
@@ -114,6 +117,7 @@ public class LetterTile : Placeable {
         if (gs != null) {
             gs.SetTile(null);
         }
+        DestroyTileSFX.Play();
         anim.SetTrigger("Death");
         Destroy(this.gameObject, .45f);
 

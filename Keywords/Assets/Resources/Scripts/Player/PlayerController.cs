@@ -76,8 +76,7 @@ public class PlayerController : MonoBehaviour {
     void Start() {
         stars = transform.Find("Stars").gameObject;
         stars.SetActive(true);
-        foreach (Transform star in stars.transform)
-        {
+        foreach (Transform star in stars.transform) {
             star.gameObject.GetComponent<Star>().Circle(transform.position);
         }
         stars.SetActive(false);
@@ -125,8 +124,7 @@ public class PlayerController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         stars = transform.Find("Stars").gameObject;
-        foreach (Transform star in stars.transform)
-        {
+        foreach (Transform star in stars.transform) {
             star.gameObject.GetComponent<Star>().Circle(transform.position);
         }
         // Pause menu
@@ -507,8 +505,7 @@ public class PlayerController : MonoBehaviour {
         bonkSFX.Play();
         camScript.Shake(0.35f);
     }
-    public IEnumerator StarsActive(float duration)
-    {
+    public IEnumerator StarsActive(float duration) {
         stars.SetActive(true);
         yield return new WaitForSeconds(duration);
         stars.SetActive(false);
