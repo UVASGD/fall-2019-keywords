@@ -251,10 +251,10 @@ public class Words : MonoBehaviour {
     string[] GetSomeSourceWords(int howMany, int lowerThreshold, int upperThreshold) {
         List<string> result = new List<string>();
         for (int i = 0; i < howMany; i++) {
-            string randomword = numletterwords[Random.Range(0, numletterwords.Length)];
-            int score = GetScore(randomword);
-
+            string randomword = "Force process through while loop to check for banned letter combinations";
+            int score = 0;
             bool banned = false;
+
             while (score < lowerThreshold || score > upperThreshold || banned) {
                 randomword = numletterwords[Random.Range(0, numletterwords.Length)];
                 score = GetScore(randomword);
