@@ -45,6 +45,15 @@ public class PlayerInfo : MonoBehaviour {
                 KeyCode.Joystick3Button3,
                 KeyCode.Joystick4Button3
             };
+        } else if (controlName == "X")
+        {
+            controlSet = new KeyCode[4]
+            {
+                KeyCode.Joystick1Button2,
+                KeyCode.Joystick2Button2,
+                KeyCode.Joystick3Button2,
+                KeyCode.Joystick4Button2
+            };
         } else if (controlName == "LeftBumper") {
             controlSet = new KeyCode[4] {
                 KeyCode.Joystick1Button4,
