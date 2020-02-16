@@ -327,11 +327,11 @@ public class MakeWalls : MonoBehaviour {
         Queue<Room> q2 = new Queue<Room>();//all rooms at the next layer of depth
 
         //start with player starting rooms
-        q1.Enqueue(roomGraph[-1]);
+        q1.Enqueue(roomGraph[Player1Start]);
         if (!coop) {
-            q1.Enqueue(roomGraph[-2]);
-            q1.Enqueue(roomGraph[-3]);
-            q1.Enqueue(roomGraph[-4]);
+            q1.Enqueue(roomGraph[Player2Start]);
+            q1.Enqueue(roomGraph[Player3Start]);
+            q1.Enqueue(roomGraph[Player4Start]);
         }
 
         //Make the rest of the stuff
