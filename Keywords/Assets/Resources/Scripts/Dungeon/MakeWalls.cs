@@ -74,6 +74,12 @@ public class MakeWalls : MonoBehaviour {
     [HideInInspector]
     public int[,] rooms;
     Dictionary<int, Room> roomGraph;
+    enum presetRooms{
+        Player1Start = -1,
+        Player2Start = -2,
+        Player3Start = -3,
+        Player4Start = -4
+    };
 
 
 
@@ -144,10 +150,10 @@ public class MakeWalls : MonoBehaviour {
         }
         int num = 6;//how far are player starting rooms from the center?
         MakeRoom(halfX, halfX, 7, 7, -5);//Central Chamber
-        MakeRoom(halfX - num, halfX - num, 3, 3, -1);//P1 start
-        MakeRoom(halfX + num, halfX - num, 3, 3, -2);//P2 start
-        MakeRoom(halfX - num, halfX + num, 3, 3, -3);//P3 start
-        MakeRoom(halfX + num, halfX + num, 3, 3, -4);//P4 start
+        MakeRoom(halfX - num, halfX - num, 3, 3, Player1Start);//P1 start
+        MakeRoom(halfX + num, halfX - num, 3, 3, Player2Start);//P2 start
+        MakeRoom(halfX - num, halfX + num, 3, 3, Player3Start);//P3 start
+        MakeRoom(halfX + num, halfX + num, 3, 3, Player4Start);//P4 start
     }
 
     //is this coordinate in bounds?
