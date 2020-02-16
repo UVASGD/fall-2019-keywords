@@ -74,11 +74,12 @@ public class MakeWalls : MonoBehaviour {
     [HideInInspector]
     public int[,] rooms;
     Dictionary<int, Room> roomGraph;
-    enum presetRooms{
+    enum PresetRooms {
         Player1Start = -1,
         Player2Start = -2,
         Player3Start = -3,
-        Player4Start = -4
+        Player4Start = -4,
+        CentralChamber = -5
     };
 
 
@@ -149,11 +150,11 @@ public class MakeWalls : MonoBehaviour {
             return;
         }
         int num = 6;//how far are player starting rooms from the center?
-        MakeRoom(halfX, halfX, 7, 7, -5);//Central Chamber
-        MakeRoom(halfX - num, halfX - num, 3, 3, Player1Start);//P1 start
-        MakeRoom(halfX + num, halfX - num, 3, 3, Player2Start);//P2 start
-        MakeRoom(halfX - num, halfX + num, 3, 3, Player3Start);//P3 start
-        MakeRoom(halfX + num, halfX + num, 3, 3, Player4Start);//P4 start
+        MakeRoom(halfX, halfX, 7, 7, (int)PresetRooms.CentralChamber);//Central Chamber
+        MakeRoom(halfX - num, halfX - num, 3, 3, (int)PresetRooms.Player1Start);//P1 start
+        MakeRoom(halfX + num, halfX - num, 3, 3, (int)PresetRooms.Player2Start);//P2 start
+        MakeRoom(halfX - num, halfX + num, 3, 3, (int)PresetRooms.Player3Start);//P3 start
+        MakeRoom(halfX + num, halfX + num, 3, 3, (int)PresetRooms.Player4Start);//P4 start
     }
 
     //is this coordinate in bounds?
@@ -327,11 +328,11 @@ public class MakeWalls : MonoBehaviour {
         Queue<Room> q2 = new Queue<Room>();//all rooms at the next layer of depth
 
         //start with player starting rooms
-        q1.Enqueue(roomGraph[Player1Start]);
+        q1.Enqueue(roomGraph[(int)PresetRooms.Player1Start]);
         if (!coop) {
-            q1.Enqueue(roomGraph[Player2Start]);
-            q1.Enqueue(roomGraph[Player3Start]);
-            q1.Enqueue(roomGraph[Player4Start]);
+            q1.Enqueue(roomGraph[(int)PresetRooms.Player2Start]);
+            q1.Enqueue(roomGraph[(int)PresetRooms.Player3Start]);
+            q1.Enqueue(roomGraph[(int)PresetRooms.Player4Start]);
         }
 
         //Make the rest of the stuff
