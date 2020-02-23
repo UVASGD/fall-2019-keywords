@@ -8,6 +8,7 @@ public class Dash : Fireable {
     private float dashSpeed = 10f, stun_duration = 2f, dashTime = 1f;
     bool dashing;
     AudioSource dashSFX;
+    public GameObject particles;
 
     public override void PickUp(GameObject player) {
         base.PickUp(player);
@@ -33,6 +34,7 @@ public class Dash : Fireable {
         dashing = true;
         dashSFX = GameManager.instance.sfx["DashSFX"];
         dashSFX.Play();
+        Instantiate(particles,rb.position,Quaternion.LookRotation(Vector3.forward, new Vector3(v.x, v.y, 0)),null);
         while (t < .25f) {
             rb.velocity = v * dashSpeed;
             t += Time.deltaTime;
