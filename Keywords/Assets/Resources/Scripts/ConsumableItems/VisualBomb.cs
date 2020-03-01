@@ -5,6 +5,7 @@ using UnityEngine;
 public class VisualBomb : Placeable {
     public GameObject indicator;
     AudioSource SwapBombSFX;
+    AudioSource BombTickSFX;
     private bool onGrid = false;
     public float fuseTime = 20f;
     private Cooldown fuse;
@@ -12,6 +13,7 @@ public class VisualBomb : Placeable {
 
     public override void PlaceOn(GameObject square, GameObject placingPlayer) {
         SwapBombSFX = GameManager.instance.sfx["SwapBombSFX"];
+        BombTickSFX = GameManager.instance.sfx["BombTickSFX"];
         base.PlaceOn(square, placingPlayer);
         onGrid = true;
         gc = square.transform.parent.gameObject.GetComponent<GridControl>();
@@ -19,12 +21,13 @@ public class VisualBomb : Placeable {
             fuse = new Cooldown(fuseTime);
         }
         fuse.Start();
-        SwapBombSFX.Play();
+        BombTickSFX.Play();
     }
 
     public override void TakeFrom(GameObject square, GameObject takingPlayer)
     {
         onGrid = false;
+        BombTickSFX.Stop();
         base.TakeFrom(square, takingPlayer);
     }
 
@@ -37,6 +40,7 @@ public class VisualBomb : Placeable {
     }
 
     void Explode(GridControl grid) {
+        BombTickSFX.Stop();
         SwapBombSFX.Play();
         int cipher = Random.Range(1, 26);
         foreach (GameObject go in grid.grid) {
