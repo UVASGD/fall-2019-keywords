@@ -6,9 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Resources/Scenes/MainMenu.unity
+    guid: 6ea645bd5da87014b92dd11181d9db8b
+  - enabled: 1
     path: Assets/Resources/Scenes/Versus.unity
     guid: 9de20d3f5281e445e87b05e1f044d6fc
-  - enabled: 0
+  - enabled: 1
     path: Assets/Resources/Scenes/Coop.unity
     guid: 3e5f496952b1c4fdbaf6c0a5aee93ffa
   m_configObjects: {}
