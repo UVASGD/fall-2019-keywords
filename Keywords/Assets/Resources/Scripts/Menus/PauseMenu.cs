@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour {
     private bool isPaused = false;
     private GameObject PauseMenuUI;
+    private GameObject ResumeButton;
 
     private void Start() {
         PauseMenuUI = transform.Find("PauseMenu").gameObject;
-        // print("aguheuhguheg " + PauseMenuUI.name);
+        ResumeButton = GameObject.Find("ResumeButton");
+        Resume();
     }
 
     private void Update() {
@@ -32,6 +35,7 @@ public class PauseMenu : MonoBehaviour {
         PauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         isPaused = true;
+        EventSystem.current.SetSelectedGameObject(ResumeButton);
     }
 
     public void Restart() {
@@ -39,8 +43,8 @@ public class PauseMenu : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void Quit() {
-        Application.Quit();
+    public void MainMenu() {
+        SceneManager.LoadScene(0);
     }
 
     public bool GetPaused() {

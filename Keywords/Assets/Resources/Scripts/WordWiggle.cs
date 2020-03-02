@@ -11,12 +11,11 @@ public class WordWiggle : MonoBehaviour {
     public float wiggleSpeedMultiplier = 1f;
 
     private Vector3[] initialPositionData;
-    private IEnumerator wiggler;
+    private bool wiggling = false;
 
-    private void Start() {
+    private void Awake() {
         RectTransform[] transforms = this.transform.GetComponentsInChildren<RectTransform>();
         initialPositionData = new Vector3[transforms.Length];
-        wiggler = Wiggle();
 
         // Fill in intiial position data
         for (int i = 0; i < transforms.Length; ++i) {
@@ -24,24 +23,8 @@ public class WordWiggle : MonoBehaviour {
         }
     }
 
-    public void StartWiggle() {
-        StartCoroutine(wiggler);
-    }
-
-    public void StopWiggle() {
-        StopCoroutine(wiggler);
-        ResetPositions();
-    }
-
-    public void ResetPositions() {
-        RectTransform[] transforms = this.transform.GetComponentsInChildren<RectTransform>();
-        for (int i = 0; i < transforms.Length; ++i) {
-            transforms[i].localPosition = initialPositionData[i];
-        }
-    }
-
-    IEnumerator Wiggle() {
-        while (true) {
+    private void Update() {
+        if (wiggling) {
             RectTransform[] transforms = this.transform.GetComponentsInChildren<RectTransform>();
 
             for (int i = 0; i < transforms.Length; ++i) {
@@ -49,8 +32,22 @@ public class WordWiggle : MonoBehaviour {
                 offset *= wiggleIntensity;
                 transforms[i].localPosition = initialPositionData[i] + offset;
             }
+        }
+    }
 
-            yield return new WaitForSeconds(0.001f / wiggleSpeedMultiplier);
+    public void StartWiggle() {
+        wiggling = true;
+    }
+
+    public void StopWiggle() {
+        wiggling = false;
+        ResetPositions();
+    }
+
+    public void ResetPositions() {
+        RectTransform[] transforms = this.transform.GetComponentsInChildren<RectTransform>();
+        for (int i = 0; i < transforms.Length; ++i) {
+            transforms[i].localPosition = initialPositionData[i];
         }
     }
 }
