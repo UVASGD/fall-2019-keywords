@@ -69,6 +69,10 @@ public class PlayerController : MonoBehaviour {
 
     private Fist fist;
     public CollisionEvent CollisionEvent;
+
+    // Unique state variables
+    public bool bonked = false;
+    private Coroutine bonkedResetCoroutine;
     #endregion
 
     #region start
@@ -149,21 +153,43 @@ public class PlayerController : MonoBehaviour {
             return;
         }
 
-        //movement
-        //rb.velocity = pMovSpeed * lsInput;
-
         //aiming and firing
-        Vector2 aim_raw = new Vector2(GetAxis("Horizontal_R"), GetAxis("Vertical_R"));
+        Vector2 aim_raw;
+        if (playerNum == keyboardControlledPlayer) {
+            aim_raw = new Vector2(0, 0);
+            if (Input.GetKey(KeyCode.I)) {
+                aim_raw.y += 1;
+            }
+            if (Input.GetKey(KeyCode.K)) {
+                aim_raw.y -= 1;
+            }
+            if (Input.GetKey(KeyCode.J)) {
+                aim_raw.x -= 1;
+            }
+            if (Input.GetKey(KeyCode.L)) {
+                aim_raw.x += 1;
+            }
+        } else {
+            aim_raw = new Vector2(GetAxis("Horizontal_R"), GetAxis("Vertical_R"));
+        }
+        aim_raw = Vector2.ClampMagnitude(aim_raw, 1.0f);
         if (aim_raw.sqrMagnitude < epsilon) {
             aim_raw = Vector2.zero;
             aimIndicator.GetComponent<SpriteRenderer>().enabled = false;
         } else if (!inventory.Get() || inventory.Get().GetComponent<Fireable>()) {
             aimIndicator.GetComponent<SpriteRenderer>().enabled = true;
         }
+
+
         Vector2 aim = aim_raw.normalized;
+
+        bool keyboardFire = false;
+        if (playerNum == keyboardControlledPlayer) {
+            keyboardFire = Input.GetKeyDown(KeyCode.O);
+        }
         float trigger = GetAxis("RTrigger");
-        if (!rt_pressed && trigger > triggerPressThreshold) {
-            //fire weapon/tool if aiming, else do not switch inventory slots
+        if ((!rt_pressed && trigger > triggerPressThreshold) || keyboardFire) {
+            //fire weapon/tool if aiming, else switch inventory slots
             rt_pressed = true;
             if (aim.Equals(Vector2.zero)) {
                 //inventory.IncSlot();
@@ -310,23 +336,23 @@ public class PlayerController : MonoBehaviour {
 	 */
     private void Interact() {
         //		print ("interacting");
-        bool onSquare = (activeSquare != null);
-        bool holding = (inventory.Get() != null);
-        bool holdingLetterTile = holding ? inventory.Get().GetComponent<Placeable>() : false;
-        bool tileOnSquare = onSquare ? activeSquare.GetComponent<GridSquare>().tile != null : false;
+        bool hoveringOverGrid = (activeSquare != null);
+        bool holdingItem = (inventory.Get() != null);
+        bool holdingLetterTile = holdingItem ? inventory.Get().GetComponent<Placeable>() : false;
+        bool squareContainsTile = hoveringOverGrid ? activeSquare.GetComponent<GridSquare>().tile != null : false;
 
-        if (!holding && !holdingLetterTile && !tileOnSquare) {
+        if (!holdingItem && !holdingLetterTile && !squareContainsTile) {
             NormalGrab();
-        } else if (holding && !holdingLetterTile && !tileOnSquare) {
+        } else if (holdingItem && !holdingLetterTile && !squareContainsTile) {
             PerformItemAction();
-        } else if (onSquare) {
-            if (holding && holdingLetterTile) {
-                if (tileOnSquare) {
+        } else if (hoveringOverGrid) {
+            if (holdingItem && holdingLetterTile) {
+                if (squareContainsTile) {
                     SwapWithSquare();
                 } else {
                     PlaceOnSquare();
                 }
-            } else if (!holding && !holdingLetterTile && tileOnSquare) {
+            } else if (!holdingItem && !holdingLetterTile && squareContainsTile) {
                 TakeFromSquare();
             }
         }
@@ -366,6 +392,7 @@ public class PlayerController : MonoBehaviour {
 
     private void TakeFromSquare() {
         //		print ("taking from square");
+        //if (activeSquare.GetComponent<GridSquare>().)
         GameObject itemToTake = activeSquare.GetComponent<GridSquare>().tile;
         itemToTake.transform.SetParent(transform);
         inventory.Add(itemToTake);
@@ -492,7 +519,7 @@ public class PlayerController : MonoBehaviour {
     AudioSource bonkSFX;
 
     public void Punch(Vector2 dir) {
-        if (pMovDisable)
+        if (pMovDisable || bonked)
             return;
         fist.Punch(dir);
 
@@ -504,16 +531,24 @@ public class PlayerController : MonoBehaviour {
         rb.velocity = dir.normalized * 0.5f;
         // fx and stuff
         // play tweety bird animation
-        setMovHandle(0.002f, duration);
-        StartCoroutine(StarsActive(duration));
+        setMovHandle(0.004f, duration);
+        setStarsActive(duration);
         setMovSpeed(pMovSpeedBase * 0.2f, duration);
         bonkSFX.Play();
         camScript.Shake(0.35f);
     }
-    public IEnumerator StarsActive(float duration) {
+    public void setStarsActive(float duration) {
+        if (bonkedResetCoroutine != null) {
+            StopCoroutine(bonkedResetCoroutine);
+        }
         stars.SetActive(true);
+        bonked = true;
+        bonkedResetCoroutine = StartCoroutine(StarsInactive(duration));
+    }
+    public IEnumerator StarsInactive(float duration) {
         yield return new WaitForSeconds(duration);
         stars.SetActive(false);
+        bonked = false;
     }
 
 

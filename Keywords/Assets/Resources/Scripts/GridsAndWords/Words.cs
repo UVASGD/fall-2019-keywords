@@ -57,6 +57,8 @@ public class Words : MonoBehaviour {
     public readonly int maxWordsForLevel = 250;
     public float humanKnowledgeFactor = 0.6f; //approximately what percentage of words less than 8 letters long does the average player actually know?
 
+    string[] bannedLetterCombs = { "ing" }; //all banned letter combinations in source word
+
     private AudioSource GetKeySFX;
     private AudioSource BigKeySFX;
     private AudioSource AlreadyMadeWordSFX;
@@ -90,7 +92,6 @@ public class Words : MonoBehaviour {
             madeLevelWordsForEachPlayer[i] = new List<string>();
         }
         UpdateLevelWords(0);
-        DontDestroyOnLoad(gameObject);
     }
 
     void Start() {
@@ -99,7 +100,7 @@ public class Words : MonoBehaviour {
         BigKeySFX = GameManager.instance.sfx["MakeLongWordSFX"];
     }
 
-    public string GetSourceWord(int level){
+    public string GetSourceWord(int level) {
         return currentSourceWords[level];
     }
     public string GetDefinition(string word) {
@@ -245,15 +246,34 @@ public class Words : MonoBehaviour {
         return false;
     }
 
+    //howMany is now obsolete
     string[] GetSomeSourceWords(int howMany, int lowerThreshold, int upperThreshold) {
         List<string> result = new List<string>();
         for (int i = 0; i < howMany; i++) {
-            string randomword = numletterwords[Random.Range(0, numletterwords.Length)];
-            int score = GetScore(randomword);
-            while (score < lowerThreshold || score > upperThreshold) {
+            string randomword = "Force process through while loop to check for banned letter combinations";
+            int score = 0;
+            bool banned = false;
+
+            while (score < lowerThreshold || score > upperThreshold || banned) {
                 randomword = numletterwords[Random.Range(0, numletterwords.Length)];
                 score = GetScore(randomword);
+
+                //Check if word contains banned letter combinations
+                banned = false;
+                for (int b = 0; b < bannedLetterCombs.Length; b++) {
+                    string word = bannedLetterCombs[b];
+                    int wordCount = 0;
+                    for (int s = 0; s < word.Length; s++) {
+                        if (randomword.Contains(word[s])) wordCount++;
+                    }
+
+                    if (wordCount == bannedLetterCombs[b].Length) {
+                        banned = true;
+                        break;
+                    }
+                }
             }
+
             // print(randomword + score);
             result.Add(randomword);
         }
