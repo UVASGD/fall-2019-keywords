@@ -310,24 +310,23 @@ public class PlayerController : MonoBehaviour {
 	 */
     private void Interact() {
         //		print ("interacting");
-        bool x = (activeSquare != null);
-        bool y = (inventory.Get() != null);
-        bool z = y ? inventory.Get().GetComponent<Placeable>() : false;
-        bool w = x ? activeSquare.GetComponent<GridSquare>().tile != null : false;
-        //		print (x + " " + y + " " + z + " " + w);
+        bool onSquare = (activeSquare != null);
+        bool holding = (inventory.Get() != null);
+        bool holdingLetterTile = holding ? inventory.Get().GetComponent<Placeable>() : false;
+        bool tileOnSquare = onSquare ? activeSquare.GetComponent<GridSquare>().tile != null : false;
 
-        if (!y && !z && !w) {
+        if (!holding && !holdingLetterTile && !tileOnSquare) {
             NormalGrab();
-        } else if (y && !z && !w) {
+        } else if (holding && !holdingLetterTile && !tileOnSquare) {
             PerformItemAction();
-        } else if (x) {
-            if (y && z) {
-                if (w) {
+        } else if (onSquare) {
+            if (holding && holdingLetterTile) {
+                if (tileOnSquare) {
                     SwapWithSquare();
                 } else {
                     PlaceOnSquare();
                 }
-            } else if (!y && !z && w) {
+            } else if (!holding && !holdingLetterTile && tileOnSquare) {
                 TakeFromSquare();
             }
         }
