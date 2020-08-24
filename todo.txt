@@ -1,0 +1,51 @@
+-2v2 mode stuff
+	-more flexible preset room thing
+	-Grid ownership team-based
+	-score team-based
+		-UI reflects that
+	-no friendly fire
+	+2v2 scene
+-Game loop
+	-Loading screen
+	-Pause menu - music/SFX vol sliders
+	-Win condition
+		-First to 50 words
+		-If time, make it first to make any word at least 8 letters long
+			-and make doors to the central room take about 40 words to enter
+		-If time, add multiple floors
+	-Win screen
+		-Player X has Won the Game!
+		-runners-up ranked by score
+		-New Game
+		-Quit
+-cooldown indicator in UI slot: Ethan
+-Balance
+	-PVP is kind of pointless, detrimental to both involved
+		-make items more scarce?
+	-countermeasure for stealing tiles : it should take a while (~5 sec) to pick up a tile if owned by somebody who is not you
+-Grappling hook
+	-make chain visible
+	-make it grab letters / players(?)
+	-handle colliding with things that aren't walls
+-Bugs
+	-Setting down items
+		-items should go back in their original transform, not always letter tile container
+	-dash item gets broken by switching to diff inventory item during dash
+	-if switch away from grappling hook while hook is out, cancel the grappling hook shot
+	-bonking ejects player away from letter tiles
+		-probably because of high linear drag on letter tiles
+	-flag doesnt change color when you pick it up from a non-claimable grid
+	-restarting scene causes null refs
+-Sprites to change
+	-Grappling hook
+		-Chain
+		-Hook
+	-Dash
+	-Blink
+-SFX
+	--place flag : snare drum
+	-grappling hook 
+		-fishing line cast (sped up) 
+		--reeling in
+	--machines should hum faintly with spatial blend when charging
+	--bonk - quiet tweeting birds while stunned

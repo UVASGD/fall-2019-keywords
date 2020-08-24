@@ -141,10 +141,14 @@ namespace UnityStandardAssets._2D {
             //print("Target: " + target.name + "   InitialTarget: " + initialTarget.name);
             shaking = false;
 		}
-
-        public void ToggleZoom() {
+        
+        public void ToggleZoom(bool zoomIn=false) {
             isZooming = true;
-            zoomTargetIndex = Game.mod(zoomTargetIndex + 1, zoomTargets.Length);
+            if (zoomIn) {
+                zoomTargetIndex = Game.mod(zoomTargetIndex - 1, zoomTargets.Length);
+            } else {
+                zoomTargetIndex = Game.mod(zoomTargetIndex + 1, zoomTargets.Length);
+            }
         }
     }
 }

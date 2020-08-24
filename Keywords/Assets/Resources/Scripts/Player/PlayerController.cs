@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour {
     private KeyCode AButton;
     private KeyCode BButton;
     private KeyCode YButton;
+    private KeyCode XButton;
     private KeyCode StartButton;
 
     private float pMovSpeedBase = 2.2f;
@@ -61,7 +62,6 @@ public class PlayerController : MonoBehaviour {
     private Func<string, float> GetAxis;
 
     private GameObject aimIndicator;
-
     private bool rt_pressed;
     private bool lt_pressed;
     const float triggerPressThreshold = 0.9f;
@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour {
     public CollisionEvent CollisionEvent;
 
     // Unique state variables
-    public bool bonked = false; 
+    public bool bonked = false;
     private Coroutine bonkedResetCoroutine;
     #endregion
 
@@ -112,6 +112,7 @@ public class PlayerController : MonoBehaviour {
         AButton = me.GetKeyCode("A");
         BButton = me.GetKeyCode("B");
         YButton = me.GetKeyCode("Y");
+        XButton = me.GetKeyCode("X");
         StartButton = me.GetKeyCode("Start");
         LeftBumper = me.GetKeyCode("LeftBumper");
         RightBumper = me.GetKeyCode("RightBumper");
@@ -155,7 +156,7 @@ public class PlayerController : MonoBehaviour {
         //aiming and firing
         Vector2 aim_raw;
         if (playerNum == keyboardControlledPlayer) {
-            aim_raw = new Vector2(0,0);
+            aim_raw = new Vector2(0, 0);
             if (Input.GetKey(KeyCode.I)) {
                 aim_raw.y += 1;
             }
@@ -179,7 +180,7 @@ public class PlayerController : MonoBehaviour {
             aimIndicator.GetComponent<SpriteRenderer>().enabled = true;
         }
 
-        
+
         Vector2 aim = aim_raw.normalized;
 
         bool keyboardFire = false;
@@ -187,11 +188,11 @@ public class PlayerController : MonoBehaviour {
             keyboardFire = Input.GetKeyDown(KeyCode.O);
         }
         float trigger = GetAxis("RTrigger");
-        if ( (!rt_pressed && trigger > triggerPressThreshold) || keyboardFire ) {
+        if ((!rt_pressed && trigger > triggerPressThreshold) || keyboardFire) {
             //fire weapon/tool if aiming, else switch inventory slots
             rt_pressed = true;
             if (aim.Equals(Vector2.zero)) {
-                inventory.IncSlot();
+                //inventory.IncSlot();
             } else {
                 //print("activating held item");
                 if (inventory.Get()) {
@@ -216,9 +217,9 @@ public class PlayerController : MonoBehaviour {
 
         float ltrigger = GetAxis("LTrigger");
         if (!lt_pressed && ltrigger > triggerPressThreshold) {
-            //switch inventory slot
+            //do not switch inventory slot
             lt_pressed = true;
-            inventory.DecSlot();
+            //inventory.DecSlot();
         }
         if (lt_pressed && ltrigger < triggerReleaseThreshold) {
             lt_pressed = false;
@@ -264,9 +265,14 @@ public class PlayerController : MonoBehaviour {
             Drop();
         }
 
-        ////Adjust camera height
+        ////Adjust camera height out
         if (Input.GetKeyDown(YButton) || (me.playerNum == keyboardControlledPlayer && Input.GetKeyDown(KeyCode.LeftShift))) {
-            camScript.ToggleZoom();
+            camScript.ToggleZoom(zoomIn: false);
+        }
+
+        ////Adjust camera height in
+        if (Input.GetKeyDown(XButton) || (me.playerNum == keyboardControlledPlayer && Input.GetKeyDown(KeyCode.RightShift))) {
+            camScript.ToggleZoom(zoomIn: true);
         }
 
         ////Change which item is active
@@ -330,24 +336,23 @@ public class PlayerController : MonoBehaviour {
 	 */
     private void Interact() {
         //		print ("interacting");
-        bool x = (activeSquare != null);
-        bool y = (inventory.Get() != null);
-        bool z = y ? inventory.Get().GetComponent<Placeable>() : false;
-        bool w = x ? activeSquare.GetComponent<GridSquare>().tile != null : false;
-        //		print (x + " " + y + " " + z + " " + w);
+        bool hoveringOverGrid = (activeSquare != null);
+        bool holdingItem = (inventory.Get() != null);
+        bool holdingLetterTile = holdingItem ? inventory.Get().GetComponent<Placeable>() : false;
+        bool squareContainsTile = hoveringOverGrid ? activeSquare.GetComponent<GridSquare>().tile != null : false;
 
-        if (!y && !z && !w) {
+        if (!holdingItem && !holdingLetterTile && !squareContainsTile) {
             NormalGrab();
-        } else if (y && !z && !w) {
+        } else if (holdingItem && !holdingLetterTile && !squareContainsTile) {
             PerformItemAction();
-        } else if (x) {
-            if (y && z) {
-                if (w) {
+        } else if (hoveringOverGrid) {
+            if (holdingItem && holdingLetterTile) {
+                if (squareContainsTile) {
                     SwapWithSquare();
                 } else {
                     PlaceOnSquare();
                 }
-            } else if (!y && !z && w) {
+            } else if (!holdingItem && !holdingLetterTile && squareContainsTile) {
                 TakeFromSquare();
             }
         }
@@ -387,6 +392,7 @@ public class PlayerController : MonoBehaviour {
 
     private void TakeFromSquare() {
         //		print ("taking from square");
+        //if (activeSquare.GetComponent<GridSquare>().)
         GameObject itemToTake = activeSquare.GetComponent<GridSquare>().tile;
         itemToTake.transform.SetParent(transform);
         inventory.Add(itemToTake);

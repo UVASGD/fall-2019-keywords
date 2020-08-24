@@ -57,7 +57,7 @@ public class Words : MonoBehaviour {
     public readonly int maxWordsForLevel = 250;
     public float humanKnowledgeFactor = 0.6f; //approximately what percentage of words less than 8 letters long does the average player actually know?
 
-    string[] bannedLetterCombs = {"ing"}; //all banned letter combinations in source word
+    string[] bannedLetterCombs = { "ing" }; //all banned letter combinations in source word
 
     private AudioSource GetKeySFX;
     private AudioSource BigKeySFX;
@@ -92,7 +92,6 @@ public class Words : MonoBehaviour {
             madeLevelWordsForEachPlayer[i] = new List<string>();
         }
         UpdateLevelWords(0);
-        DontDestroyOnLoad(gameObject);
     }
 
     void Start() {
@@ -101,7 +100,7 @@ public class Words : MonoBehaviour {
         BigKeySFX = GameManager.instance.sfx["MakeLongWordSFX"];
     }
 
-    public string GetSourceWord(int level){
+    public string GetSourceWord(int level) {
         return currentSourceWords[level];
     }
     public string GetDefinition(string word) {
@@ -268,7 +267,7 @@ public class Words : MonoBehaviour {
                         if (randomword.Contains(word[s])) wordCount++;
                     }
 
-                    if (wordCount == bannedLetterCombs[b].Length){
+                    if (wordCount == bannedLetterCombs[b].Length) {
                         banned = true;
                         break;
                     }

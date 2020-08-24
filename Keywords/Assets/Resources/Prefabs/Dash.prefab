@@ -146,3 +146,5 @@ MonoBehaviour:
   dashSpeed: 10
   stun_duration: 2
   dashTime: 1
+  particles: {fileID: 4030745729572150077, guid: fe13ed6ebb09eb4408a8f90992e7527a,
+    type: 3}
