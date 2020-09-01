@@ -66,23 +66,15 @@ class Room {
 public class MakeWalls : MonoBehaviour {
     #region fields
     //back end - grid of rooms
-    public bool coop;
+    public string mode;
     public int width;
+    public List<RoomParams> presetRooms;
     private int numSquares;
     private int numCheckedOff;
     private int numRooms;
     [HideInInspector]
     public int[,] rooms;
     Dictionary<int, Room> roomGraph;
-    enum PresetRooms {
-        Player1Start = -1,
-        Player2Start = -2,
-        Player3Start = -3,
-        Player4Start = -4,
-        CentralChamber = -5
-    };
-
-
 
     //front end - generated game objects
     private const float epsilon = 0.005f; //makes borders between walls/corners look better
@@ -143,18 +135,10 @@ public class MakeWalls : MonoBehaviour {
     }
 
     void MakePresetRooms() {
-        //Starting Room
         int halfX = width / 2;
-        if (coop) {
-            MakeRoom(halfX, halfX, 3, 3, -1);
-            return;
+        foreach (RoomParams r in presetRooms) {
+            MakeRoom(halfX + r.x, halfX + r.y, r.width, r.height, (int)r.id);
         }
-        int num = 6;//how far are player starting rooms from the center?
-        MakeRoom(halfX, halfX, 7, 7, (int)PresetRooms.CentralChamber);//Central Chamber
-        MakeRoom(halfX - num, halfX - num, 3, 3, (int)PresetRooms.Player1Start);//P1 start
-        MakeRoom(halfX + num, halfX - num, 3, 3, (int)PresetRooms.Player2Start);//P2 start
-        MakeRoom(halfX - num, halfX + num, 3, 3, (int)PresetRooms.Player3Start);//P3 start
-        MakeRoom(halfX + num, halfX + num, 3, 3, (int)PresetRooms.Player4Start);//P4 start
     }
 
     //is this coordinate in bounds?
@@ -328,11 +312,14 @@ public class MakeWalls : MonoBehaviour {
         Queue<Room> q2 = new Queue<Room>();//all rooms at the next layer of depth
 
         //start with player starting rooms
-        q1.Enqueue(roomGraph[(int)PresetRooms.Player1Start]);
-        if (!coop) {
-            q1.Enqueue(roomGraph[(int)PresetRooms.Player2Start]);
-            q1.Enqueue(roomGraph[(int)PresetRooms.Player3Start]);
-            q1.Enqueue(roomGraph[(int)PresetRooms.Player4Start]);
+        if (mode == "Versus") {
+            q1.Enqueue(roomGraph[(int)RoomID.Player1Start]);
+            q1.Enqueue(roomGraph[(int)RoomID.Player2Start]);
+            q1.Enqueue(roomGraph[(int)RoomID.Player3Start]);
+            q1.Enqueue(roomGraph[(int)RoomID.Player4Start]);
+        } else if (mode == "2v2") {
+            q1.Enqueue(roomGraph[(int)RoomID.Team1Start]);
+            q1.Enqueue(roomGraph[(int)RoomID.Team2Start]);
         }
 
         //Make the rest of the stuff
