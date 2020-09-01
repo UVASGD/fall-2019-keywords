@@ -10,6 +10,7 @@ public class PauseMenu : MonoBehaviour {
     private GameObject ResumeButton;
 
     private void Start() {
+        transform.Find("PauseMenu").gameObject.SetActive(true);
         PauseMenuUI = transform.Find("PauseMenu").gameObject;
         ResumeButton = GameObject.Find("ResumeButton");
         Resume();
