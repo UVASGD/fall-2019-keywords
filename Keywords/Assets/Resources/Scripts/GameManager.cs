@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour {
 
     private void FindPauseMenu(Scene scene, LoadSceneMode mode) {
         if (!pauseMenu) {
-            pauseMenu = GameObject.Find("Menu").GetComponent<PauseMenu>();
+            pauseMenu = GameObject.Find("Menus").GetComponent<PauseMenu>();
         }
     }
 }

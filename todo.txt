@@ -5,9 +5,12 @@
 		-UI reflects that
 	-no friendly fire
 	+2v2 scene
--Game loop
+-Menus
+	-accept controller input for clicking button
+	-accept keyboard input for going between buttons
 	-Loading screen
 	-Pause menu - music/SFX vol sliders
+-Game loop
 	-Win condition
 		-First to 50 words
 		-If time, make it first to make any word at least 8 letters long
