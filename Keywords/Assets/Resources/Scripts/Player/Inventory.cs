@@ -17,12 +17,11 @@ public class Inventory : MonoBehaviour {
     void Start() {
         items = new GameObject[inventorySize];
         UI = GetComponent<PlayerInfo>().UI.transform.Find("Inventory").gameObject;
-        activeSlot = 0;
         SwitchSlot(0);
     }
 
     //C# mod is not too useful
-    int correctmod(int a, int n) {
+    int mod(int a, int n) {
         return ((a % n) + n) % n;
     }
 
@@ -46,11 +45,11 @@ public class Inventory : MonoBehaviour {
     }
 
     public void IncSlot() {
-        SwitchSlot(correctmod(activeSlot + 1, inventorySize));
+        SwitchSlot(mod(activeSlot + 1, inventorySize));
     }
 
     public void DecSlot() {
-        SwitchSlot(correctmod(activeSlot - 1, inventorySize));
+        SwitchSlot(mod(activeSlot - 1, inventorySize));
     }
 
     public void Add(GameObject obj) {
